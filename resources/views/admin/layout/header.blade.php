@@ -5,16 +5,18 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>@yield("title", "Admin")</title>
 
+  <link rel="icon" type="image/png" href="{{ asset("dist/back/img/favicon.png") }}">
+
   <!-- General CSS Files -->
-  <link rel="stylesheet" href="{{ asset("dist/modules/bootstrap/css/bootstrap.min.css") }}">
-  <link rel="stylesheet" href="{{ asset("dist/modules/fontawesome/css/all.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("dist/back/modules/bootstrap/css/bootstrap.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("dist/back/modules/fontawesome/css/all.min.css") }}">
 
   <!-- CSS Libraries -->
-  <link rel="stylesheet" href="{{ asset("dist/modules/iziToast/css/iziToast.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("dist/back/modules/iziToast/css/iziToast.min.css") }}">
 
   <!-- Template CSS -->
-  <link rel="stylesheet" href="{{ asset("dist/css/style.css") }}">
-  <link rel="stylesheet" href="{{ asset("dist/css/components.css") }}">
+  <link rel="stylesheet" href="{{ asset("dist/back/css/style.css") }}">
+  <link rel="stylesheet" href="{{ asset("dist/back/css/components.css") }}">
   
   @stack("styles")
 

@@ -8,6 +8,6 @@ use Illuminate\Contracts\View\View;
 class AdminHomeController extends Controller
 {
     public function index() :View{
-        return view("admin.page_home");
+        return view("admin.home");
     }
 }

@@ -1,6 +1,6 @@
             <footer class="main-footer">
                 <div class="footer-left">
-                Copyright &copy; 2018 <div class="bullet"></div> Design By <a href="https://nauval.in/">Muhamad Nauval Azhar</a>
+                Copyright &copy; 2018 <div class="bullet"></div> Design By <a href="">Abdullah Onur</a>
                 </div>
                 <div class="footer-right">
                 
@@ -10,17 +10,19 @@
     </div>
 
     <!-- General JS Scripts -->
-    <script src="{{ asset("dist/modules/jquery.min.js") }}"></script>
-    <script src="{{ asset("dist/modules/popper.js") }}"></script>
-    <script src="{{ asset("dist/modules/tooltip.js") }}"></script>
-    <script src="{{ asset("dist/modules/bootstrap/js/bootstrap.min.js") }}"></script>
-    <script src="{{ asset("dist/modules/nicescroll/jquery.nicescroll.min.js") }}"></script>
-    <script src="{{ asset("dist/modules/izitoast/js/iziToast.min.js") }}"></script>
-    <script src="{{ asset("dist/js/stisla.js") }}"></script>
+    <script src="{{ asset("dist/back/modules/jquery.min.js") }}"></script>
+    <script src="{{ asset("dist/back/modules/popper.js") }}"></script>
+    <script src="{{ asset("dist/back/modules/tooltip.js") }}"></script>
+    <script src="{{ asset("dist/back/modules/bootstrap/js/bootstrap.min.js") }}"></script>
+    <script src="{{ asset("dist/back/modules/nicescroll/jquery.nicescroll.min.js") }}"></script>
+    <script src="{{ asset("dist/back/modules/izitoast/js/iziToast.min.js") }}"></script>
+    <script src="{{ asset("dist/back/js/stisla.js") }}"></script>
 
     <!-- Template JS File -->
-    <script src="{{ asset("dist/js/scripts.js") }}"></script>
-    <script src="{{ asset("dist/js/custom.js") }}"></script>
+    <script src="{{ asset("dist/back/js/scripts.js") }}"></script>
+    <script src="{{ asset("dist/back/js/custom.js") }}"></script>
+
+    <!-- Session Messages -->
     @if(Session::has("error"))
     <script>
             iziToast.show({
@@ -39,6 +41,8 @@
         })
     </script>
     @endif
+
+    
     @stack("scripts")
 </body>
 </html>

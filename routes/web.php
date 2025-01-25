@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminHomeController;
+use App\Http\Controllers\Front\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix("admin")->middleware("admin.guest")->group(function(){
@@ -24,4 +25,7 @@ Route::prefix("admin")->middleware("admin.logedin")->group(function () {
     Route::get("", [AdminHomeController::class, "index"])->name("admin.index");
 });
 
+Route::prefix("/")->group(function(){
+    Route::get("",[HomeController::class,"index"])->name("front.index");
+});
 
