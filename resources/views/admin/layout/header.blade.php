@@ -8,11 +8,11 @@
   <link rel="icon" type="image/png" href="{{ asset("dist/back/img/favicon.png") }}">
 
   <!-- General CSS Files -->
-  <link rel="stylesheet" href="{{ asset("dist/back/modules/bootstrap/css/bootstrap.min.css") }}">
-  <link rel="stylesheet" href="{{ asset("dist/back/modules/fontawesome/css/all.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("dist/back/css/bootstrap.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("dist/back/css/fontawesome/css/all.min.css") }}">
 
   <!-- CSS Libraries -->
-  <link rel="stylesheet" href="{{ asset("dist/back/modules/iziToast/css/iziToast.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("dist/back/css/iziToast.min.css") }}">
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="{{ asset("dist/back/css/style.css") }}">

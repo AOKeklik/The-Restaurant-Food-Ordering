@@ -10,12 +10,12 @@
     </div>
 
     <!-- General JS Scripts -->
-    <script src="{{ asset("dist/back/modules/jquery.min.js") }}"></script>
-    <script src="{{ asset("dist/back/modules/popper.js") }}"></script>
-    <script src="{{ asset("dist/back/modules/tooltip.js") }}"></script>
-    <script src="{{ asset("dist/back/modules/bootstrap/js/bootstrap.min.js") }}"></script>
-    <script src="{{ asset("dist/back/modules/nicescroll/jquery.nicescroll.min.js") }}"></script>
-    <script src="{{ asset("dist/back/modules/izitoast/js/iziToast.min.js") }}"></script>
+    <script src="{{ asset("dist/back/js/jquery.min.js") }}"></script>
+    <script src="{{ asset("dist/back/js/popper.js") }}"></script>
+    <script src="{{ asset("dist/back/js/tooltip.js") }}"></script>
+    <script src="{{ asset("dist/back/js/bootstrap.min.js") }}"></script>
+    <script src="{{ asset("dist/back/js/jquery.nicescroll.min.js") }}"></script>
+    <script src="{{ asset("dist/back/js/iziToast.min.js") }}"></script>
     <script src="{{ asset("dist/back/js/stisla.js") }}"></script>
 
     <!-- Template JS File -->
