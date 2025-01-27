@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
 
         'admin.logedin' => \App\Http\Middleware\AdminAuthhenticate::class,
         'admin.guest' => \App\Http\Middleware\AdminRedirectIfAuthenticated::class,
+        'customer.guest' => \App\Http\Middleware\CustomerRedirectIfAuthenticated::class,
+        'customer.logedin' => \App\Http\Middleware\CustomerAuthenticate::class,
     ];
 }

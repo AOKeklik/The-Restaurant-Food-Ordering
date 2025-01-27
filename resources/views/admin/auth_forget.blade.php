@@ -3,9 +3,9 @@
         <div class="container mt-5">
             <div class="row">
                 <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
-                    <div class="login-brand">
+                    <a href="{{ route("front.index") }}" class="login-brand d-block">
                         <img src="{{ asset("dist/back/img/stisla-fill.svg") }}" alt="logo" width="100" class="shadow-light rounded-circle">
-                    </div>
+                    </a>
 
                     <div class="card card-primary">
                         <div class="card-header"><h4>Forgot Password</h4></div>

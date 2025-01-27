@@ -12,13 +12,25 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminAuthController extends Controller
 {
-    public function login():View{
+    public function signin():View{
         return view("admin.auth_login");
     }
     public function forget():View{
         return view("admin.auth_forget");
     }
-    public function login_submit(Request $request){
+    public function reset(Request $request):View{
+        $admin = User::where("email", $request->email)->first();
+
+        if(!$admin)
+            return redirect()->route("admin.login")->with("error","In valid email!");
+
+        if(!password_verify($admin->remember_token,$request->token))
+            return redirect()->route("admin.login")->with("error","In valid token!");
+
+        return view("admin.auth_reset",["token"=>$request->token,"email"=>$request->email]);
+    }
+
+    public function signin_submit(Request $request){
         $request->validate([
             "email"=>"required|email|exists:users,email",
             "password"=>"required|string|min:8",
@@ -62,17 +74,6 @@ class AdminAuthController extends Controller
         return redirect()->route("admin.login")->with("success","Please check your email and follow the steps there!");
 
     }
-    public function reset(Request $request){
-        $admin = User::where("email", $request->email)->first();
-
-        if(!$admin)
-            return redirect()->route("admin.login")->with("error","In valid email!");
-
-        if(!password_verify($admin->remember_token,$request->token))
-            return redirect()->route("admin.login")->with("error","In valid token!");
-
-        return view("admin.auth_reset",["token"=>$request->token,"email"=>$request->email]);
-    }
     public function reset_submit(Request $request){
         $request->validate([
             // "email"=>"required|email|exists:users,email",
@@ -96,7 +97,7 @@ class AdminAuthController extends Controller
 
         return redirect()->route("admin.login")->with("success","Password has been updated usccessfully!");
     }
-    public function logout_submit(){
+    public function signout_submit(){
         Auth::guard("user")->logout();
         session()->flush();
         return redirect()->route("admin.login")->with("success","Successfully logged out.");
