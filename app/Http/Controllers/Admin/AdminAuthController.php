@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 class AdminAuthController extends Controller
 {
     public function signin():View{
-        return view("admin.auth_login");
+        return view("admin.auth_signin");
     }
     public function forget():View{
         return view("admin.auth_forget");
@@ -22,10 +22,10 @@ class AdminAuthController extends Controller
         $admin = User::where("email", $request->email)->first();
 
         if(!$admin)
-            return redirect()->route("admin.login")->with("error","In valid email!");
+            return redirect()->route("admin.signin")->with("error","In valid email!");
 
         if(!password_verify($admin->remember_token,$request->token))
-            return redirect()->route("admin.login")->with("error","In valid token!");
+            return redirect()->route("admin.signin")->with("error","In valid token!");
 
         return view("admin.auth_reset",["token"=>$request->token,"email"=>$request->email]);
     }
@@ -71,7 +71,7 @@ class AdminAuthController extends Controller
 
         \Mail::to($request->email)->send(new Websitemail($subject,$message));
 
-        return redirect()->route("admin.login")->with("success","Please check your email and follow the steps there!");
+        return redirect()->route("admin.sginin")->with("success","Please check your email and follow the steps there!");
 
     }
     public function reset_submit(Request $request){
@@ -95,11 +95,11 @@ class AdminAuthController extends Controller
         $admin->status=1;
         $admin->update();
 
-        return redirect()->route("admin.login")->with("success","Password has been updated usccessfully!");
+        return redirect()->route("admin.sginin")->with("success","Password has been updated usccessfully!");
     }
     public function signout_submit(){
         Auth::guard("user")->logout();
         session()->flush();
-        return redirect()->route("admin.login")->with("success","Successfully logged out.");
+        return redirect()->route("admin.signin")->with("success","Successfully logged out.");
     }
 }

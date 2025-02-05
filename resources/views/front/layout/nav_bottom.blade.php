@@ -65,7 +65,11 @@
                         <a class="cart_icon"><i class="fas fa-shopping-basket"></i> <span>5</span></a>
                     </li>
                     <li>
-                        <a href="dashboard.html"><i class="fas fa-user"></i></a>
+                        @if(Auth::guard("user")->check())
+                            <a href="{{ route("front.customer.dashboard") }}"><i class="fas fa-user"></i></a>
+                        @else
+                            <a href="{{ route("front.customer.signin") }}"><i class="fas fa-user"></i></a>
+                        @endif
                     </li>
                     <li>
                         <a class="common_btn" href="#" data-bs-toggle="modal"

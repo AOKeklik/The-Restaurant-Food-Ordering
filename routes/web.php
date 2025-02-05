@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminHomeController;
+use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Front\CustomerAuthController;
 use App\Http\Controllers\Front\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,10 @@ Route::prefix("admin")->middleware("admin.guest")->group(function(){
 Route::prefix("admin")->middleware("admin.logedin")->group(function () {
     /* dashboard */
     Route::get("", [AdminHomeController::class, "index"])->name("admin.index");
+
+    /* profile */
+    Route::get("/profile/edit",[AdminProfileController::class,"profile_edit"])->name("admin.profile.edit");
+    Route::post("/profile/update",[AdminProfileController::class,"profile_update"])->name("admin.profile.update");
 });
 
 

@@ -11,7 +11,7 @@
                         <div class="card-header"><h4>Login</h4></div>
 
                         <div class="card-body">
-                            <form method="POST" action="{{ route("admin.login.submit") }}" class="needs-validation" novalidate="">
+                            <form method="POST" action="{{ route("admin.signin.submit") }}" class="needs-validation" novalidate="">
                                 @csrf
                                 @method("POST")
                                 <div class="form-group">
