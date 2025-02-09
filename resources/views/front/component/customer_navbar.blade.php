@@ -4,7 +4,11 @@
             <div class="dasboard_header_img">
                 <img src="{{ asset("uploads/customer") }}/{{ Auth::guard("user")->user()->avatar }}" alt="user" class="img-fluid w-100">
                 <label for="upload"><i class="far fa-camera"></i></label>
-                <input type="file" id="upload" hidden>
+                <form action="{{ route("front.customer.avatar.update") }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method("post")
+                    <input type="file" id="upload" name="avatar" hidden>
+                </form>
             </div>
             <h2>{{ Auth::guard("user")->user()->name }}</h2>
         </div>
@@ -50,3 +54,19 @@
         </div>
     </div>
 </div>
+@push("scripts")
+    <script>
+        $(document).ready(function(){            
+            $("input[name=avatar]").change(function(e){
+                $(this).closest(".dasboard_header_img").css("pointer-events","none")
+
+                $(this).closest(".dasboard_header_img").find("img").attr("src",URL.createObjectURL(e.target.files[0]))
+
+                
+                setTimeout(() => {
+                    $(this).closest("form").submit()
+                }, 2000);
+            })
+        })
+    </script>
+@endpush

@@ -11,8 +11,13 @@ class AdminAuthhenticate
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if(!Auth::guard('user')->check() || Auth::guard("user")->user()->role !== "admin")
+        if(!Auth::guard('user')->check())
             return redirect()->route("admin.signin")->with("error","You must be logged in as an admin to access this page!");
+
+        if(Auth::guard("user")->user()->role !== "admin") {
+            Auth::guard("user")->logout();
+            return redirect()->route("admin.signin")->with("error","Unauthorized access");
+        }
         
         return $next($request);
     }

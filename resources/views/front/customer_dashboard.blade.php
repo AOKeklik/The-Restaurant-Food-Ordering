@@ -34,6 +34,7 @@
                         <div class="fp__dashboard_content">
                             <div class="tab-content" id="v-pills-tabContent">
 
+                                {{-- profile --}}
                                 <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
                                     aria-labelledby="v-pills-home-tab">
                                     <div class="fp_dashboard_body">
@@ -71,39 +72,30 @@
                                             </h4>
 
                                             <div class="personal_info_text">
-                                                <p><span>Name:</span> Hasib Ahmed</p>
-                                                <p><span>Email:</span> hasibahmed@gmail.com</p>
-                                                <p><span>Phone:</span> 023 434 54354</p>
-                                                <p><span>Address:</span> 7232 Broadway Suite 308, Jackson Heights,
-                                                    11372, NY, United States </p>
+                                                <p><span>Name:</span> {{ Auth::guard("user")->user()->name }}</p>
+                                                <p><span>Email:</span> {{ Auth::guard("user")->user()->email }}</p>
                                             </div>
 
                                             <div class="fp_dash_personal_info_edit comment_input p-0">
-                                                <form>
+                                                <form action="{{ route("front.customer.profile.update") }}" method="POST">
+                                                    @csrf
+                                                    @method("POST")
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <div class="fp__comment_imput_single">
                                                                 <label>name</label>
-                                                                <input type="text" placeholder="Name">
+                                                                <input type="text" placeholder="Name" name="name" value="{{ Auth::guard("user")->user()->name }}">
+                                                                @error("name") <small class="form-text text-danger">{{ $message }}</small> @enderror
                                                             </div>
                                                         </div>
-                                                        <div class="col-xl-6 col-lg-6">
+                                                        <div class="col-12">
                                                             <div class="fp__comment_imput_single">
                                                                 <label>email</label>
-                                                                <input type="email" placeholder="Email">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-6 col-lg-6">
-                                                            <div class="fp__comment_imput_single">
-                                                                <label>phone</label>
-                                                                <input type="text" placeholder="Phone">
+                                                                <input type="email" placeholder="Email" name="email" value="{{ Auth::guard("user")->user()->email }}">
+                                                                @error("email") <small class="form-text text-danger">{{ $message }}</small> @enderror
                                                             </div>
                                                         </div>
                                                         <div class="col-xl-12">
-                                                            <div class="fp__comment_imput_single">
-                                                                <label>address</label>
-                                                                <textarea rows="4" placeholder="Address"></textarea>
-                                                            </div>
                                                             <button type="submit" class="common_btn">submit</button>
                                                         </div>
                                                     </div>
@@ -1093,30 +1085,36 @@
                                     </div>
                                 </div>
 
+                                {{-- password --}}
                                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
                                     aria-labelledby="v-pills-settings-tab">
                                     <div class="fp_dashboard_body fp__change_password">
                                         <div class="fp__review_input">
                                             <h3>change password</h3>
                                             <div class="comment_input pt-0">
-                                                <form>
+                                                <form action="{{ route("front.customer.password.update") }}" method="POST">
+                                                    @csrf
+                                                    @method("POST")
                                                     <div class="row">
                                                         <div class="col-xl-6">
                                                             <div class="fp__comment_imput_single">
                                                                 <label>Current Password</label>
-                                                                <input type="password" placeholder="Current Password">
+                                                                <input type="password" placeholder="Current Password" name="current_password">
+                                                                @error("current_password") <small class="form-text text-danger">{{ $message }}</small> @enderror
                                                             </div>
                                                         </div>
                                                         <div class="col-xl-6">
                                                             <div class="fp__comment_imput_single">
                                                                 <label>New Password</label>
-                                                                <input type="password" placeholder="New Password">
+                                                                <input type="password" placeholder="New Password" name="password">
+                                                                @error("password") <small class="form-text text-danger">{{ $message }}</small> @enderror
                                                             </div>
                                                         </div>
                                                         <div class="col-xl-12">
                                                             <div class="fp__comment_imput_single">
                                                                 <label>confirm Password</label>
-                                                                <input type="password" placeholder="Confirm Password">
+                                                                <input type="password" placeholder="Confirm Password" name="confirm_password">
+                                                                @error("confirm_password") <small class="form-text text-danger">{{ $message }}</small> @enderror
                                                             </div>
                                                             <button type="submit"
                                                                 class="common_btn mt_20">submit</button>

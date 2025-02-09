@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string("name");
             $table->string("email")->unique();
             $table->string("avatar")->default("/uploads/avatar.png");
+            $table->string("phone",20)->nullable()->unique();
+            $table->string("address");
             $table->enum("role",["customer","admin"])->default("user");
             $table->string("password");
             $table->rememberToken();

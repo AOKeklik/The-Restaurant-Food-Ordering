@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Slider;
 
 class HomeController extends Controller
 {
+    
     public function index(){
-        return view("front.home");
-    }
+        $slides=Slider::where("status",true)->orderBy("id","desc")->limit(3)->get();
 
-    public function dashboard () {
-        return view("front.customer_dashboard");
+        return view("front.home",compact("slides"));
     }
 }

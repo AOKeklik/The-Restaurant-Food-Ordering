@@ -11,7 +11,6 @@ class AdminRedirectIfAuthenticated
 {
     public function handle(Request $request, Closure $next): Response
     {
-
         if($request->routeIs("admin.signout.submit"))
             return $next($request);
 

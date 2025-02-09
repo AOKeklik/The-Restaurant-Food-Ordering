@@ -11,7 +11,14 @@
             <li class="@if(Route::is("admin.index")) active @endif">
                 <a class="nav-link" href="{{ route("admin.index") }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a>
             </li>
-
+            <li class="menu-header">Slider</li>
+            <li class="dropdown @if(Route::is("admin.slides") || Route::is("admin.slide.add")) active @endif">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"> <i class="fa-solid fa-image"></i> <span>Slides</span></a>
+                <ul class="dropdown-menu">
+                    <li class="@if(Route::is("admin.slides")) active @endif"><a class="nav-link" href="{{ route("admin.slides") }}">Slides</a></li>
+                    <li class="@if(Route::is("admin.slide.add")) active @endif"><a class="nav-link" href="{{ route("admin.slide.add") }}">Add Slide</a></li>
+                </ul>
+            </li>
 
             {{-- <li class="menu-header">Starter</li>
             <li class="dropdown">

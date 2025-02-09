@@ -65,9 +65,9 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
-        'admin.logedin' => \App\Http\Middleware\AdminAuthhenticate::class,
-        'admin.guest' => \App\Http\Middleware\AdminRedirectIfAuthenticated::class,
-        'customer.guest' => \App\Http\Middleware\CustomerRedirectIfAuthenticated::class,
-        'customer.logedin' => \App\Http\Middleware\CustomerAuthenticate::class,
+        'admin.authenticate' => \App\Http\Middleware\AdminAuthhenticate::class,
+        'admin.redirectIfAuthenticated' => \App\Http\Middleware\AdminRedirectIfAuthenticated::class,
+        'customer.authenticate' => \App\Http\Middleware\CustomerAuthenticate::class,
+        'customer.redirectIfAuthenticated' => \App\Http\Middleware\CustomerRedirectIfAuthenticated::class,
     ];
 }

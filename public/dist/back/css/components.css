@@ -1678,7 +1678,7 @@ tr:first-child > td > .fc-day-grid-event {
 }
 .activities .activity .activity-detail:before {
   content: "";
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 6 Pro";
   font-weight: 900;
   font-size: 20px;
   position: absolute;

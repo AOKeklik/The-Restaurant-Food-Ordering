@@ -3,13 +3,15 @@
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Front\CustomerAuthController;
+use App\Http\Controllers\Front\CustomerProfileController;
 use App\Http\Controllers\Front\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /* ********** ADMIN *********** */
 
-Route::prefix("admin")->middleware("admin.guest")->group(function(){
+Route::prefix("admin")->middleware("admin.redirectIfAuthenticated")->group(function(){
     /* signin */
     Route::get("signin", [AdminAuthController::class, "signin"])->name("admin.signin");
     Route::post("signin/submit", [AdminAuthController::class, "signin_submit"])->name("admin.signin.submit");
@@ -24,19 +26,28 @@ Route::prefix("admin")->middleware("admin.guest")->group(function(){
     Route::post("reset/submit",[AdminAuthController::class,"reset_submit"])->name("admin.reset.submit");
 });
 
-Route::prefix("admin")->middleware("admin.logedin")->group(function () {
+Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     /* dashboard */
     Route::get("", [AdminHomeController::class, "index"])->name("admin.index");
 
     /* profile */
-    Route::get("/profile/edit",[AdminProfileController::class,"profile_edit"])->name("admin.profile.edit");
-    Route::post("/profile/update",[AdminProfileController::class,"profile_update"])->name("admin.profile.update");
+    Route::get("profile/edit",[AdminProfileController::class,"profile_edit"])->name("admin.profile.edit");
+    Route::post("profile/update",[AdminProfileController::class,"profile_update"])->name("admin.profile.update");
+
+    /* slider */
+    Route::get("sliders",[AdminSliderController::class,"slides"])->name("admin.slides");
+    Route::get("slider/add",[AdminSliderController::class,"slides_add"])->name("admin.slide.add");
+    Route::post("slider/store",[AdminSliderController::class,"slides_store"])->name("admin.slide.store");
+    Route::get("slider/edit/{slide_id}",[AdminSliderController::class,"slides_edit"])->name("admin.slide.edit");
+    Route::post("slider/update",[AdminSliderController::class,"slides_update"])->name("admin.slide.update");
+    Route::post("slider/status/update",[AdminSliderController::class,"slides_status_update"])->name("admin.slide.status.update");
+    Route::post("slider/delete",[AdminSliderController::class,"slides_delete"])->name("admin.slide.delete");
 });
 
 
 /* ********** CUSTOMER *********** */
 
-Route::prefix("customer")->middleware("customer.guest")->group(function(){
+Route::prefix("customer")->middleware("customer.redirectIfAuthenticated")->group(function(){
     /* signup */
     Route::get("signup",[CustomerAuthController::class,"signup"])->name("front.customer.signup");
     Route::post("signup/submit",[CustomerAuthController::class,"signup_submit"])->name("front.customer.signup.submit");
@@ -58,8 +69,13 @@ Route::prefix("customer")->middleware("customer.guest")->group(function(){
     Route::post("reset/submit",[CustomerAuthController::class,"reset_submit"])->name("front.customer.reset.submit");
 });
 
-Route::prefix("customer")->middleware("customer.logedin")->group(function(){
-    Route::get("dashboard",[HomeController::class,"dashboard"])->name("front.customer.dashboard");
+Route::prefix("customer")->middleware("customer.authenticate")->group(function(){
+    Route::get("",[CustomerProfileController::class,"dashboard"])->name("front.customer.dashboard");
+
+    /* profile */
+    Route::post("avatar/update",[CustomerProfileController::class,"avatar_update"])->name("front.customer.avatar.update");
+    Route::post("profile/update",[CustomerProfileController::class,"profile_update"])->name("front.customer.profile.update");
+    Route::post("password/update",[CustomerProfileController::class,"password_update"])->name("front.customer.password.update");
 });
 
 

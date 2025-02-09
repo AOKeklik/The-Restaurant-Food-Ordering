@@ -9,13 +9,17 @@
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="{{ asset("dist/back/css/bootstrap.min.css") }}">
-  <link rel="stylesheet" href="{{ asset("dist/back/css/fontawesome/css/all.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("dist/back/css/all.css") }}">
 
   <!-- CSS Libraries -->
   <link rel="stylesheet" href="{{ asset("dist/back/css/iziToast.min.css") }}">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@5.1.1/css/bootstrap5-toggle.min.css">
+  
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="{{ asset("dist/back/css/style.css") }}">
+  <link rel="stylesheet" href="{{ asset("dist/back/css/custom.css") }}">
   <link rel="stylesheet" href="{{ asset("dist/back/css/components.css") }}">
   
   @stack("styles")

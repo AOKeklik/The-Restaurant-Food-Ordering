@@ -34,6 +34,19 @@
 
 @include("admin.layout.sidebar")
 
+<div class="main-content">
+    <section class="section">
+        <div class="section-header justify-content-between">
+            <h1>@yield("title", "Admin")</h1>
+            <a target="_blank" href="@yield("link",route("front.index"))" class="btn btn-primary">
+                <i class="fa fa-eye"></i>
+                Frontend
+            </a>
+        </div>
+    </section>
+
 @yield("content")
+
+</div>
 
 @include("admin.layout.footer")
