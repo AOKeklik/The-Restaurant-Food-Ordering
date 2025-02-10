@@ -11,6 +11,37 @@
         </div>
     </div>
     <div class="card-body">
+        <div class="row justify-content-center">
+            <form class="col-md-8" action="{{ route("admin.setting.slider.update") }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method("POST")
+                <!-- Image Upload -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <img src="{{ asset("uploads/setting") }}/{{ $provider_settings->slider_photo }}" alt="" class="w-100">
+                    </div>
+                    <div class="col-md-9">
+                        <label for="image" class="form-label">Image*</label>
+                        <div class="custom-file">
+                            <input name="slider_photo" type="file" class="custom-file-input" id="slider_photo">
+                            <label id="slider_photo" class="custom-file-label" for="slider_photo" name="slider_photo">Choose file</label>
+                        </div>
+                        @error("slider_photo") <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <input type="checkbox" @if($provider_settings->slider_status == 1) checked @endif data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger" name="slider_status">
+                    @error("slider_status") <small class="text-danger">{{ $message }}</small> @enderror
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <hr class="my-5">
         <div class="table-responsive" >
             <table class="table table-bordered table-md" id="example">
                 <thead>
@@ -60,6 +91,13 @@
 @endsection
 @push("scripts")
     <script>
+        /* image */
+        $(document).ready(function(){
+            $("#slider_photo").change(function(e){
+                $(this).closest(".row").find('img').attr("src",URL.createObjectURL(e.target.files[0]))
+            })
+        })
+
         /* update */
         $(document).ready(function(){
             $(".checkbox_slide_status").change(async function(){

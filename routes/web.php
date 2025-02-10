@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Front\CustomerAuthController;
 use App\Http\Controllers\Front\CustomerProfileController;
@@ -33,6 +34,9 @@ Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     /* profile */
     Route::get("profile/edit",[AdminProfileController::class,"profile_edit"])->name("admin.profile.edit");
     Route::post("profile/update",[AdminProfileController::class,"profile_update"])->name("admin.profile.update");
+
+    /* settings */
+    Route::post("setting/slider/update",[AdminSettingController::class,"slider_update"])->name("admin.setting.slider.update");
 
     /* slider */
     Route::get("sliders",[AdminSliderController::class,"slides"])->name("admin.slides");
