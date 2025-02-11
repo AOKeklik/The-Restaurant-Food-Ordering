@@ -13,8 +13,15 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
+            
             $table->text("slider_photo");
-            $table->tinyInteger("slider_status")->default(0);
+            $table->boolean("slider_status")->default(0);
+
+            $table->string("why_choose_title");
+            $table->string("why_choose_sub_title");
+            $table->text("why_choose_description");
+            $table->boolean("why_choose_status")->default(0);
+
             $table->timestamps();
         });
     }

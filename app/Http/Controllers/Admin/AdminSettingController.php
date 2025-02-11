@@ -64,4 +64,28 @@ class AdminSettingController extends Controller
 
         return redirect()->back()->with("success","Settings updated successfully.");
     }
+    public function why_choose_update (Request $request){
+        $request->validate([
+            "why_choose_title"=>"required|string",
+            "why_choose_sub_title"=>"required|string",
+            "why_choose_description"=>"required|string",
+            "why_choose_status"=>"nullable",
+        ]);
+
+        $setting=Setting::first();
+
+        if(!$setting)
+            return redirect()->back()->with("error","Settings not found.");
+        
+
+        $setting->why_choose_title=$request->why_choose_title;
+        $setting->why_choose_sub_title=$request->why_choose_sub_title;
+        $setting->why_choose_description=$request->why_choose_description;
+        $setting->why_choose_status=$request->has("why_choose_status") ? 1 : 0;
+        
+        if(!$setting->save())
+            return redirect()->back()->with("error","Failed to update settings.");
+
+        return redirect()->back()->with("success","Settings updated successfully.");
+    }
 }

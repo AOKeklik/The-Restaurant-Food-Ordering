@@ -20,7 +20,7 @@ class AdminSliderController extends Controller
         $slide=Slider::find($slide_id);
 
         if(!$slide)
-            return redirect()->route("admin.slides")->with("error","");
+            return redirect()->route("admin.slides")->with("error","The slide not found.");
 
         return view("admin.slide_edit",compact("slide"));
     }

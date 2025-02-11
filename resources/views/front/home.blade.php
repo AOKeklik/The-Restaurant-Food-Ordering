@@ -50,7 +50,9 @@
     <!--=============================
         CHOOSE START
     ==============================-->
-    @include("front.component.choose")
+    @if($provider_settings->why_choose_status == 1 && $whyChooses->count() > 0)
+        @include("front.component.choose")
+    @endif
     <!--=============================
         CHOOSE END
     ==============================-->
