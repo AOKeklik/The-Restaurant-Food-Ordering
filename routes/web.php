@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminHomeController;
+use App\Http\Controllers\Admin\AdminProductCategoryController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminSliderController;
@@ -50,13 +51,23 @@ Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     Route::post("slider/delete",[AdminSliderController::class,"slides_delete"])->name("admin.slide.delete");
 
     /* why choose */
-    Route::get("why_chooses",[AdminWhyChooseController::class,"why_chooses"])->name("admin.why_chooses");
-    Route::get("why_choose/add",[AdminWhyChooseController::class,"why_choose_add"])->name("admin.why_choose.add");
-    Route::get("why_choose/edit/{why_choose_id}",[AdminWhyChooseController::class,"why_choose_edit"])->name("admin.why_choose.edit");
-    Route::post("why_choose/store",[AdminWhyChooseController::class,"why_choose_store"])->name("admin.why_choose.store");
-    Route::post("why_choose/update",[AdminWhyChooseController::class,"why_choose_update"])->name("admin.why_choose.update");
-    Route::post("why_choose/status/update",[AdminWhyChooseController::class,"why_choose_status_update"])->name("admin.why_choose.status.update");
-    Route::post("why_choose/delete",[AdminWhyChooseController::class,"why_choose_delete"])->name("admin.why_choose.delete");
+    Route::get("why-chooses",[AdminWhyChooseController::class,"why_chooses"])->name("admin.why_chooses");
+    Route::get("why-choose/add",[AdminWhyChooseController::class,"why_choose_add"])->name("admin.why_choose.add");
+    Route::get("why-choose/edit/{why_choose_id}",[AdminWhyChooseController::class,"why_choose_edit"])->name("admin.why_choose.edit");
+    Route::post("why-choose/store",[AdminWhyChooseController::class,"why_choose_store"])->name("admin.why_choose.store");
+    Route::post("why-choose/update",[AdminWhyChooseController::class,"why_choose_update"])->name("admin.why_choose.update");
+    Route::post("why-choose/status/update",[AdminWhyChooseController::class,"why_choose_status_update"])->name("admin.why_choose.status.update");
+    Route::post("why-choose/delete",[AdminWhyChooseController::class,"why_choose_delete"])->name("admin.why_choose.delete");
+
+    /* product categories */
+    Route::get("product/categories",[AdminProductCategoryController::class,"product_categories"])->name("admin.product.categories");
+    Route::get("product/category/add",[AdminProductCategoryController::class,"product_category_add"])->name("admin.product.category.add");
+    Route::get("product/category/edit/{category_id}",[AdminProductCategoryController::class,"product_category_edit"])->name("admin.product.category.edit");
+    Route::post("product/category/store",[AdminProductCategoryController::class,"product_category_store"])->name("admin.product.category.store");
+    Route::post("product/category/update",[AdminProductCategoryController::class,"product_category_update"])->name("admin.product.category.update");
+    Route::post("product/category/status/update",[AdminProductCategoryController::class,"product_category_status_update"])->name("admin.product.category.status.update");
+    Route::post("product/category/home/update",[AdminProductCategoryController::class,"product_category_home_update"])->name("admin.product.category.home.update");
+    Route::post("product/category/delete",[AdminProductCategoryController::class,"product_category_delete"])->name("admin.product.category.delete");
 });
 
 

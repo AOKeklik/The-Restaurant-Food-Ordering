@@ -26,6 +26,18 @@
                     <li class="@if(Route::is("admin.why_choose.add")) active @endif"><a class="nav-link" href="{{ route("admin.why_choose.add") }}">Add Choose</a></li>
                 </ul>
             </li>
+            <li class="dropdown @if(Route::is("admin.product.categories") || Route::is("admin.product.category.add")) active @endif">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"> <i class="fas fa-folder"></i> <span>Categorise</span></a>
+                <ul class="dropdown-menu">
+                    <li class="@if(Route::is("admin.product.categories")) active @endif">
+                        <a class="nav-link" href="{{ route("admin.product.categories") }}">Categories</a>
+                    </li>
+                    <li class="@if(Route::is("admin.product.category.add")) active @endif">
+                        <a class="nav-link" href="{{ route("admin.product.category.add") }}">Add Category</a>
+                    </li>
+                </ul>
+            </li>
+
 
             {{-- <li class="menu-header">Starter</li>
             <li class="dropdown">
