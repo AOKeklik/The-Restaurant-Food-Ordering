@@ -2,14 +2,16 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminHomeController;
-use App\Http\Controllers\Admin\AdminProductCategoryController;
+use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminWhyChooseController;
 use App\Http\Controllers\Front\CustomerAuthController;
-use App\Http\Controllers\Front\CustomerProfileController;
-use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\FrontCustomerProfileController;
+use App\Http\Controllers\Front\FrontHomeController;
+use App\Http\Controllers\Front\FrontProductController;
 use Illuminate\Support\Facades\Route;
 
 /* ********** ADMIN *********** */
@@ -59,15 +61,25 @@ Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     Route::post("why-choose/status/update",[AdminWhyChooseController::class,"why_choose_status_update"])->name("admin.why_choose.status.update");
     Route::post("why-choose/delete",[AdminWhyChooseController::class,"why_choose_delete"])->name("admin.why_choose.delete");
 
-    /* product categories */
-    Route::get("product/categories",[AdminProductCategoryController::class,"product_categories"])->name("admin.product.categories");
-    Route::get("product/category/add",[AdminProductCategoryController::class,"product_category_add"])->name("admin.product.category.add");
-    Route::get("product/category/edit/{category_id}",[AdminProductCategoryController::class,"product_category_edit"])->name("admin.product.category.edit");
-    Route::post("product/category/store",[AdminProductCategoryController::class,"product_category_store"])->name("admin.product.category.store");
-    Route::post("product/category/update",[AdminProductCategoryController::class,"product_category_update"])->name("admin.product.category.update");
-    Route::post("product/category/status/update",[AdminProductCategoryController::class,"product_category_status_update"])->name("admin.product.category.status.update");
-    Route::post("product/category/home/update",[AdminProductCategoryController::class,"product_category_home_update"])->name("admin.product.category.home.update");
-    Route::post("product/category/delete",[AdminProductCategoryController::class,"product_category_delete"])->name("admin.product.category.delete");
+    /* categories */
+    Route::get("categories",[AdminCategoryController::class,"categories"])->name("admin.categories");
+    Route::get("category/add",[AdminCategoryController::class,"category_add"])->name("admin.category.add");
+    Route::get("category/edit/{category_id}",[AdminCategoryController::class,"category_edit"])->name("admin.category.edit");
+    Route::post("category/store",[AdminCategoryController::class,"category_store"])->name("admin.category.store");
+    Route::post("category/update",[AdminCategoryController::class,"category_update"])->name("admin.category.update");
+    Route::post("category/status/update",[AdminCategoryController::class,"category_status_update"])->name("admin.category.status.update");
+    Route::post("category/home/update",[AdminCategoryController::class,"category_home_update"])->name("admin.category.home.update");
+    Route::post("category/delete",[AdminCategoryController::class,"category_delete"])->name("admin.category.delete");
+
+    /* products */
+    Route::get("products",[AdminProductController::class,"products"])->name("admin.products");
+    Route::get("product/add",[AdminProductController::class,"product_add"])->name("admin.product.add");
+    Route::post("product/store",[AdminProductController::class,"product_store"])->name("admin.product.store");
+    Route::get("product/edit/{product_id}",[AdminProductController::class,"product_edit"])->name("admin.product.edit");
+    Route::post("product/update",[AdminProductController::class,"product_update"])->name("admin.product.update");
+    Route::post("product/status/update",[AdminProductController::class,"product_status_update"])->name("admin.product.status.update");
+    Route::post("product/home/update",[AdminProductController::class,"product_home_update"])->name("admin.product.home.update");
+    Route::post("product/delete",[AdminProductController::class,"product_delete"])->name("admin.product.delete");
 });
 
 
@@ -96,12 +108,15 @@ Route::prefix("customer")->middleware("customer.redirectIfAuthenticated")->group
 });
 
 Route::prefix("customer")->middleware("customer.authenticate")->group(function(){
-    Route::get("",[CustomerProfileController::class,"dashboard"])->name("front.customer.dashboard");
+    Route::get("",[FrontCustomerProfileController::class,"dashboard"])->name("front.customer.dashboard");
 
     /* profile */
-    Route::post("avatar/update",[CustomerProfileController::class,"avatar_update"])->name("front.customer.avatar.update");
-    Route::post("profile/update",[CustomerProfileController::class,"profile_update"])->name("front.customer.profile.update");
-    Route::post("password/update",[CustomerProfileController::class,"password_update"])->name("front.customer.password.update");
+    Route::post("avatar/update",[FrontCustomerProfileController::class,"avatar_update"])->name("front.customer.avatar.update");
+    Route::post("profile/update",[FrontCustomerProfileController::class,"profile_update"])->name("front.customer.profile.update");
+    Route::post("password/update",[FrontCustomerProfileController::class,"password_update"])->name("front.customer.password.update");
+
+    /* products */
+    Route::get("products",[FrontProductController::class,"products"])->name("front.products");
 });
 
 
@@ -109,6 +124,6 @@ Route::prefix("customer")->middleware("customer.authenticate")->group(function()
 
 
 Route::prefix("/")->group(function(){
-    Route::get("",[HomeController::class,"index"])->name("front.index");
+    Route::get("",[FrontHomeController::class,"index"])->name("front.index");
 });
 

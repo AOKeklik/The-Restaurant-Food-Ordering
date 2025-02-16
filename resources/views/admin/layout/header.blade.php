@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="{{ asset("dist/back/css/iziToast.min.css") }}">
   <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@5.1.1/css/bootstrap5-toggle.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
   
 
   <!-- Template CSS -->

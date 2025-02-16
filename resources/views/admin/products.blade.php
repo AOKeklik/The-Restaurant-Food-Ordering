@@ -1,80 +1,66 @@
 @extends("admin.layout.app")
-@section("title", "Slides")
+@section("title", "Products")
+@section("link", route("front.products"))
 @section("content")
 <div class="card">
     <div class="card-header">
-        <h4>Card Header</h4>
+        <h4>Procuts</h4>
         <div class="card-header-action">
-            <a href="{{ route("admin.slide.add") }}" class="btn btn-primary">
+            <a href="{{ route("admin.product.add") }}" class="btn btn-primary">
                 Add New
             </a>
         </div>
     </div>
     <div class="card-body">
-        <div class="row justify-content-center">
-            <form class="col-md-8" action="{{ route("admin.setting.slider.update") }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method("POST")
-                <!-- Image Upload -->
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <img src="{{ asset("uploads/setting") }}/{{ $provider_settings->slider_photo }}" alt="" class="w-100">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="image" class="form-label">Image*</label>
-                        <input name="slider_photo" type="file" class="form-control" id="slider_photo">
-                        @error("slider_photo") <small class="text-danger">{{ $message }}</small> @enderror
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="slider_status" class="form-label">Show*</label>
-                    <input type="checkbox" @if($provider_settings->slider_status == 1) checked @endif data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger" name="slider_status">
-                    @error("slider_status") <small class="text-danger">{{ $message }}</small> @enderror
-                </div>
-
-                <!-- Submit Button -->
-                <div class="text-end">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
-        </div>
-        <hr class="my-5">
         <div class="table-responsive" >
             <table class="table table-bordered table-md" id="example">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Image</th>
-                        <th>Title</th>
+                        <th>Name</th>
+                        <th>Sku</th>
+                        <th>Price</th>
                         <th>Status</th>
+                        <th>Home</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($slides as $slide)
+                    @foreach($products as $product)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
-                                <img style="width:75px" src="{{ asset("uploads/slider/") }}/{{ $slide->image }}" alt="">
+                                <img style="width:75px" src="{{ asset("uploads/product/") }}/{{ $product->image }}" alt="">
                             </td>
-                            <td>{{ $slide->title }}</td>
+                            <td>{{ $product->name }}</td>
+                            <td>{{ $product->sku }}</td>
+                            <td>${{ $product->price }}</td>
                             <td>
-                                <div class="badge badge-success" style="@if($slide->status == 0) display:none @endif">Active</div>
-                                <div class="badge badge-danger" style="@if($slide->status == 1) display:none @endif">Inactive</div>
+                                <div class="d-inline active">
+                                    <span class="button-loader"></span>
+                                    <input 
+                                        type="checkbox"
+                                        class="checkbox_product_status" 
+                                        data-product-id="{{ $product->id }}"
+                                        @if($product->status == 1) checked @endif
+                                        data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger">
+                                </div>
                             </td>
                             <td>
                                 <div class="d-inline active">
                                     <span class="button-loader"></span>
                                     <input 
                                         type="checkbox"
-                                        class="checkbox_slide_status" 
-                                        data-slide-id="{{ $slide->id }}"
-                                        @if($slide->status == 1) checked @endif
+                                        class="checkbox_product_home" 
+                                        data-product-id="{{ $product->id }}"
+                                        @if($product->show_on_homepage == 1) checked @endif
                                         data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger">
                                 </div>
-                                <a href="{{ route("admin.slide.edit",["slide_id"=>$slide->id]) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                                <a data-slide-id="{{ $slide->id }}" href="" class="btn btn-danger slide_delete">
+                            </td>
+                            <td>                                
+                                <a href="{{ route("admin.product.edit",["product_id"=>$product->id]) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                <a data-product-id="{{ $product->id }}" href="" class="btn btn-danger product_delete">
                                     <span class="button-loader"></span>
                                     <i class="fas fa-trash"></i>
                                 </a>
@@ -89,21 +75,12 @@
 @endsection
 @push("scripts")
     <script>
-        /* image */
-        $(document).ready(function(){
-            $("#slider_photo").change(function(e){
-                $(this).closest(".row").find('img').attr("src",URL.createObjectURL(e.target.files[0]))
-            })
-        })
-
         /* update */
         $(document).ready(function(){
-            $(".checkbox_slide_status").change(async function(){
+            $(".checkbox_product_status").change(async function(){
 
                 const el = $(this).closest(".d-inline")
-                const on = $(this).closest("tr").find(".badge.badge-success")
-                const off = $(this).closest("tr").find(".badge.badge-danger")
-                const slide_id =$(this).data("slide-id")
+                const product_id =$(this).data("product-id")
                 const status = $(this).prop("checked") ? 1 : 0
                 const formData=new FormData()
 
@@ -112,7 +89,7 @@
                 await new Promise(resolve=>setTimeout(resolve, 1000))
 
                 formData.append("_token", "{{ csrf_token() }}")
-                formData.append("slide_id",slide_id)
+                formData.append("product_id",product_id)
                 formData.append("status",status)
 
                 $.ajax({
@@ -120,7 +97,7 @@
                     contentType: false,
                     processData: false,
                     data: formData,
-                    url: "{{ route('admin.slide.status.update') }}",
+                    url: "{{ route('admin.product.status.update') }}",
                     success:function(res){
                         console.log(res)
 
@@ -130,15 +107,44 @@
                             position: "topRight",
                         })
 
-                        if(res.success){
-                            if(status === 1){
-                                on.show()
-                                off.hide()
-                            }else{
-                                on.hide()
-                                off.show()
-                            }
-                        }
+                        el.removeClass("pending")
+                        el.addClass("active")
+                    }
+                })
+            })
+        })
+
+        /* update */
+        $(document).ready(function(){
+            $(".checkbox_product_home").change(async function(){
+
+                const el = $(this).closest(".d-inline")
+                const product_id =$(this).data("product-id")
+                const status = $(this).prop("checked") ? 1 : 0
+                const formData=new FormData()
+
+                el.addClass("pending")
+                el.removeClass("active")
+                await new Promise(resolve=>setTimeout(resolve, 1000))
+
+                formData.append("_token", "{{ csrf_token() }}")
+                formData.append("product_id",product_id)
+                formData.append("status",status)
+
+                $.ajax({
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    url: "{{ route('admin.product.home.update') }}",
+                    success:function(res){
+                        console.log(res)
+
+                        iziToast.show({
+                            title: res.error?.message ?? res.success?.message,
+                            color: res.error ? "red" : "green",
+                            position: "topRight",
+                        })
 
                         el.removeClass("pending")
                         el.addClass("active")
@@ -149,7 +155,7 @@
 
         /* delete */
         $(document).ready(function(){
-            $(".slide_delete").click(async function(e){
+            $(".product_delete").click(async function(e){
                 e.preventDefault()
 
 
@@ -167,7 +173,7 @@
 
                         const el = $(this)
                         const parent = $(this).closest("tr")
-                        const slide_id =$(this).data("slide-id")
+                        const product_id =$(this).data("product-id")
                         const formData=new FormData()
 
                         el.addClass("pending")
@@ -175,14 +181,14 @@
                         await new Promise(resolve=>setTimeout(resolve, 1000))
 
                         formData.append("_token", "{{ csrf_token() }}")
-                        formData.append("slide_id",slide_id)
+                        formData.append("product_id",product_id)
 
                         $.ajax({
                             type: "POST",
                             contentType: false,
                             processData: false,
                             data: formData,
-                            url: "{{ route('admin.slide.delete') }}",
+                            url: "{{ route('admin.product.delete') }}",
                             success:function(res){
                                 console.log(res)
 

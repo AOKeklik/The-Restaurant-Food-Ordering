@@ -6,14 +6,14 @@
     <div class="card-header">
         <h4>Add Category</h4>
         <div class="card-header-action">
-            <a href="{{ route("admin.product.categories") }}" class="btn btn-primary">
+            <a href="{{ route("admin.categories") }}" class="btn btn-primary">
                 <i class="fa fa-eye"></i>
                 Categories
             </a>
         </div>
     </div>
     <div class="card-body">
-        <form action="{{ route("admin.product.category.store") }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route("admin.category.store") }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method("POST")
             <div class="row">

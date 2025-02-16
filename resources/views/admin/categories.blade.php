@@ -6,7 +6,7 @@
     <div class="card-header">
         <h4>Card Category</h4>
         <div class="card-header-action">
-            <a href="{{ route("admin.product.category.add") }}" class="btn btn-primary">
+            <a href="{{ route("admin.category.add") }}" class="btn btn-primary">
                 Add New
             </a>
         </div>
@@ -53,7 +53,7 @@
                                 </div>
                             </td>
                             <td>
-                                <a href="{{ route("admin.product.category.edit",["category_id"=>$category->id]) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                <a href="{{ route("admin.category.edit",["category_id"=>$category->id]) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
                                 <a data-category-id="{{ $category->id }}" href="" class="btn btn-danger category_delete">
                                     <span class="button-loader"></span>
                                     <i class="fas fa-trash"></i>
@@ -89,7 +89,7 @@
                 formData.append("_token", "{{ csrf_token() }}")
                 
                 $.ajax({
-                    url: "{{ route('admin.product.category.status.update') }}",
+                    url: "{{ route('admin.category.status.update') }}",
                     type: "POST",
                     contentType: false,
                     processData: false,
@@ -125,7 +125,7 @@
                 formData.append("_token", "{{ csrf_token() }}")
                 
                 $.ajax({
-                    url: "{{ route('admin.product.category.home.update') }}",
+                    url: "{{ route('admin.category.home.update') }}",
                     type: "POST",
                     contentType: false,
                     processData: false,
@@ -171,7 +171,7 @@
                         formData.append("_token", "{{ csrf_token() }}")
                         
                         $.ajax({
-                            url: "{{ route('admin.product.category.delete') }}",
+                            url: "{{ route('admin.category.delete') }}",
                             type: "POST",
                             contentType: false,
                             processData: false,

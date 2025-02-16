@@ -21,6 +21,7 @@
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@5.1.1/js/bootstrap5-toggle.jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 
     <!-- Template JS File -->
     <script src="{{ asset("dist/back/js/scripts.js") }}"></script>
@@ -46,8 +47,8 @@
     </script>
     @endif
 
-    <!-- Datatable -->
     <script>
+        // Datatable
         $(document).ready(function () {
             const table = $('#example').DataTable({
                 order: [], 
@@ -65,6 +66,11 @@
                     "paging": false,
                 })
             }
+        })
+
+        // editor
+        $(document).ready(function() {
+            $('.summernote').summernote()
         })
     </script>
 

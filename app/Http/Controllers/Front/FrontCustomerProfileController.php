@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CustomerProfileController extends Controller
+class FrontCustomerProfileController extends Controller
 {
     public function dashboard () : View {
         return view("front.customer_dashboard");

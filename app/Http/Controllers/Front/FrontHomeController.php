@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Slider;
 use App\Models\WhyChoose;
 
-class HomeController extends Controller
+class FrontHomeController extends Controller
 {
-    
     public function index(){
         $slides=Slider::where("status",true)->orderBy("id","desc")->limit(3)->get();
         $whyChooses=WhyChoose::where("status",true)->orderBy("id","desc")->limit(3)->get();

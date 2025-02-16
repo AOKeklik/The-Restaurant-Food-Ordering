@@ -9,24 +9,24 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class AdminProductCategoryController extends Controller
+class AdminCategoryController extends Controller
 {
-    public function product_categories ():View {
+    public function categories ():View {
         $categories=Category::orderBy("id","DESC")->get();
         return view("admin.categories",compact("categories"));
     }
-    public function product_category_add ():View {
+    public function category_add ():View {
         $categories=Category::orderBy("id","DESC")->get();
         return view("admin.category_add",compact("categories"));
     }
-    public function product_category_edit ($category_id):View {
+    public function category_edit ($category_id):View {
         $categories=Category::orderBy("id","DESC")->get();
         $category=Category::find($category_id);
         return view("admin.category_edit",compact("category","categories"));
     }
 
 
-    public function product_category_store (Request $request) {
+    public function category_store (Request $request) {
         $request->validate([
             "parent_id"=>"nullable|integer|exists:categories,id",
             "name"=>"required|string|unique:categories,name",
@@ -54,9 +54,9 @@ class AdminProductCategoryController extends Controller
         if(!$category->save())
             return redirect()->back()->with("error","Failed to save category.");
 
-        return redirect()->route("admin.product.categories")->with("success","Category created successfully.");
+        return redirect()->route("admin.categories")->with("success","Category created successfully.");
     }
-    public function product_category_update (Request $request) {
+    public function category_update (Request $request) {
         $request->validate([
             "category_id" => "required|integer|exists:categories,id",
             "parent_id"=> "nullable|integer|exists:categories,id",
@@ -95,9 +95,9 @@ class AdminProductCategoryController extends Controller
             return redirect()->back()->with("error", "Failed to save category.");
         }
     
-        return redirect()->route("admin.product.categories")->with("success", "Category updated successfully.");
+        return redirect()->route("admin.categories")->with("success", "Category updated successfully.");
     }
-    public function product_category_status_update (Request $request) {
+    public function category_status_update (Request $request) {
         $validator = \Validator::make($request->all(), [
             "category_id"=>"required|numeric|exists:categories,id",
             "status"=>"required|numeric|in:1,0"
@@ -118,7 +118,7 @@ class AdminProductCategoryController extends Controller
 
         return response()->json(["success"=>["message"=>"Category status updated successfully."]]);
     }
-    public function product_category_home_update (Request $request) {
+    public function category_home_update (Request $request) {
         $validator = \Validator::make($request->all(), [
             "category_id"=>"required|numeric|exists:categories,id",
             "show_on_homepage"=>"required|numeric|in:1,0"
@@ -139,7 +139,7 @@ class AdminProductCategoryController extends Controller
 
         return response()->json(["success"=>["message"=>"Category homepage status updated successfully."]]);
     }
-    public function product_category_delete (Request $request) {
+    public function category_delete (Request $request) {
         $validator = \Validator::make($request->all(), [
             "category_id"=>"required|numeric|exists:categories,id",
         ]);
