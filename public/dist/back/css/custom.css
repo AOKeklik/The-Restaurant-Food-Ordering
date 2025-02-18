@@ -9,10 +9,10 @@
 
 .pending {pointer-events: none;user-select: none;}
 .pending .button-loader {display: inline-block;}
-.pending .button-loader + * {display: none;}
+.pending > *:not(.button-loader) {display: none;}
 
 .active .button-loader {display: none;}
-.active .button-loader + * {display: inline-block;}
+.active > *:not(.button-loader) {display: inline-block;}
 
 .button-loader {
     position: relative;

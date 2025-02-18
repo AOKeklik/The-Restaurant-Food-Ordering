@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminProductImageController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminSliderController;
@@ -80,6 +81,13 @@ Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     Route::post("product/status/update",[AdminProductController::class,"product_status_update"])->name("admin.product.status.update");
     Route::post("product/home/update",[AdminProductController::class,"product_home_update"])->name("admin.product.home.update");
     Route::post("product/delete",[AdminProductController::class,"product_delete"])->name("admin.product.delete");
+
+    /* product images */
+    Route::get("product/images/{product_id}",[AdminProductImageController::class,"images"])->name("admin.product.images");
+    Route::post("product/image/store",[AdminProductImageController::class,"image_store"])->name("admin.product.image.store");
+    Route::post("product/image/update",[AdminProductImageController::class,"image_update"])->name("admin.product.image.update");
+    Route::post("product/image/status/update",[AdminProductImageController::class,"image_status_update"])->name("admin.product.image.status.update");
+    Route::post("product/image/delete",[AdminProductImageController::class,"image_delete"])->name("admin.product.image.delete");
 });
 
 

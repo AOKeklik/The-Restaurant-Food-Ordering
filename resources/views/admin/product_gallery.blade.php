@@ -1,67 +1,76 @@
 @extends("admin.layout.app")
-@section("title", "Products")
+@section("title", "Product Gallery")
 @section("link", route("front.products"))
 @section("content")
 <div class="card">
     <div class="card-header">
-        <h4>Procuts</h4>
+        <h4>Images</h4>
         <div class="card-header-action">
-            <a href="{{ route("admin.product.add") }}" class="btn btn-primary">
-                Add New
+            <a href="{{ route("admin.products") }}" class="btn btn-primary">
+                Products
             </a>
         </div>
     </div>
     <div class="card-body">
+        <div class="row justify-content-center">
+            <form class="col-md-8" action="{{ route("admin.product.image.store") }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method("POST")
+                <input type="hidden" name="product_id" value="{{ request("product_id") }}">
+                <!-- Image Upload -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <img src="https://placehold.co/300x150?text=Hello\nWorld" alt="" class="w-100">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="images" class="form-label">Image*</label>
+                        <input name="images[]" type="file" class="form-control" id="images" multiple>
+                        @error("images") <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+                </div>
+                <!-- Submit Button -->
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <hr class="my-5">
         <div class="table-responsive" >
             <table class="table table-bordered table-md" id="example">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Image</th>
-                        <th>Name</th>
-                        <th>Sku</th>
-                        <th>Price</th>
                         <th>Status</th>
-                        <th>Home</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($products as $product)
+                    @foreach($images as $image)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
-                                <img style="width:75px" src="{{ asset("uploads/product/") }}/{{ $product->image }}" alt="">
-                            </td>
-                            <td>{{ $product->name }}</td>
-                            <td>{{ $product->sku }}</td>
-                            <td>${{ $product->price }}</td>
-                            <td>
-                                <div class="d-inline active">
-                                    <span class="button-loader"></span>
-                                    <input 
-                                        type="checkbox"
-                                        class="checkbox_product_status" 
-                                        data-product-id="{{ $product->id }}"
-                                        @if($product->status == 1) checked @endif
-                                        data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger">
-                                </div>
+                                <img style="width:75px" src="{{ asset("uploads/product-image") }}/{{ $image->image }}" alt="">
                             </td>
                             <td>
                                 <div class="d-inline active">
                                     <span class="button-loader"></span>
                                     <input 
                                         type="checkbox"
-                                        class="checkbox_product_home" 
-                                        data-product-id="{{ $product->id }}"
-                                        @if($product->show_on_homepage == 1) checked @endif
+                                        class="image_status" 
+                                        data-product-id="{{ request("product_id") }}"
+                                        data-image-id="{{ $image->id }}"
+                                        @if($image->status == 1) checked @endif
                                         data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger">
                                 </div>
                             </td>
                             <td>                                
-                                <a href="{{ route("admin.product.images",["product_id"=>$product->id]) }}" class="btn btn-primary"><i class="fas fa-images"></i></a>
-                                <a href="{{ route("admin.product.edit",["product_id"=>$product->id]) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                                <a data-product-id="{{ $product->id }}" href="" class="btn btn-danger product_delete">
+                                <label for="image-{{ $image->id }}" class="btn btn-primary">
+                                    <span class="button-loader"></span>
+                                    <input data-image-id="{{ $image->id }}" data-product-id="{{ request("product_id") }}" type="file" name="image" id="image-{{ $image->id }}" class="d-none image">
+                                    <i class="fas fa-edit"></i>
+                                </label>
+                                <a data-image-id="{{ $image->id }}" data-product-id="{{ request("product_id") }}" href="" class="btn btn-danger image_delete">
                                     <span class="button-loader"></span>
                                     <i class="fas fa-trash"></i>
                                 </a>
@@ -76,21 +85,48 @@
 @endsection
 @push("scripts")
     <script>
+        /* files */
+        $(document).ready(function(){
+            $("#images").change(function(e){
+                const images = []
+
+                Array.from(e.target.files).forEach(file => {
+                    images.push(`
+                        <div class="col-md-4">
+                            <img src='${URL.createObjectURL(file)}' class='w-100'>
+                        </div>
+                    `)
+                })
+
+
+                $(this).closest("form").find(".col-md-6").first().html("")
+                $(this).closest("form").find(".col-md-6").first().html(`
+                    <div class="row">
+                        ${images.join("")}
+                    </div>
+                `)
+            })
+        })
+
         /* update */
         $(document).ready(function(){
-            $(".checkbox_product_status").change(async function(){
+            $(".image").change(async function(e){
 
-                const el = $(this).closest(".d-inline")
+                const el = $(this)
+                const parent = $(this).closest("label")
                 const product_id =$(this).data("product-id")
+                const image_id =$(this).data("image-id")
                 const status = $(this).prop("checked") ? 1 : 0
                 const formData=new FormData()
 
-                el.addClass("pending")
-                el.removeClass("active")
+                parent.addClass("pending")
+                parent.removeClass("active")
                 await new Promise(resolve=>setTimeout(resolve, 1000))
 
                 formData.append("_token", "{{ csrf_token() }}")
+                formData.append("image",e.target.files[0])
                 formData.append("product_id",product_id)
+                formData.append("image_id",image_id)
                 formData.append("status",status)
 
                 $.ajax({
@@ -98,7 +134,7 @@
                     contentType: false,
                     processData: false,
                     data: formData,
-                    url: "{{ route('admin.product.status.update') }}",
+                    url: "{{ route('admin.product.image.update') }}",
                     success:function(res){
                         console.log(res)
 
@@ -108,8 +144,12 @@
                             position: "topRight",
                         })
 
-                        el.removeClass("pending")
-                        el.addClass("active")
+                        if(res.success)
+                            el.closest("tr").find("img").attr("src", URL.createObjectURL(e.target.files[0]))
+
+
+                        parent.removeClass("pending")
+                        parent.addClass("active")
                     }
                 })
             })
@@ -117,10 +157,11 @@
 
         /* update */
         $(document).ready(function(){
-            $(".checkbox_product_home").change(async function(){
+            $(".image_status").change(async function(){
 
                 const el = $(this).closest(".d-inline")
                 const product_id =$(this).data("product-id")
+                const image_id =$(this).data("image-id")
                 const status = $(this).prop("checked") ? 1 : 0
                 const formData=new FormData()
 
@@ -130,6 +171,7 @@
 
                 formData.append("_token", "{{ csrf_token() }}")
                 formData.append("product_id",product_id)
+                formData.append("image_id",image_id)
                 formData.append("status",status)
 
                 $.ajax({
@@ -137,7 +179,7 @@
                     contentType: false,
                     processData: false,
                     data: formData,
-                    url: "{{ route('admin.product.home.update') }}",
+                    url: "{{ route('admin.product.image.status.update') }}",
                     success:function(res){
                         console.log(res)
 
@@ -147,6 +189,7 @@
                             position: "topRight",
                         })
 
+
                         el.removeClass("pending")
                         el.addClass("active")
                     }
@@ -154,9 +197,9 @@
             })
         })
 
-        /* delete */
+        /* delete image */
         $(document).ready(function(){
-            $(".product_delete").click(async function(e){
+            $(".image_delete").click(function(e){
                 e.preventDefault()
 
 
@@ -174,6 +217,7 @@
 
                         const el = $(this)
                         const parent = $(this).closest("tr")
+                        const image_id =$(this).data("image-id")
                         const product_id =$(this).data("product-id")
                         const formData=new FormData()
 
@@ -183,13 +227,14 @@
 
                         formData.append("_token", "{{ csrf_token() }}")
                         formData.append("product_id",product_id)
+                        formData.append("image_id",image_id)
 
                         $.ajax({
                             type: "POST",
                             contentType: false,
                             processData: false,
                             data: formData,
-                            url: "{{ route('admin.product.delete') }}",
+                            url: "{{ route('admin.product.image.delete') }}",
                             success:function(res){
                                 console.log(res)
 
@@ -208,9 +253,7 @@
                             }
                         })
                     }
-                });
-
-                
+                })
             })
         })
     </script>
