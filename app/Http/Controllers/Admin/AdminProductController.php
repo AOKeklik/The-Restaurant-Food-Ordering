@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
+use App\Models\ProductSizes;
 use Cocur\Slugify\Slugify;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -227,6 +229,27 @@ class AdminProductController extends Controller
 
         if(!$product)
             return response()->json(["error"=>["message"=>"Product not found."]]);
+
+        $product_images=ProductImage::where("product_id",$product->id)->get();
+
+        if($product_images->count() > 0){
+            foreach($product_images as $product_image) {
+                if(is_file(public_path("uploads/product-image/").$product_image->image))
+                    unlink(public_path("uploads/product-image/").$product_image->image);
+
+                if(!$product_image->delete())
+                    return response()->json(["error"=>["message"=>"Failed to delete the product image."]]);
+            }
+        }   
+
+        $product_sizes=ProductSizes::where("product_id",$product->id)->get();
+
+        if($product_sizes->count() > 0){
+            foreach($product_sizes as $product_size) {
+                if(!$product_size->delete())
+                    return response()->json(["error"=>["message"=>"Failed to delete the product size."]]);
+            }
+        }  
 
         if(is_file(public_path("uploads/product/").$product->image))
             unlink(public_path("uploads/product/").$product->image);

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminProductImageController;
+use App\Http\Controllers\Admin\AdminProductSizeController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminSliderController;
@@ -88,6 +89,14 @@ Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     Route::post("product/image/update",[AdminProductImageController::class,"image_update"])->name("admin.product.image.update");
     Route::post("product/image/status/update",[AdminProductImageController::class,"image_status_update"])->name("admin.product.image.status.update");
     Route::post("product/image/delete",[AdminProductImageController::class,"image_delete"])->name("admin.product.image.delete");
+
+    /* product sizes */
+    Route::get("product/sizes/{product_id}",[AdminProductSizeController::class,"sizes"])->name("admin.product.sizes");
+    Route::post("product/size/store",[AdminProductSizeController::class,"size_store"])->name("admin.product.size.store");
+    Route::get("product/size/edit/{size_id}",[AdminProductSizeController::class,"size_edit"])->name("admin.product.size.edit");
+    Route::post("product/size/update",[AdminProductSizeController::class,"size_update"])->name("admin.product.size.update");
+    Route::post("product/size/status/update",[AdminProductSizeController::class,"size_status_update"])->name("admin.product.size.status.update");
+    Route::post("product/size/delete",[AdminProductSizeController::class,"size_delete"])->name("admin.product.size.delete");
 });
 
 
