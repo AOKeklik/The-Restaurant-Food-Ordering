@@ -22,10 +22,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@5.1.1/js/bootstrap5-toggle.jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- Template JS File -->
     <script src="{{ asset("dist/back/js/scripts.js") }}"></script>
-    <script src="{{ asset("dist/back/js/custom.js") }}"></script>
 
     <!-- Session Messages -->
     @if(Session::has("error"))
@@ -48,7 +48,7 @@
     @endif
 
     <script>
-        // Datatable
+        /* Datatable */
         $(document).ready(function () {
             const table = $('#example').DataTable({
                 order: [], 
@@ -68,9 +68,18 @@
             }
         })
 
-        // editor
+        /* editor */
         $(document).ready(function() {
             $('.summernote').summernote()
+        })
+
+        /* select */
+        $(document).ready(function(){
+            $('.select2').select2({
+                placeholder: 'This is my placeholder',
+                allowClear: true,
+                width: '100%',
+            })
         })
     </script>
 

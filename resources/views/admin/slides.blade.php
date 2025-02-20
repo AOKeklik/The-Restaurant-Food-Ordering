@@ -60,19 +60,17 @@
                             </td>
                             <td>{{ $slide->title }}</td>
                             <td>
-                                <div class="badge badge-success" style="@if($slide->status == 0) display:none @endif">Active</div>
-                                <div class="badge badge-danger" style="@if($slide->status == 1) display:none @endif">Inactive</div>
-                            </td>
-                            <td>
                                 <div class="d-inline active">
                                     <span class="button-loader"></span>
                                     <input 
                                         type="checkbox"
-                                        class="checkbox_slide_status" 
+                                        class="status" 
                                         data-slide-id="{{ $slide->id }}"
                                         @if($slide->status == 1) checked @endif
                                         data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger">
                                 </div>
+                            </td>
+                            <td>
                                 <a href="{{ route("admin.slide.edit",["slide_id"=>$slide->id]) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
                                 <a data-slide-id="{{ $slide->id }}" href="" class="btn btn-danger slide_delete">
                                     <span class="button-loader"></span>
@@ -98,11 +96,9 @@
 
         /* update */
         $(document).ready(function(){
-            $(".checkbox_slide_status").change(async function(){
+            $(".status").change(async function(){
 
                 const el = $(this).closest(".d-inline")
-                const on = $(this).closest("tr").find(".badge.badge-success")
-                const off = $(this).closest("tr").find(".badge.badge-danger")
                 const slide_id =$(this).data("slide-id")
                 const status = $(this).prop("checked") ? 1 : 0
                 const formData=new FormData()
@@ -129,16 +125,6 @@
                             color: res.error ? "red" : "green",
                             position: "topRight",
                         })
-
-                        if(res.success){
-                            if(status === 1){
-                                on.show()
-                                off.hide()
-                            }else{
-                                on.hide()
-                                off.show()
-                            }
-                        }
 
                         el.removeClass("pending")
                         el.addClass("active")

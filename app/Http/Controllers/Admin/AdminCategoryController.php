@@ -16,11 +16,11 @@ class AdminCategoryController extends Controller
         return view("admin.categories",compact("categories"));
     }
     public function category_add ():View {
-        $categories=Category::orderBy("id","DESC")->get();
+        $categories=Category::where("status",1)->orderBy("id","DESC")->get();
         return view("admin.category_add",compact("categories"));
     }
     public function category_edit ($category_id):View {
-        $categories=Category::orderBy("id","DESC")->get();
+        $categories=Category::where("status",1)->orderBy("id","DESC")->get();
         $category=Category::find($category_id);
         return view("admin.category_edit",compact("category","categories"));
     }

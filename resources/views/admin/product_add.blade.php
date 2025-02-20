@@ -34,6 +34,15 @@
                 <input type="text" class="form-control" id="name" placeholder="Name" name="name" value="{{ old("name") }}">
                 @error("name") <small class="form-text text-danger">{{ $message }}</small> @enderror
             </div>
+            <div class="form-group col-12">
+                <label for="options">Options</label>
+                <select id="options" name="options[]" class="form-control select2" multiple>
+                    @foreach($options as $option)
+                        <option @if(in_array($option->id,old("options",[]))) selected @endif value="{{ $option->id }}">{{ $option->name }}</option>
+                    @endforeach
+                </select>
+                @error("options") <small class="form-text text-danger">{{ $message }}</small> @enderror
+            </div>
             <div class="form-group col-md-6">
                 <label for="slug">Slug</label>
                 <input type="text" class="form-control" id="slug" placeholder="Slug" name="slug" readonly>

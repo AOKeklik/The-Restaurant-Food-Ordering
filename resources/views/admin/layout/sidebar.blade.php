@@ -22,6 +22,17 @@
                     </li>
                 </ul>
             </li>
+            <li class="dropdown @if(Route::is("admin.options") || Route::is("admin.option.add")) active @endif">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"> <i class="fas fa-sliders-h"></i> <span>Options</span></a>
+                <ul class="dropdown-menu">
+                    <li class="@if(Route::is("admin.options")) active @endif">
+                        <a class="nav-link" href="{{ route("admin.options") }}">Options</a>
+                    </li>
+                    <li class="@if(Route::is("admin.category.add")) active @endif">
+                        <a class="nav-link" href="{{ route("admin.option.add") }}">Add Option</a>
+                    </li>
+                </ul>
+            </li>
             <li class="menu-header">Sections</li>
             <li class="dropdown @if(Route::is("admin.slides") || Route::is("admin.slide.add")) active @endif">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"> <i class="fa-solid fa-image"></i> <span>Slides</span></a>

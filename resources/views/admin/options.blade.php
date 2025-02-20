@@ -1,12 +1,13 @@
 @extends("admin.layout.app")
-@section("title", "Categories")
+@section("title", "Options")
 @section("link", route("front.index"))
 @section("content")
 <div class="card">
     <div class="card-header">
-        <h4>Card Category</h4>
+        <h4>Card Option</h4>
         <div class="card-header-action">
-            <a href="{{ route("admin.category.add") }}" class="btn btn-primary">
+            <a href="{{ route("admin.option.add") }}" class="btn btn-primary">
+                <i class="fa fa-plus"></i>
                 Add New
             </a>
         </div>
@@ -18,43 +19,31 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Slug</th>
+                        <th>Price</th>
                         <th>Status</th>
-                        <th>Home Page</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($categories as $category)
+                    @foreach($options as $option)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $category->name }}</td>
-                            <td>{{ $category->slug }}</td>
+                            <td>{{ $option->name }}</td>
+                            <td>${{ $option->price }}</td>
                             <td>
                                 <div class="d-inline active">
                                     <span class="button-loader"></span>
                                     <input 
                                         type="checkbox"
-                                        class="status" 
-                                        data-category-id="{{ $category->id }}"
-                                        @if($category->status == 1) checked @endif
+                                        class="option_status" 
+                                        data-option-id="{{ $option->id }}"
+                                        @if($option->status == 1) checked @endif
                                         data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger">
                                 </div>
                             </td>
                             <td>
-                                <div class="d-inline active">
-                                    <span class="button-loader"></span>
-                                    <input 
-                                        type="checkbox"
-                                        class="show_on_homepage" 
-                                        data-category-id="{{ $category->id }}"
-                                        @if($category->show_on_homepage == 1) checked @endif
-                                        data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger">
-                                </div>
-                            </td>
-                            <td>
-                                <a href="{{ route("admin.category.edit",["category_id"=>$category->id]) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                                <a data-category-id="{{ $category->id }}" href="" class="btn btn-danger category_delete">
+                                <a href="{{ route("admin.option.edit",["option_id"=>$option->id]) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                <a data-option-id="{{ $option->id }}" href="" class="btn btn-danger option_delete">
                                     <span class="button-loader"></span>
                                     <i class="fas fa-trash"></i>
                                 </a>
@@ -72,11 +61,11 @@
         $(document).ready(function(){
 
             /* update status */
-            $(".status").change(async function(e){
+            $(".option_status").change(async function(e){
                 
                 const el=$(this).closest(".d-inline")
                 const status=$(this).prop("checked") ? 1 : 0
-                const category_id=$(this).data("category-id")
+                const option_id=$(this).data("option-id")
                 const formData=new FormData()
 
                 
@@ -85,11 +74,11 @@
                 await new Promise(resolve=>setTimeout(resolve,1000))
                 
                 formData.append("status",status)
-                formData.append("category_id",category_id)
+                formData.append("option_id",option_id)
                 formData.append("_token", "{{ csrf_token() }}")
                 
                 $.ajax({
-                    url: "{{ route('admin.category.status.update') }}",
+                    url: "{{ route('admin.option.status.update') }}",
                     type: "POST",
                     contentType: false,
                     processData: false,
@@ -106,50 +95,14 @@
                     }
                 })
             })  
-
-            /* update home status */
-            $(".show_on_homepage").change(async function(e){
-                
-                const el=$(this).closest(".d-inline")
-                const show_on_homepage=$(this).prop("checked") ? 1 : 0
-                const category_id=$(this).data("category-id")
-                const formData=new FormData()
-
-                
-                el.addClass("pending")
-                el.removeClass("active")
-                await new Promise(resolve=>setTimeout(resolve,1000))
-                
-                formData.append("show_on_homepage",show_on_homepage)
-                formData.append("category_id",category_id)
-                formData.append("_token", "{{ csrf_token() }}")
-                
-                $.ajax({
-                    url: "{{ route('admin.category.home.update') }}",
-                    type: "POST",
-                    contentType: false,
-                    processData: false,
-                    data: formData,
-                    success:function(res){
-                        iziToast.show({
-                            title:res.error?.message ?? res.success?.message,
-                            color:res.error ? "red":"green",
-                            position:"topRight"
-                        })
-
-                        el.removeClass("pending")
-                        el.addClass("active")
-                    }
-                })
-            })
             
             /* deletes */
-            $(".category_delete").click(async function(e){
+            $(".option_delete").click(async function(e){
                 e.preventDefault()
 
                 const tr=$(this).closest("tr")
                 const el=$(this)
-                const category_id=$(this).data("category-id")
+                const option_id=$(this).data("option-id")
                 const formData=new FormData()
 
                 Swal.fire({
@@ -167,11 +120,11 @@
                         el.removeClass("active")
                         await new Promise(resolve=>setTimeout(resolve,1000))
                         
-                        formData.append("category_id",category_id)
+                        formData.append("option_id",option_id)
                         formData.append("_token", "{{ csrf_token() }}")
                         
                         $.ajax({
-                            url: "{{ route('admin.category.delete') }}",
+                            url: "{{ route('admin.option.delete') }}",
                             type: "POST",
                             contentType: false,
                             processData: false,

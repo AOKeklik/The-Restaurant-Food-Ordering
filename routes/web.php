@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\AdminOptionController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminProductImageController;
 use App\Http\Controllers\Admin\AdminProductSizeController;
@@ -72,6 +73,15 @@ Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     Route::post("category/status/update",[AdminCategoryController::class,"category_status_update"])->name("admin.category.status.update");
     Route::post("category/home/update",[AdminCategoryController::class,"category_home_update"])->name("admin.category.home.update");
     Route::post("category/delete",[AdminCategoryController::class,"category_delete"])->name("admin.category.delete");
+
+    /* options */
+    Route::get("options",[AdminOptionController::class,"options"])->name("admin.options");
+    Route::get("option/add",[AdminOptionController::class,"option_add"])->name("admin.option.add");
+    Route::get("option/edit/{option_id}",[AdminOptionController::class,"option_edit"])->name("admin.option.edit");
+    Route::post("option/store",[AdminOptionController::class,"option_store"])->name("admin.option.store");
+    Route::post("option/update",[AdminOptionController::class,"option_update"])->name("admin.option.update");
+    Route::post("option/status/update",[AdminOptionController::class,"option_status_update"])->name("admin.option.status.update");
+    Route::post("option/delete",[AdminOptionController::class,"option_delete"])->name("admin.option.delete");
 
     /* products */
     Route::get("products",[AdminProductController::class,"products"])->name("admin.products");

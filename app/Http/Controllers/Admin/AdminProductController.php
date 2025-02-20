@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Option;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductSizes;
@@ -18,17 +19,20 @@ class AdminProductController extends Controller
         return view("admin.products",compact("products"));
     }
     public function product_add ():View {
-        $categories=Category::orderBy("id","desc")->get();
-        return view("admin.product_add",compact("categories"));
+        $categories=Category::where("status",1)->orderBy("id","desc")->get();
+        $options=Option::where("status",1)->orderBy("id","desc")->get();
+
+        return view("admin.product_add",compact("options","categories"));
     }
     public function product_edit ($product_id) {
-        $categories=Category::orderBy("id","desc")->get();
+        $categories=Category::where("status",1)->orderBy("id","desc")->get();
+        $options=Option::where("status",1)->orderBy("id","desc")->get();
         $product=Product::find($product_id);
 
         if(!$product)
             return redirect()->route("admin.products")->with("error","Product not found!");
 
-        return view("admin.product_edit",compact("categories","product"));
+        return view("admin.product_edit",compact("options","categories","product"));
     }
 
 
@@ -105,6 +109,7 @@ class AdminProductController extends Controller
         $request->validate([
             "product_id"=>"required|numeric|exists:products,id",
             "category_id"=>"required|numeric|exists:categories,id",
+            "options"=>"nullable|array|exists:options,id",
             "name"=>"required|string",
             "price"=>"required|numeric",
             "offer_price"=>"nullable|numeric",
@@ -158,6 +163,7 @@ class AdminProductController extends Controller
         }
 
         $product->category_id=$request->category_id;
+        $product->options=$request->has("options") ? implode(",",$request->options) : null;
         $product->slug=$slug;
         $product->name=$request->name;
         $product->price=$request->price;
