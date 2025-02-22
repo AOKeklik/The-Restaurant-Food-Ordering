@@ -141,9 +141,6 @@ Route::prefix("customer")->middleware("customer.authenticate")->group(function()
     Route::post("avatar/update",[FrontCustomerProfileController::class,"avatar_update"])->name("front.customer.avatar.update");
     Route::post("profile/update",[FrontCustomerProfileController::class,"profile_update"])->name("front.customer.profile.update");
     Route::post("password/update",[FrontCustomerProfileController::class,"password_update"])->name("front.customer.password.update");
-
-    /* products */
-    Route::get("products",[FrontProductController::class,"products"])->name("front.products");
 });
 
 
@@ -152,5 +149,9 @@ Route::prefix("customer")->middleware("customer.authenticate")->group(function()
 
 Route::prefix("/")->group(function(){
     Route::get("",[FrontHomeController::class,"index"])->name("front.index");
+
+    /* product */
+    Route::get("products",[FrontProductController::class,"products"])->name("front.products");
+    Route::get("product/{product_id}/{product_slug}",[FrontProductController::class,"product"])->name("front.product");
 });
 

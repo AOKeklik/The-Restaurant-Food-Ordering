@@ -140,21 +140,25 @@ class AdminCategoryController extends Controller
         return response()->json(["success"=>["message"=>"Category homepage status updated successfully."]]);
     }
     public function category_delete (Request $request) {
-        $validator = \Validator::make($request->all(), [
-            "category_id"=>"required|numeric|exists:categories,id",
-        ]);
-
-        if(!$validator->passes())
-            return response()->json(["error"=>["message"=>$validator->errors()->first()]]);
-
-        $category=Category::find($request->category_id);
-
-        if(!$category)
-            return response()->json(["error"=>["message"=>"Category not found."]]);
-
-        if(!$category->delete())
-            return response()->json(["error"=>["message"=>"Failed to delete category status."]]);
-
-        return response()->json(["success"=>["message"=>"Category deleted successfully."]]);
+        try{
+            $validator = \Validator::make($request->all(), [
+                "category_id"=>"required|numeric|exists:categories,id",
+            ]);
+    
+            if(!$validator->passes())
+                return response()->json(["error"=>["message"=>$validator->errors()->first()]]);
+    
+            $category=Category::find($request->category_id);
+    
+            if(!$category)
+                return response()->json(["error"=>["message"=>"Category not found."]]);
+    
+            if(!$category->delete())
+                return response()->json(["error"=>["message"=>"Failed to delete category status."]]);
+    
+            return response()->json(["success"=>["message"=>"Category deleted successfully."]]);
+        }catch(\Exception $err){
+            return response()->json(["error"=>["message"=>$err->getMessage()]]);
+        }
     }
 }

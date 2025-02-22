@@ -3,8 +3,8 @@
     ==============================-->
     <nav class="navbar navbar-expand-lg main_menu">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="images/logo.png" alt="FoodPark" class="img-fluid">
+            <a class="navbar-brand" href="{{ route("front.index") }}">
+                <img src="" alt="FoodPark" class="img-fluid">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,7 +13,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav m-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{{ route("front.index") }}">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="about.html">about</a>

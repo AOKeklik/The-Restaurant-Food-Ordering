@@ -25,7 +25,7 @@ return new class extends Migration
             $table->text("seo_description")->nullable();
             $table->string("image");
             $table->text("description");
-            $table->string("short_description")->nullable();
+            $table->text("short_description")->nullable();
             $table->boolean("status")->default(0);
             $table->boolean("show_on_homepage")->default(0);
 

@@ -91,39 +91,24 @@
 
 
     <!--jquery library js-->
-    <script src="{{ asset("dist/front/js/jquery-3.6.0.min.js") }}"></script>
-    <!--bootstrap js-->
-    <script src="{{ asset("dist/front/js/bootstrap.bundle.min.js") }}"></script>
-    <!--font-awesome js-->
-    <script src="{{ asset("dist/front/js/Font-Awesome.js") }}"></script>
-    <!-- slick slider -->
-    <script src="{{ asset("dist/front/js/slick.min.js") }}"></script>
-    <!-- isotop js -->
-    <script src="{{ asset("dist/front/js/isotope.pkgd.min.js") }}"></script>
-    <!-- simplyCountdownjs -->
-    <script src="{{ asset("dist/front/js/simplyCountdown.js") }}"></script>
-    <!-- counter up js -->
+    <script src="{{ asset("dist/front/js/jquery-3.6.0.min.js") }}"></script>    
+    <script src="{{ asset("dist/front/js/bootstrap.bundle.min.js") }}"></script>    
+    <script src="{{ asset("dist/front/js/Font-Awesome.js") }}"></script>    
+    <script src="{{ asset("dist/front/js/slick.min.js") }}"></script>   
+    <script src="{{ asset("dist/front/js/isotope.pkgd.min.js") }}"></script>    
+    <script src="{{ asset("dist/front/js/simplyCountdown.js") }}"></script>   
     <script src="{{ asset("dist/front/js/jquery.waypoints.min.js") }}"></script>
-    <script src="{{ asset("dist/front/js/jquery.countup.min.js") }}"></script>
-    <!-- nice select js -->
+    <script src="{{ asset("dist/front/js/jquery.countup.min.js") }}"></script>    
     <script src="{{ asset("dist/front/js/jquery.nice-select.min.js") }}"></script>
-    <!-- venobox js -->
-    <script src="{{ asset("dist/front/js/venobox.min.js") }}"></script>
-    <!-- sticky sidebar js -->
+    <script src="{{ asset("dist/front/js/venobox.min.js") }}"></script>    
     <script src="{{ asset("dist/front/js/sticky_sidebar.js") }}"></script>
-    <!-- wow js -->
-    <script src="{{ asset("dist/front/js/wow.min.js") }}"></script>
-    <!-- ex zoom js -->
+    <script src="{{ asset("dist/front/js/wow.min.js") }}"></script>    
     <script src="{{ asset("dist/front/js/jquery.exzoom.js") }}"></script>
-    <!-- izi toast -->
     <script src="{{ asset("dist/front/js/iziToast.min.js") }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!--main/custom js-->
     <script src="{{ asset("dist/front/js/main.js") }}"></script>
-
-    <!-- Template JS File -->
-    <script src="{{ asset("dist/back/js/scripts.js") }}"></script>
-    <script src="{{ asset("dist/back/js/custom.js") }}"></script>
 
     <!-- Session Messages -->
     @if(Session::has("error"))
@@ -145,6 +130,16 @@
     </script>
     @endif
 
+    <script>
+        /* select2 */        
+        $(document).ready(function(){
+            $('.select2').select2({
+                placeholder: 'This is my placeholder',
+                allowClear: true,
+                width: '100%',
+            })
+        })
+    </script>
     
     @stack("scripts")
 </body>
