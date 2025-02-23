@@ -39,6 +39,7 @@ class AdminProductController extends Controller
     public function product_store (Request $request) {
         $request->validate([
             "category_id"=>"required|numeric|exists:categories,id",
+            "options"=>"nullable|array|exists:options,id",
             "name"=>"required|string",
             "price"=>"required|numeric",
             "offer_price"=>"nullable|numeric",
@@ -87,6 +88,7 @@ class AdminProductController extends Controller
         }
 
         $product->category_id=$request->category_id;
+        $product->options=$request->has("options") ? implode(",",$request->options) : null;
         $product->slug=$slug;
         $product->sku=$sku;
         $product->name=$request->name;

@@ -11,18 +11,18 @@ class AdminSliderController extends Controller
 {
     public function slides() :View{
         $slides=Slider::orderBy("id","desc")->get();
-        return view("admin.slides",compact("slides"));
+        return view("admin.setting_slides",compact("slides"));
     }
     public function slides_add() :View{
-        return view("admin.slide_add");
+        return view("admin.setting_slide_add");
     }
     public function slides_edit($slide_id) :View{
         $slide=Slider::find($slide_id);
 
         if(!$slide)
-            return redirect()->route("admin.slides")->with("error","The slide not found.");
+            return redirect()->route("admin.setting.slides")->with("error","The slide not found.");
 
-        return view("admin.slide_edit",compact("slide"));
+        return view("admin.setting_slide_edit",compact("slide"));
     }
 
 
@@ -76,7 +76,7 @@ class AdminSliderController extends Controller
         if(!$slide->save())
             return redirect()->back()->with("error","Failed to save slide."); 
 
-        return redirect()->route("admin.slides")->with("success","Slide added successfully.");
+        return redirect()->route("admin.setting.slides")->with("success","Slide added successfully.");
     }
     public function slides_update(Request $request) {
         $request->validate([
@@ -134,7 +134,7 @@ class AdminSliderController extends Controller
         if(!$slide->save())
             return redirect()->back()->with("error","Failed to update slide."); 
 
-        return redirect()->route("admin.slides")->with("success","Slide updated successfully.");
+        return redirect()->route("admin.setting.slides")->with("success","Slide updated successfully.");
     }
     public function slides_status_update(Request $request){
         $validator = \Validator::make($request->all(), [

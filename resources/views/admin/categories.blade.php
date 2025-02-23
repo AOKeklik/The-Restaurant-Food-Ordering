@@ -7,6 +7,7 @@
         <h4>Card Category</h4>
         <div class="card-header-action">
             <a href="{{ route("admin.category.add") }}" class="btn btn-primary">
+                <i class="fa fa-plus"></i>
                 Add New
             </a>
         </div>

@@ -7,6 +7,7 @@
         <h4>Procuts</h4>
         <div class="card-header-action">
             <a href="{{ route("admin.product.add") }}" class="btn btn-primary">
+                <i class="fa fa-plus"></i>
                 Add New
             </a>
         </div>
@@ -36,7 +37,7 @@
                             </td>
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->sku }}</td>
-                            <td>${{ $product->price }}</td>
+                            <td>{{ currency($product->price) }}</td>
                             <td>
                                 <div class="d-inline active">
                                     <span class="button-loader"></span>

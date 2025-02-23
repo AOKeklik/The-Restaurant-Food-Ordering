@@ -5,14 +5,14 @@
     <div class="card-header">
         <h4>Why Choose</h4>
         <div class="card-header-action">
-            <a href="{{ route("admin.why_chooses") }}" class="btn btn-primary">
+            <a href="{{ route("admin.setting.why_chooses") }}" class="btn btn-primary">
                 <i class="fa fa-eye"></i>
                 Why Choose
             </a>
         </div>
     </div>
     <div class="card-body">
-        <form action="{{ route("admin.why_choose.store") }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route("admin.setting.why_choose.store") }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method("POST")
             <!-- Image Upload -->

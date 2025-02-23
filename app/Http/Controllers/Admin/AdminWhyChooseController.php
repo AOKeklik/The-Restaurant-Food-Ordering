@@ -11,18 +11,18 @@ class AdminWhyChooseController extends Controller
 {
     public function why_chooses() :View{
         $whyChooses=WhyChoose::orderBy("id","desc")->get();
-        return view("admin.why_chooses",compact("whyChooses"));
+        return view("admin.setting_why_chooses",compact("whyChooses"));
     }
     public function why_choose_add() :View{
-        return view("admin.why_choose_add");
+        return view("admin.setting_why_choose_add");
     }
     public function why_choose_edit($why_choose_id) :View{
         $whyChooses=WhyChoose::find($why_choose_id);
 
         if(!$whyChooses)
-            return redirect()->route("admin.why_chooses")->with("error","The why choose not found.");
+            return redirect()->route("admin.setting.why_chooses")->with("error","The why choose not found.");
 
-        return view("admin.why_choose_edit",compact("whyChooses"));
+        return view("admin.setting_why_choose_edit",compact("whyChooses"));
     }
 
 
@@ -43,7 +43,7 @@ class AdminWhyChooseController extends Controller
         if(!$whyChoose->save())
             return redirect()->back()->with("error","Failed to save why choose."); 
 
-        return redirect()->route("admin.why_chooses")->with("success","Why choose added successfully.");
+        return redirect()->route("admin.setting.why_chooses")->with("success","Why choose added successfully.");
     }
     public function why_choose_update(Request $request) {
         $request->validate([
@@ -62,7 +62,7 @@ class AdminWhyChooseController extends Controller
         if(!$whyChoose->save())
             return redirect()->back()->with("error","Failed to update why choose."); 
 
-        return redirect()->route("admin.why_chooses")->with("success","Why choose updated successfully.");
+        return redirect()->route("admin.setting.why_chooses")->with("success","Why choose updated successfully.");
     }
     public function why_choose_status_update(Request $request){
         $validator = \Validator::make($request->all(), [

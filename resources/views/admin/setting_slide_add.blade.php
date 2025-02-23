@@ -5,14 +5,14 @@
     <div class="card-header">
         <h4>Slides</h4>
         <div class="card-header-action">
-            <a href="{{ route("admin.slides") }}" class="btn btn-primary">
+            <a href="{{ route("admin.setting.slides") }}" class="btn btn-primary">
                 <i class="fa fa-eye"></i>
                 Slides
             </a>
         </div>
     </div>
     <div class="card-body">
-        <form action="{{ route("admin.slide.store") }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route("admin.setting.slide.store") }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method("POST")
             <!-- Image Upload -->

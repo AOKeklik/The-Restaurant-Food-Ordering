@@ -34,6 +34,15 @@
                 <input type="text" class="form-control" id="name" placeholder="Name" name="name" value="{{ old("name") }}">
                 @error("name") <small class="form-text text-danger">{{ $message }}</small> @enderror
             </div>
+            <div class="form-group col-md-6">
+                <label for="slug">Slug</label>
+                <input type="text" class="form-control" id="slug" placeholder="Slug" name="slug" readonly>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="price">Price*</label>
+                <input name="price" type="text" class="form-control" id="price" placeholder="Price" value="{{ old("price") }}">
+                @error("price") <small class="form-text text-danger">{{ $message }}</small> @enderror
+            </div>
             <div class="form-group col-12">
                 <label for="options">Options</label>
                 <select id="options" name="options[]" class="form-control select2" multiple>
@@ -42,15 +51,6 @@
                     @endforeach
                 </select>
                 @error("options") <small class="form-text text-danger">{{ $message }}</small> @enderror
-            </div>
-            <div class="form-group col-md-6">
-                <label for="slug">Slug</label>
-                <input type="text" class="form-control" id="slug" placeholder="Slug" name="slug" readonly>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="price">Price*</label>
-                <input name="price" type="text" class="form-control" id="price" placeholder="Password" value="{{ old("price") }}">
-                @error("price") <small class="form-text text-danger">{{ $message }}</small> @enderror
             </div>
             <div class="form-group col-md-6">
                 <label for="offer_price">Offer Price</label>

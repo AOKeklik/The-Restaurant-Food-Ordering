@@ -50,10 +50,10 @@
                     <div id="price-show">
                         <h3 class="price">
                             @if($product->offer_price > 0)    
-                                ${{ $product->offer_price }}
-                                <del>${{ $product->price }}</del>
+                                {{ currency($product->offer_price) }}
+                                <del>{{ currency($product->price) }}</del>
                             @else
-                                ${{ $product->price }}
+                                {{ currency($product->price) }}
                             @endif
                         </h3>
                     </div>
@@ -66,7 +66,7 @@
                                 <select id="product_size" name="product_size" class="form-control">
                                     <option selected>Select a size</option>
                                     @foreach($product->product_sizes as $product_size)
-                                        <option value="{{ $product_size->id }}" data-price="${{ $product_size->price }}">
+                                        <option value="{{ $product_size->id }}" data-price="{{ currency($product_size->price) }}">
                                             {{ $product_size->name }}
                                         </option>
                                     @endforeach
@@ -249,7 +249,7 @@
                 <h2>related item</h2>
                 <div class="row related_product_slider">
                     @foreach($related_products as $related_product)
-                        <div class="col-xl-3 wow fadeInUp" data-wow-duration="1s">
+                        <div class="wow fadeInUp" data-wow-duration="1s">
                             <div class="fp__menu_item">
                                 <div class="fp__menu_item_img">
                                     <img src="{{ asset("uploads/product") }}/{{ $related_product->image }}" alt="menu" class="img-fluid w-100">
@@ -267,10 +267,10 @@
                                     <a class="title" href="{{ route("front.product",[$related_product->id,$related_product->slug]) }}">{!! $related_product->name !!}</a>
                                     <h5 class="price">
                                         @if($related_product->offer_price > 0)    
-                                            ${{ $related_product->offer_price }}
-                                            <del>${{ $related_product->price }}</del>
+                                            {{ currency($related_product->offer_price) }}
+                                            <del>{{ currency($related_product->price) }}</del>
                                         @else
-                                            ${{ $related_product->price }}
+                                            {{ currency($related_product->price) }}
                                         @endif
                                     </h5>
                                     <ul class="d-flex flex-wrap justify-content-center">
@@ -380,9 +380,10 @@
         $(document).ready(function(){
             $("#product_size").change(function(e){
                 const price=$(this).find("option:selected").data("price")
+
                 
                 if(price) {
-                    $(".price").slideUp(0)
+                    $("h3.price").slideUp(0)
 
                     if($(".price-variation").length === 0)
                         $(".price").closest("#price-show").append("<h3 class='price price-variation'>"+price+"</h3>")

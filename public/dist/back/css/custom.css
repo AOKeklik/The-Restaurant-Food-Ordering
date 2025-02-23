@@ -12,7 +12,7 @@
 .pending > *:not(.button-loader) {display: none;}
 
 .active .button-loader {display: none;}
-.active > *:not(.button-loader) {display: inline-block;}
+.active > *:not(.button-loader):not(.row) {display: inline-block;}
 
 .button-loader {
     position: relative;

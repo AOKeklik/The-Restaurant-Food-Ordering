@@ -7,17 +7,13 @@
                 <div class="row justify-content-between">
                     <div class="col-lg-4 col-sm-8 col-md-6">
                         <div class="fp__footer_content">
-                            <a class="footer_logo" href="index.html">
-                                <img src="images/footer_logo.png" alt="FoodPark" class="img-fluid w-100">
+                            <a class="footer_logo" href="{{ route("front.index") }}">
+                                <img src="{{ asset("uploads/setting") }}/{{ $provider_settings->site_footer_logo }}" alt="FoodPark" class="img-fluid w-100">
                             </a>
-                            <span>There are many variations of Lorem Ipsum available, but the majority have
-                                suffered.</span>
-                            <p class="info"><i class="far fa-map-marker-alt"></i> 7232 Broadway Suite 308, Jackson
-                                Heights, 11372, NY, United States</p>
-                            <a class="info" href="callto:1234567890123"><i class="fas fa-phone-alt"></i>
-                                +1347-430-9510</a>
-                            <a class="info" href="mailto:websolutionus1@gmail.com"><i class="fas fa-envelope"></i>
-                                websolutionus1@gmail.com</a>
+                            <span>{{ $provider_settings->site_short_description }}</span>
+                            <p class="info"><i class="far fa-map-marker-alt"></i> {{ $provider_settings->site_address }}</p>
+                            <a class="info" href="callto:{{ $provider_settings->site_phone }}"><i class="fas fa-phone-alt"></i>{{ $provider_settings->site_phone }}</a>
+                            <a class="info" href="mailto:{{ $provider_settings->site_email }}"><i class="fas fa-envelope"></i>{{ $provider_settings->site_email }}</a>
                         </div>
                     </div>
                     <div class="col-lg-2 col-sm-4 col-md-6">
@@ -92,7 +88,8 @@
 
     <!--jquery library js-->
     <script src="{{ asset("dist/front/js/jquery-3.6.0.min.js") }}"></script>    
-    <script src="{{ asset("dist/front/js/bootstrap.bundle.min.js") }}"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="{{ asset("dist/front/js/Font-Awesome.js") }}"></script>    
     <script src="{{ asset("dist/front/js/slick.min.js") }}"></script>   
     <script src="{{ asset("dist/front/js/isotope.pkgd.min.js") }}"></script>    

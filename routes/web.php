@@ -43,26 +43,30 @@ Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     Route::post("profile/update",[AdminProfileController::class,"profile_update"])->name("admin.profile.update");
 
     /* settings */
+    Route::get("settings",[AdminSettingController::class,"settings"])->name("admin.settings");
+    Route::post("settings/update",[AdminSettingController::class,"settings_update"])->name("admin.settings.update");
     Route::post("setting/slider/update",[AdminSettingController::class,"slider_update"])->name("admin.setting.slider.update");
-    Route::post("setting/why_choose/update",[AdminSettingController::class,"why_choose_update"])->name("admin.setting.why_choose.update");
+    Route::post("setting/why-chooser/update",[AdminSettingController::class,"why_choose_update"])->name("admin.setting.why_chooser.update");
+    Route::get("setting/menu",[AdminSettingController::class,"menu"])->name("admin.setting.menu");
+    Route::post("setting/menu/update",[AdminSettingController::class,"menu_update"])->name("admin.setting.menu.update");
 
-    /* slider */
-    Route::get("sliders",[AdminSliderController::class,"slides"])->name("admin.slides");
-    Route::get("slider/add",[AdminSliderController::class,"slides_add"])->name("admin.slide.add");
-    Route::get("slider/edit/{slide_id}",[AdminSliderController::class,"slides_edit"])->name("admin.slide.edit");
-    Route::post("slider/store",[AdminSliderController::class,"slides_store"])->name("admin.slide.store");
-    Route::post("slider/update",[AdminSliderController::class,"slides_update"])->name("admin.slide.update");
-    Route::post("slider/status/update",[AdminSliderController::class,"slides_status_update"])->name("admin.slide.status.update");
-    Route::post("slider/delete",[AdminSliderController::class,"slides_delete"])->name("admin.slide.delete");
+    /* settings - slider */
+    Route::get("setting/slides",[AdminSliderController::class,"slides"])->name("admin.setting.slides");
+    Route::get("setting/slide/add",[AdminSliderController::class,"slides_add"])->name("admin.setting.slide.add");
+    Route::get("setting/slide/edit/{slide_id}",[AdminSliderController::class,"slides_edit"])->name("admin.setting.slide.edit");
+    Route::post("setting/slide/store",[AdminSliderController::class,"slides_store"])->name("admin.setting.slide.store");
+    Route::post("setting/slide/update",[AdminSliderController::class,"slides_update"])->name("admin.setting.slide.update");
+    Route::post("setting/slide/status/update",[AdminSliderController::class,"slides_status_update"])->name("admin.setting.slide.status.update");
+    Route::post("setting/slide/delete",[AdminSliderController::class,"slides_delete"])->name("admin.setting.slide.delete");
 
-    /* why choose */
-    Route::get("why-chooses",[AdminWhyChooseController::class,"why_chooses"])->name("admin.why_chooses");
-    Route::get("why-choose/add",[AdminWhyChooseController::class,"why_choose_add"])->name("admin.why_choose.add");
-    Route::get("why-choose/edit/{why_choose_id}",[AdminWhyChooseController::class,"why_choose_edit"])->name("admin.why_choose.edit");
-    Route::post("why-choose/store",[AdminWhyChooseController::class,"why_choose_store"])->name("admin.why_choose.store");
-    Route::post("why-choose/update",[AdminWhyChooseController::class,"why_choose_update"])->name("admin.why_choose.update");
-    Route::post("why-choose/status/update",[AdminWhyChooseController::class,"why_choose_status_update"])->name("admin.why_choose.status.update");
-    Route::post("why-choose/delete",[AdminWhyChooseController::class,"why_choose_delete"])->name("admin.why_choose.delete");
+    /*settings -  why choose */
+    Route::get("setting/why-chooses",[AdminWhyChooseController::class,"why_chooses"])->name("admin.setting.why_chooses");
+    Route::get("setting/why-choose/add",[AdminWhyChooseController::class,"why_choose_add"])->name("admin.setting.why_choose.add");
+    Route::get("setting/why-choose/edit/{why_choose_id}",[AdminWhyChooseController::class,"why_choose_edit"])->name("admin.setting.why_choose.edit");
+    Route::post("setting/why-choose/store",[AdminWhyChooseController::class,"why_choose_store"])->name("admin.setting.why_choose.store");
+    Route::post("setting/why-choose/update",[AdminWhyChooseController::class,"why_choose_update"])->name("admin.setting.why_choose.update");
+    Route::post("setting/why-choose/status/update",[AdminWhyChooseController::class,"why_choose_status_update"])->name("admin.setting.why_choose.status.update");
+    Route::post("setting/why-choose/delete",[AdminWhyChooseController::class,"why_choose_delete"])->name("admin.setting.why_choose.delete");  
 
     /* categories */
     Route::get("categories",[AdminCategoryController::class,"categories"])->name("admin.categories");

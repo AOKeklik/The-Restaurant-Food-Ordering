@@ -1,50 +1,37 @@
 @extends("admin.layout.app")
-@section("title", "Why Choose")
+@section("title", "Slides")
 @section("content")
 <div class="card">
     <div class="card-header">
-        <h4>Why Chooses</h4>
+        <h4>Card Header</h4>
         <div class="card-header-action">
-            <a href="{{ route("admin.why_choose.add") }}" class="btn btn-primary">
+            <a href="{{ route("admin.setting.slide.add") }}" class="btn btn-primary">
+                <i class="fa fa-plus"></i>
                 Add New
             </a>
         </div>
     </div>
     <div class="card-body">
         <div class="row justify-content-center">
-            <form class="col-md-8" action="{{ route("admin.setting.why_choose.update") }}" method="POST" enctype="multipart/form-data">
+            <form class="col-md-8" action="{{ route("admin.setting.slider.update") }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method("POST")
+                <!-- Image Upload -->
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <!-- Offer -->
-                        <div class="mb-3">
-                            <label for="why_choose_title" class="form-label">Title*</label>
-                            <input type="text" class="form-control" id="why_choose_title" name="why_choose_title" placeholder="Enter offer"  value="{{ $provider_settings->why_choose_title }}">
-                        </div>
-                        @error("why_choose_title") <small class="text-danger">{{ $message }}</small> @enderror
+                        <img src="{{ asset("uploads/setting") }}/{{ $provider_settings->slider_photo }}" alt="" class="w-100">
                     </div>
                     <div class="col-md-6">
-                        <!-- Title -->
-                        <div class="mb-3">
-                            <label for="why_choose_sub_title" class="form-label">Sub Title*</label>
-                            <input type="text" class="form-control" id="why_choose_sub_title" name="why_choose_sub_title" placeholder="Enter title"  value="{{ $provider_settings->why_choose_sub_title }}">
-                            @error("why_choose_sub_title") <small class="text-danger">{{ $message }}</small> @enderror
-                        </div>
+                        <label for="image" class="form-label">Image*</label>
+                        <input name="slider_photo" type="file" class="form-control" id="slider_photo">
+                        @error("slider_photo") <small class="text-danger">{{ $message }}</small> @enderror
                     </div>
                 </div>
 
-                <!-- Short Description -->
                 <div class="mb-3">
-                    <label for="why_choose_description" class="form-label">Description*</label>
-                    <textarea class="form-control" id="why_choose_description" name="why_choose_description" rows="3" placeholder="Enter short description">{{ $provider_settings->why_choose_description }}</textarea>
-                </div>
-                @error("why_choose_description") <small class="text-danger">{{ $message }}</small> @enderror
-
-                <div class="mb-3">
-                    <label for="why_choose_status" class="form-label">Show*</label>
-                    <input type="checkbox" @if($provider_settings->why_choose_status == 1) checked @endif data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger" name="why_choose_status">
-                    @error("why_choose_status") <small class="text-danger">{{ $message }}</small> @enderror
+                    <label for="slider_status" class="form-label">Show*</label>
+                    <input type="checkbox" @if($provider_settings->slider_status == 1) checked @endif data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger" name="slider_status">
+                    @error("slider_status") <small class="text-danger">{{ $message }}</small> @enderror
                 </div>
 
                 <!-- Submit Button -->
@@ -59,34 +46,34 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Icon</th>
+                        <th>Image</th>
                         <th>Title</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($whyChooses as $whyChoose)
+                    @foreach($slides as $slide)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
-                                <i class="{{ $whyChoose->icon }}"></i>
+                                <img style="width:75px" src="{{ asset("uploads/slider/") }}/{{ $slide->image }}" alt="">
                             </td>
-                            <td>{{ $whyChoose->title }}</td>
+                            <td>{{ $slide->title }}</td>
                             <td>
                                 <div class="d-inline active">
                                     <span class="button-loader"></span>
                                     <input 
                                         type="checkbox"
                                         class="status" 
-                                        data-why-choose-id="{{ $whyChoose->id }}"
-                                        @if($whyChoose->status == 1) checked @endif
+                                        data-slide-id="{{ $slide->id }}"
+                                        @if($slide->status == 1) checked @endif
                                         data-toggle="toggle" data-onlabel="On" data-offlabel="Off" data-onstyle="success" data-offstyle="danger">
                                 </div>
                             </td>
                             <td>
-                                <a href="{{ route("admin.why_choose.edit",["why_choose_id"=>$whyChoose->id]) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                                <a data-why-choose-id="{{ $whyChoose->id }}" href="" class="btn btn-danger slide_delete">
+                                <a href="{{ route("admin.setting.slide.edit",["slide_id"=>$slide->id]) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                <a data-slide-id="{{ $slide->id }}" href="" class="btn btn-danger slide_delete">
                                     <span class="button-loader"></span>
                                     <i class="fas fa-trash"></i>
                                 </a>
@@ -113,7 +100,7 @@
             $(".status").change(async function(){
 
                 const el = $(this).closest(".d-inline")
-                const why_choose_id =$(this).data("why-choose-id")
+                const slide_id =$(this).data("slide-id")
                 const status = $(this).prop("checked") ? 1 : 0
                 const formData=new FormData()
 
@@ -122,7 +109,7 @@
                 await new Promise(resolve=>setTimeout(resolve, 1000))
 
                 formData.append("_token", "{{ csrf_token() }}")
-                formData.append("why_choose_id",why_choose_id)
+                formData.append("slide_id",slide_id)
                 formData.append("status",status)
 
                 $.ajax({
@@ -130,7 +117,7 @@
                     contentType: false,
                     processData: false,
                     data: formData,
-                    url: "{{ route('admin.why_choose.status.update') }}",
+                    url: "{{ route('admin.setting.slide.status.update') }}",
                     success:function(res){
                         console.log(res)
 
@@ -167,7 +154,7 @@
 
                         const el = $(this)
                         const parent = $(this).closest("tr")
-                        const why_choose_id =$(this).data("why-choose-id")
+                        const slide_id =$(this).data("slide-id")
                         const formData=new FormData()
 
                         el.addClass("pending")
@@ -175,14 +162,14 @@
                         await new Promise(resolve=>setTimeout(resolve, 1000))
 
                         formData.append("_token", "{{ csrf_token() }}")
-                        formData.append("why_choose_id",why_choose_id)
+                        formData.append("slide_id",slide_id)
 
                         $.ajax({
                             type: "POST",
                             contentType: false,
                             processData: false,
                             data: formData,
-                            url: "{{ route('admin.why_choose.delete') }}",
+                            url: "{{ route('admin.setting.slide.delete') }}",
                             success:function(res){
                                 console.log(res)
 

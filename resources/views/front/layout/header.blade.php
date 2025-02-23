@@ -8,7 +8,7 @@
     <title>@yield("title", "The Restaurant Food Ordering")</title>
     <link rel="icon" type="image/png" href="{{ asset("dist/front/images/favicon.png") }}">
     <link rel="stylesheet" href="{{ asset("dist/front/css/all.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("dist/front/css/bootstrap.min.css") }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset("dist/front/css/spacing.css") }}">
     <link rel="stylesheet" href="{{ asset("dist/front/css/slick.css") }}">
     <link rel="stylesheet" href="{{ asset("dist/front/css/nice-select.css") }}">
