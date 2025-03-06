@@ -1,5 +1,6 @@
 @extends("front.layout.app")
 @section("title", "Product - ".$product->name)
+@section("page_title", "Product Detail")
 @section("content")
 
 
@@ -21,9 +22,9 @@
                 <div class="exzoom hidden" id="exzoom">
                     <div class="exzoom_img_box fp__menu_details_images">
                         <ul class='exzoom_img_ul'>
-                            <li><img class="zoom ing-fluid w-100" src="{{ asset("uploads/product") }}/{{ $product->image }}" alt="product"></li>
+                            <li><img class="zoom img-fluid w-100" src="{{ asset("uploads/product") }}/{{ $product->image }}" alt="product"></li>
                             @foreach($product->product_photos as $product_photo)
-                                <li><img class="zoom ing-fluid w-100" src="{{ asset("uploads/product-image") }}/{{ $product_photo->image }}" alt="product"></li>
+                                <li><img class="zoom img-fluid w-100" src="{{ asset("uploads/product-image") }}/{{ $product_photo->image }}" alt="product"></li>
                             @endforeach
                         </ul>
                     </div>
@@ -47,16 +48,14 @@
                         <i class="far fa-star"></i>
                         <span>(201)</span>
                     </p>
-                    <div id="price-show">
-                        <h3 class="price">
-                            @if($product->offer_price > 0)    
-                                {{ currency($product->offer_price) }}
-                                <del>{{ currency($product->price) }}</del>
-                            @else
-                                {{ currency($product->price) }}
-                            @endif
-                        </h3>
-                    </div>
+                    <h3 class="price">
+                        @if($product->offer_price > 0)    
+                            {{ currency($product->offer_price) }}
+                            <del>{{ currency($product->price) }}</del>
+                        @else
+                            {{ currency($product->price) }}
+                        @endif
+                    </h3>
                     <p class="short_description">{{ $product->short_description }}</p>
 
                     @if($product->product_sizes->count() > 0)
@@ -64,10 +63,15 @@
                             <div class="form-group">
                                 <label for="product_size" class="fs-5 mb-1 fw-bold">Select Size</label>
                                 <select id="product_size" name="product_size" class="form-control">
-                                    <option selected>Select a size</option>
+                                    <option selected>Normal</option>
                                     @foreach($product->product_sizes as $product_size)
-                                        <option value="{{ $product_size->id }}" data-price="{{ currency($product_size->price) }}">
-                                            {{ $product_size->name }}
+                                        <option 
+                                            value="{{ $product_size->id }}" data-price="{{ $product_size->price }}" 
+                                            @if(isset(Session::get("cart")[$product->id]["product_size"]) && Session::get("cart")[$product->id]["product_size"]["id"] ==  $product_size->id) 
+                                                selected
+                                            @endif
+                                        >
+                                            {{ $product_size->name }} (+{{ currency($product_size->price) }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -79,30 +83,66 @@
                         <div class="details_extra_item">
                             <div class="form-group">
                                 <label for="options" class="fs-5 mb-1 fw-bold">Select Options</label>
-                                <select id="options" name="options" class="form-control select2" multiple>
+                                <select id="options" name="options[]" class="form-control select2" multiple>
                                     @foreach($options as $option)
-                                        <option value="{{ $option->id }}">
-                                            {{ $option->name }} + ${{ $option->price }}
+                                        <option 
+                                            value="{{ $option->id }}" data-price="{{ $option->price }}"
+                                            @if(isset(Session::get("cart")[$product->id]["product_options"]) && 
+                                            in_array($option->id, array_column(Session::get("cart")[$product->id]["product_options"], "id"))) 
+                                                selected
+                                            @endif
+                                        >
+                                            <strong>{{ $option->name }}</strong>  (+{{ currency($option->price) }})
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                     @endif
-
+                    
                     <div class="details_quentity">
                         <h5>select quentity</h5>
                         <div class="quentity_btn_area d-flex flex-wrapa align-items-center">
                             <div class="quentity_btn">
-                                <button class="btn btn-danger"><i class="fal fa-minus"></i></button>
-                                <input type="text" placeholder="1">
-                                <button class="btn btn-success"><i class="fal fa-plus"></i></button>
+                                <button class="btn btn-primary cart_decrease" style="background: #f86f03"><i class="fal fa-minus"></i></button>
+                                <input 
+                                    type="text" id="quantity" name="quantity" placeholder="1" readonly
+                                    @if(isset(Session::get("cart")[$product->id]["product_info"])) 
+                                        value="{{ Session::get("cart")[$product->id]["product_info"]["quantity"] }}" 
+                                    @else
+                                        value="1" 
+                                    @endif
+                                >
+                                <button class="btn btn-primary cart_increase" style="background: #f86f03"><i class="fal fa-plus"></i></button>
                             </div>
-                            <h3>$320.00</h3>
+                            <h3 
+                                id="total_price" 
+                                data-price="{{ $product->offer_price > 0 ? $product->offer_price : $product->price }}"
+                            >
+                                @if(isset(Session::get("cart")[$product->id]["product_info"]))
+                                    {{ currency(cartItemTotal($product->id)) }}
+                                @else
+                                    @if ($product->offer_price > 0)
+                                        {{ currency($product->offer_price) }}
+                                    @else
+                                        {{ currency($product->price) }}
+                                    @endif
+                                @endif
+                            </h3>
                         </div>
                     </div>
                     <ul class="details_button_area d-flex flex-wrap">
-                        <li><a class="common_btn" href="#">add to cart</a></li>
+                        <li>
+                            @if(Session::has("cart") && array_key_exists($product->id, Session::get("cart")))
+                                <a class="common_btn" href="javascript:void(0)">
+                                    <i class="fa-solid fa-cart-circle-check fs-3"></i>
+                                </a>
+                            @else
+                                <a data-product-id="{{ $product->id }}" class="common_btn add_to_cart" href="javascript:void(0)">
+                                    <span class="text-white">add to cart</span>
+                                </a>
+                            @endif
+                        </li>
                         <li><a class="wishlist" href="#"><i class="far fa-heart"></i></a></li>
                     </ul>
                 </div>
@@ -274,7 +314,11 @@
                                         @endif
                                     </h5>
                                     <ul class="d-flex flex-wrap justify-content-center">
-                                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#cartModal"><i class="fas fa-shopping-basket"></i></a></li>
+                                        <li>
+                                            <a class="show_up_popup" data-product-id="{{ $related_product->id }}" href="#">
+                                                <i class="fas fa-shopping-basket"></i>
+                                            </a>
+                                        </li>
                                         <li><a href="#"><i class="fal fa-heart"></i></a></li>
                                         <li><a href="#"><i class="far fa-eye"></i></a></li>
                                     </ul>
@@ -284,90 +328,6 @@
                     @endforeach
                 </div>
             </div>
-
-            <!-- ADD TO CART POPUT START -->
-                <div class="fp__cart_popup">
-                    <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                                            class="fal fa-times"></i></button>
-                                    <div class="fp__cart_popup_img">
-                                        <img src="images/menu1.png" alt="menu" class="img-fluid w-100">
-                                    </div>
-                                    <div class="fp__cart_popup_text">
-                                        <a href="#" class="title">Maxican Pizza Test Better</a>
-                                        <p class="rating">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
-                                            <i class="far fa-star"></i>
-                                            <span>(201)</span>
-                                        </p>
-                                        <h4 class="price">$320.00 <del>$350.00</del> </h4>
-
-                                        <div class="details_size">
-                                            <h5>select size</h5>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="large01"
-                                                    checked>
-                                                <label class="form-check-label" for="large01">
-                                                    large <span>+ $350</span>
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="medium01">
-                                                <label class="form-check-label" for="medium01">
-                                                    medium <span>+ $250</span>
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="small01">
-                                                <label class="form-check-label" for="small01">
-                                                    small <span>+ $150</span>
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <div class="details_extra_item">
-                                            <h5>select option <span>(optional)</span></h5>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="coca-cola01">
-                                                <label class="form-check-label" for="coca-cola01">
-                                                    coca-cola <span>+ $10</span>
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="7up01">
-                                                <label class="form-check-label" for="7up01">
-                                                    7up <span>+ $15</span>
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <div class="details_quentity">
-                                            <h5>select quentity</h5>
-                                            <div class="quentity_btn_area d-flex flex-wrapa align-items-center">
-                                                <div class="quentity_btn">
-                                                    <button class="btn btn-danger"><i class="fal fa-minus"></i></button>
-                                                    <input type="text" placeholder="1">
-                                                    <button class="btn btn-success"><i class="fal fa-plus"></i></button>
-                                                </div>
-                                                <h3>$320.00</h3>
-                                            </div>
-                                        </div>
-                                        <ul class="details_button_area d-flex flex-wrap">
-                                            <li><a class="common_btn" href="#">add to cart</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <!-- ADD TO CART POPUT END -->
         @endif
     </div>
 </section>
@@ -376,25 +336,152 @@
 ==============================-->
 @endsection
 @push("scripts")
-    <script>
-        $(document).ready(function(){
-            $("#product_size").change(function(e){
-                const price=$(this).find("option:selected").data("price")
+<script>
+    /* ////////////////////////////////
+            product select
+    ////////////////////////////////// */
+    $(document).ready(function(){
+        /* size & options */
+        $(".fp__menu_details select#product_size").change(function(){
+            const parent = $(this).closest(".fp__menu_details")
+            updateTotalPrice(parent)
+        })
+        $(".fp__menu_details select#options").change(function(){
+            const parent = $(this).closest(".fp__menu_details")
+            updateTotalPrice(parent)
+        })
 
-                
-                if(price) {
-                    $("h3.price").slideUp(0)
+        /* decrease button */
+        $(".fp__menu_details button.cart_decrease").click(function(e){
+            e.preventDefault()
 
-                    if($(".price-variation").length === 0)
-                        $(".price").closest("#price-show").append("<h3 class='price price-variation'>"+price+"</h3>")
-                    else
-                        $("#price-show").find(".price-variation").html(price).slideDown(0)
+            const parent = $(this).closest(".fp__menu_details")
+            const quantity=parent.find("input[name=quantity]")
+            const currentQuantity=parseFloat(quantity.val())
 
-                } else {
-                    $("#price-show").find(".price").slideDown(0)
-                    $("#price-show").find(".price-variation").slideUp(0)
+            if(currentQuantity <= 1) return
+
+            quantity.val(currentQuantity - 1)
+            updateTotalPrice (parent)
+            
+        })
+
+        /* increase button */
+        $(".fp__menu_details button.cart_increase").click(function(e){
+            e.preventDefault()
+
+            const parent = $(this).closest(".fp__menu_details")
+            const quantity=parent.find("input[name=quantity]")
+            const currentQuantity=parseFloat(quantity.val())
+
+            if(currentQuantity > 100) return
+            
+            quantity.val(currentQuantity + 1)            
+            updateTotalPrice (parent)
+        })
+
+        
+        /* add to cart */
+        $(".fp__menu_details .add_to_cart").click(function(e){
+            e.preventDefault()
+            
+            const el = $(this)
+            const parent = el.closest(".fp__menu_details")
+            cartSubmit (el,parent)
+        })
+        
+        
+        /* ==== functions ==== */
+
+
+        /* update total price */
+        function updateTotalPrice(parent) {
+
+            const quantity=parent.find("input[name=quantity]")
+            const h3= parent.find("#total_price")
+            const product_size=  parent.find("select#product_size option:selected")
+            const options=  parent.find("select#options option:selected")
+
+            const pasePrice= parseFloat(h3.data("price")) || 0
+            const sizePrice= parseFloat(product_size.data("price")) || 0
+            let optionPrice=0
+            const qty= parseFloat(quantity.val()) || 0
+
+            if(options && options.length > 0)
+                options.each(function(){
+                    optionPrice += parseFloat($(this).data("price")) || 0
+                })
+
+            const total=((pasePrice + sizePrice + optionPrice) * qty).toFixed(2)
+            const formatedTotal = total + " {{ $provider_settings->site_currency_icon }}"
+            
+            h3.html(formatedTotal)
+        }
+
+        /* cart submit */
+        async function cartSubmit(el,parent){
+
+            const quantity=parent.find("input[name=quantity]")
+            const product_id=el.data("product-id")
+            const product_size=parent.find("select#product_size").val()
+            const options=parent.find("select#options").val()
+            const formData=new FormData()
+
+            formData.append("_token", "{{ csrf_token() }}")
+            formData.append("product_id",product_id)
+            
+            if(options && options.length > 0)
+                options.forEach(option=>{
+                    formData.append("options[]",option)
+                })
+
+            if(Number(product_size)) formData.append("product_size",product_size)
+            formData.append("quantity",quantity.val())
+
+            el.html('<div class="spinner-border" role="status"></div>')            
+            await new Promise(resolve=>setTimeout(resolve,1000))
+
+            $.ajax({
+                type:"POST",
+                data:formData,
+                contentType:false,
+                processData:false,
+                url:"{{ route('front.order.cart.ajax.submit') }}",
+                success:function(res){
+                    // console.log(res)
+
+                    if(res.success){
+                        el.html('<i class="fa-solid fa-cart-circle-check fs-3"></i>')
+                        el.css("pointer-events","none")                 
+
+                        updateCartSidebar ()
+                    }
+
+                    iziToast.show({
+                        title: res.error?.message ?? res.success?.message,
+                        position: "topRight",
+                        color: res.error ? "red" : "green"
+                    })                    
                 }
             })
-        })
-    </script>
+
+        }
+
+        /* refresh cart sidebar */
+        function updateCartSidebar () {
+            $.ajax({
+                type:"GET",
+                contentType:false,
+                processData:false,
+                url:"{{ route('front.order.cart.ajax.items') }}",
+                success:function(res){
+                    console.log(res)
+
+                    $(".fp__menu_cart_boody").html(res)  
+                    $(".cart_item_count").html($(".cart_item_count_get").html())
+                }
+            })
+        }
+    })
+</script>
 @endpush

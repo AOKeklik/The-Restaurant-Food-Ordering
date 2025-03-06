@@ -5,10 +5,10 @@
     <div class="fp__breadcrumb_overlay">
         <div class="container">
             <div class="fp__breadcrumb_text">
-                <h1>menu Details</h1>
+                <h1>@yield("page_title")</h1>
                 <ul>
                     <li><a href="{{ route("front.index") }}">home</a></li>
-                    <li><a href="javasicript:void(0)">menu Details</a></li>
+                    <li><a href="javasicript:void(0)">@yield("page_title")</a></li>
                 </ul>
             </div>
         </div>

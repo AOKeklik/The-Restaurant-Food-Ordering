@@ -23,7 +23,8 @@ $(function () {
         $(".fp__menu_cart_area").addClass("show_mini_cart");
     });
 
-    $(".close_cart").click(function () {
+    /* close cart sidebar */
+    $(document).on("click",".close_cart",function () {
         $(".fp__menu_cart_area").removeClass("show_mini_cart");
     });
 

@@ -88,8 +88,8 @@
 
     <!--jquery library js-->
     <script src="{{ asset("dist/front/js/jquery-3.6.0.min.js") }}"></script>    
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="{{ asset("dist/front/js/Font-Awesome.js") }}"></script>    
     <script src="{{ asset("dist/front/js/slick.min.js") }}"></script>   
     <script src="{{ asset("dist/front/js/isotope.pkgd.min.js") }}"></script>    
@@ -103,42 +103,14 @@
     <script src="{{ asset("dist/front/js/jquery.exzoom.js") }}"></script>
     <script src="{{ asset("dist/front/js/iziToast.min.js") }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <script src=https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
 
     <!--main/custom js-->
     <script src="{{ asset("dist/front/js/main.js") }}"></script>
-
-    <!-- Session Messages -->
-    @if(Session::has("error"))
-    <script>
-            iziToast.show({
-            title: "{{ Session::get("error") }}",
-            position: "topRight",
-            color: "red"
-        })
-    </script>
-    @endif
-    @if(Session::has("success"))
-    <script>
-            iziToast.show({
-            title: "{{ Session::get("success") }}",
-            position: "topRight",
-            color: "green"
-        })
-    </script>
-    @endif
-
-    <script>
-        /* select2 */        
-        $(document).ready(function(){
-            $('.select2').select2({
-                placeholder: 'This is my placeholder',
-                allowClear: true,
-                width: '100%',
-            })
-        })
-    </script>
     
     @stack("scripts")
+    @include('front.layout.global-scripts')
 </body>
 
 </html>

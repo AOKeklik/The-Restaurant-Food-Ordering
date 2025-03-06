@@ -14,8 +14,13 @@ use App\Http\Controllers\Admin\AdminWhyChooseController;
 use App\Http\Controllers\Front\CustomerAuthController;
 use App\Http\Controllers\Front\FrontCustomerProfileController;
 use App\Http\Controllers\Front\FrontHomeController;
+use App\Http\Controllers\Front\FrontOrderController;
 use App\Http\Controllers\Front\FrontProductController;
+
+
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 /* ********** ADMIN *********** */
 
@@ -152,10 +157,29 @@ Route::prefix("customer")->middleware("customer.authenticate")->group(function()
 
 
 Route::prefix("/")->group(function(){
+    /* base */
     Route::get("",[FrontHomeController::class,"index"])->name("front.index");
 
     /* product */
     Route::get("products",[FrontProductController::class,"products"])->name("front.products");
     Route::get("product/{product_id}/{product_slug}",[FrontProductController::class,"product"])->name("front.product");
+
+    /* order - cart */
+    Route::get("order/cart",[FrontOrderController::class,"cart"])->name("front.order.cart");
+    Route::post("order/popup/ajax/submit",[FrontOrderController::class,"cart_ajax_popup"])->name("front.order.popup.ajax.submit");
+    Route::post("order/cart/ajax/submit",[FrontOrderController::class,"cart_ajax_submit"])->name("front.order.cart.ajax.submit");
+    Route::get("order/cart/ajax/items",[FrontOrderController::class,"cart_ajax_items"])->name("front.order.cart.ajax.items");
+    Route::post("order/cart/ajax/item/remove",[FrontOrderController::class,"cart_ajax_item_remove"])->name("front.order.cart.ajax.item.remove");
+    Route::get("order/cart/ajax/items/remove",[FrontOrderController::class,"cart_ajax_items_remove"])->name("front.order.cart.ajax.items.remove");
+    Route::post("order/cart/ajax/quantity",[FrontOrderController::class,"cart_ajax_quantity"])->name("front.order.cart.ajax.quantity");
+
+    /* order - cart */
 });
 
+
+
+// Route::get('/', function () {
+//     $cart = Session::get('cart', 'Cart is empty'); 
+//     Log::info('Cart session data: ', ['cart' => $cart]);
+//     return 'Cart session logged in the terminal';
+// });

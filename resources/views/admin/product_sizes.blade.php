@@ -53,7 +53,7 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $size->name }}</td>
-                            <td>${{ $size->price }}</td>
+                            <td>{{ currency($size->price) }}</td>
                             <td>
                                 <div class="d-inline active">
                                     <span class="button-loader"></span>
