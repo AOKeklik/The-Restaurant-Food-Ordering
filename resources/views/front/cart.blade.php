@@ -110,6 +110,8 @@
                 product select
         ////////////////////////////////// */
         $(document).ready(function(){
+            let global_quantity = 0
+
             /* delete item by click */
             $(".delete_cart_item").click(deleteCartItem)
 
@@ -125,10 +127,11 @@
                 const currentQuantity=parseFloat(quantity.val())
 
                 if(currentQuantity <= 1) return
-
-                quantity.val(currentQuantity - 1)
-                updateTotalPrice (parent)
                 
+                global_quantity = parseFloat(currentQuantity - 1) || 0
+                updateTotalPrice (parent, function () {
+                    quantity.val(currentQuantity - 1) 
+                })
             })
 
             /* increase button */
@@ -141,36 +144,38 @@
 
                 if(currentQuantity > 100) return
                 
-                quantity.val(currentQuantity + 1)            
-                updateTotalPrice (parent)
+                global_quantity = parseFloat(currentQuantity + 1) || 0
+                updateTotalPrice (parent, function () {
+                    quantity.val(currentQuantity + 1) 
+                })
             })
             
             
             /* ==== functions ==== */
 
-
             /* update total price */
-            async function updateTotalPrice(parent) {
-                const quantity=parent.find("input[name=quantity]")
-
+            function updateTotalPrice(parent, updateQuantity) {
                 const h3= parent.find("#total_price")
 
                 const price= parseFloat(h3.data("price")) || 0
-                const qty= parseFloat(quantity.val()) || 0
+                const qty= global_quantity
+
+                console.log(qty)
 
                 const total=(price * qty).toFixed(2)
                 const formatedTotal = total + " {{ $provider_settings->site_currency_icon }}"
-                
-                await updateCartQuantity(parent)
-                h3.html(formatedTotal)
+
+                updateCartQuantity(parent, function () {
+                    h3.html(formatedTotal)
+                    updateQuantity()
+                })
             }
 
             /* update cart item quantity */
-            async function updateCartQuantity (parent) {
+            async function updateCartQuantity (parent, updateH3andQuantity) {
 
                 const product_id=parent.data("product-id")
-                const quantity=parent.find("input[name=quantity]")
-                const qty= parseFloat(quantity.val()) || 0
+                const qty= global_quantity 
                 const formData=new FormData()
                 
                 formData.append("_token", "{{ csrf_token() }}")
@@ -180,25 +185,29 @@
                 $('.overlay-container').removeClass('d-none');
                 $('.overlay').addClass('active');
                 await new Promise(resolve=>setTimeout(resolve,1000))
-                
-                $.ajax({
+
+                await $.ajax({
                     type:"post",
                     contentType:false,
                     processData:false,
                     data: formData,
                     url:"{{ route('front.order.cart.ajax.quantity') }}",
-                    success:function(res){
+                    success: async function(res){
                         console.log(res)
 
                         $('.overlay-container').addClass('d-none');
-                        $('.overlay').removeClass('active').promise().done( async function () {
+                        $('.overlay').removeClass('active')
+
+                        iziToast.show({
+                            title: res.error?.message ?? res.success?.message,
+                            position: "topRight",
+                            color: res.error ? "red" : "green"
+                        })                            
+
+                        if(res.success) {
                             await updateCartSidebar()
-                            iziToast.show({
-                                title: res.error?.message ?? res.success?.message,
-                                position: "topRight",
-                                color: res.error ? "red" : "green"
-                            })
-                        })
+                            updateH3andQuantity()
+                        }
                     }
                 })
             }

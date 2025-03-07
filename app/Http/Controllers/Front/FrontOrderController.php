@@ -52,6 +52,9 @@ class FrontOrderController extends Controller
             $cart = Session::get("cart", []);
             $product = Product::find($request->product_id);
 
+            if($product->max_quantity > -1 && $request->quantity > $product->max_quantity)
+                return response()->json(["error" => ["message" => "Requested quantity exceeds the available stock limit of " . $product->max_quantity . "."]]);
+
             $cart[$product->id] = [
                 "product_info"=>[
                     "id" => $product->id,
@@ -104,6 +107,10 @@ class FrontOrderController extends Controller
             }
     
             $cart = Session::get("cart", []);
+            $product = Product::find($request->product_id);
+
+            if($product->max_quantity > -1 && $request->quantity > $product->max_quantity)
+                return response()->json(["error" => ["message" => "Requested quantity exceeds the available stock limit of " . $product->max_quantity . "."]]);
     
             if (isset($cart) && array_key_exists($request->product_id, $cart)) {
                 $cart[ $request->product_id]["product_info"]["quantity"] = $request->quantity;
@@ -116,7 +123,7 @@ class FrontOrderController extends Controller
             return response()->json(["error" => ["message" => $e->getMessage()]]);
         }
     }
-    public function cart_ajax_items_remove (Request $request) 
+    public function cart_ajax_items_remove () 
     {
         try {    
             $cart = Session::get("cart", []);

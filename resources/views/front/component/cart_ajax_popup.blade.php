@@ -97,7 +97,11 @@
     </div>
     <ul class="details_button_area d-flex flex-wrap">
         <li>
-            @if(Session::has("cart") && array_key_exists($product->id, Session::get("cart")))
+            @if($product->max_quantity === 0)
+                <a class="common_btn bg-danger" href="javascript:void(0)">
+                    <i class="fa-duotone fa-light fa-xmark"></i> Stock out
+                </a>
+            @elseif(Session::has("cart") && array_key_exists($product->id, Session::get("cart")))
                 <a class="common_btn" href="javascript:void(0)">
                     <i class="fa-solid fa-cart-circle-check fs-3"></i>
                 </a>
@@ -226,14 +230,17 @@
                 processData:false,
                 url:"{{ route('front.order.cart.ajax.submit') }}",
                 success:function(res){
-                    // console.log(res)
+                    console.log(res)
 
                     if(res.success){
                         el.html('<i class="fa-solid fa-cart-circle-check fs-3"></i>')
-                        el.css("pointer-events","none")                 
-
+                        el.css("pointer-events","none")
                         updateCartSidebar ()
                     }
+
+                    if(res.error)
+                        el.html('<span class="text-white">add to cart</span>')
+
 
                     iziToast.show({
                         title: res.error?.message ?? res.success?.message,

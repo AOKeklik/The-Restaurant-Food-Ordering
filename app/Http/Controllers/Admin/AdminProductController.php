@@ -42,6 +42,7 @@ class AdminProductController extends Controller
             "options"=>"nullable|array|exists:options,id",
             "name"=>"required|string",
             "price"=>"required|numeric",
+            "max_quantity"=>"nullable|numeric",
             "offer_price"=>"nullable|numeric",
             "seo_title"=>"nullable|string",
             "seo_description"=>"nullable|string|",
@@ -97,6 +98,9 @@ class AdminProductController extends Controller
         if($request->offer_price)
             $product->offer_price=$request->offer_price;
 
+        if(filter_var($request->max_quantity,FILTER_VALIDATE_INT) !== false)
+            $product->max_quantity=$request->max_quantity;
+
         $product->seo_title=$request->seo_title;
         $product->seo_description=$request->seo_description;
         $product->description=$request->description;
@@ -115,6 +119,7 @@ class AdminProductController extends Controller
             "name"=>"required|string",
             "price"=>"required|numeric",
             "offer_price"=>"nullable|numeric",
+            "max_quantity"=>"nullable|numeric",
             "seo_title"=>"nullable|string",
             "seo_description"=>"nullable|string|",
             "image"=>"nullable|file|mimes:jpg,jpeg,png|max:1048576",
@@ -172,6 +177,9 @@ class AdminProductController extends Controller
 
         if($request->offer_price)
             $product->offer_price=$request->offer_price;
+
+        if(filter_var($request->max_quantity,FILTER_VALIDATE_INT) !== false)
+            $product->max_quantity=$request->max_quantity;
 
         $product->seo_title=$request->seo_title;
         $product->seo_description=$request->seo_description;

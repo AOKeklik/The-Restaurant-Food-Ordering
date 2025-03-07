@@ -43,7 +43,7 @@
                 <input name="price" type="text" class="form-control" id="price" placeholder="Price" value="{{ old("price") }}">
                 @error("price") <small class="form-text text-danger">{{ $message }}</small> @enderror
             </div>
-            <div class="form-group col-12">
+            <div class="form-group col-6">
                 <label for="options">Options</label>
                 <select id="options" name="options[]" class="form-control select2" multiple>
                     @foreach($options as $option)
@@ -51,6 +51,11 @@
                     @endforeach
                 </select>
                 @error("options") <small class="form-text text-danger">{{ $message }}</small> @enderror
+            </div>
+            <div class="form-group col-md-6">
+                <label for="max_quantity">Max Quantity</label>
+                <input name="max_quantity" type="text" class="form-control" id="max_quantity" placeholder="Quantity" value="{{ old("max_quantity") }}">
+                @error("max_quantity") <small class="form-text text-danger">{{ $message }}</small> @enderror
             </div>
             <div class="form-group col-md-6">
                 <label for="offer_price">Offer Price</label>

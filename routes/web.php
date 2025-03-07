@@ -172,8 +172,6 @@ Route::prefix("/")->group(function(){
     Route::post("order/cart/ajax/item/remove",[FrontOrderController::class,"cart_ajax_item_remove"])->name("front.order.cart.ajax.item.remove");
     Route::get("order/cart/ajax/items/remove",[FrontOrderController::class,"cart_ajax_items_remove"])->name("front.order.cart.ajax.items.remove");
     Route::post("order/cart/ajax/quantity",[FrontOrderController::class,"cart_ajax_quantity"])->name("front.order.cart.ajax.quantity");
-
-    /* order - cart */
 });
 
 

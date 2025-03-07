@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string("slug");
             $table->double("price");
             $table->double("offer_price")->default(0);
+            $table->double("max_quantity")->default(-1);
             $table->string("sku")->unique()->nullable();
             $table->string("seo_title")->nullable();
             $table->text("seo_description")->nullable();
