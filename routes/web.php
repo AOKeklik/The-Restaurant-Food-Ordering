@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminCouponController;
+use App\Http\Controllers\Admin\AdminDeliveryAreasController;
 use App\Http\Controllers\Admin\AdminOptionController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminProductImageController;
@@ -101,6 +102,16 @@ Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     Route::post("coupon/update",[AdminCouponController::class,"coupon_update"])->name("admin.coupon.update");
     Route::post("coupon/ajax/status/update",[AdminCouponController::class,"coupon_ajax_status_update"])->name("admin.coupon.ajax.status.update");
     Route::post("coupon/ajax/delete",[AdminCouponController::class,"coupon_ajax_delete"])->name("admin.coupon.ajax.delete");
+
+    /* delivery areas */
+    Route::get("delivery-areas",[AdminDeliveryAreasController::class,"delivery_areas"])->name("admin.delivery_areas");
+    Route::get("delivery-area/add",[AdminDeliveryAreasController::class,"delivery_area_add"])->name("admin.delivery_area.add");
+    Route::get("delivery-area/edit/{delivery_area_id}",[AdminDeliveryAreasController::class,"delivery_area_edit"])->name("admin.delivery_area.edit");
+    Route::post("delivery-area/store",[AdminDeliveryAreasController::class,"delivery_area_store"])->name("admin.delivery_area.store");
+    Route::post("delivery-area/update",[AdminDeliveryAreasController::class,"delivery_area_update"])->name("admin.delivery_area.update");
+    Route::post("delivery-area/ajax/status/update",[AdminDeliveryAreasController::class,"delivery_area_ajax_status_update"])
+        ->name("admin.delivery_area.ajax.status.update");
+    Route::post("delivery-area/ajax/delete",[AdminDeliveryAreasController::class,"delivery_area_ajax_delete"])->name("admin.delivery_area.ajax.delete");
 
     /* products */
     Route::get("products",[AdminProductController::class,"products"])->name("admin.products");

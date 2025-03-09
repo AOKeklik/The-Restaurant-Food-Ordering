@@ -79,3 +79,11 @@ if(!function_exists("cartTotal")){
         return $total;
     }
 }
+
+if(!function_exists("formatDeliveryTime")){
+    function formatDeliveryTime ($val) {
+        $hours = floor($val / 60);
+        $minutes= $val % 60;
+        return sprintf("%02d:%02d", $hours, $minutes); // Format as HH:MM
+    }
+}
