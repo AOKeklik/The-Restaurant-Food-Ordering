@@ -18,18 +18,6 @@ $(function () {
 
 
 
-    //=======MENU CART======
-    $(".cart_icon").click(function () {
-        $(".fp__menu_cart_area").addClass("show_mini_cart");
-    });
-
-    /* close cart sidebar */
-    $(document).on("click",".close_cart",function () {
-        $(".fp__menu_cart_area").removeClass("show_mini_cart");
-    });
-
-
-
     //=======MENU SEARCH======
     $(".menu_search").click(function () {
         $(".fp__search_form").addClass("show");

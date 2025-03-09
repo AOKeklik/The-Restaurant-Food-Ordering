@@ -26,16 +26,14 @@
         <div class="tab-content py-5" id="myTabContent2">
             <div class="tab-pane fade show active" id="site" role="tabpanel" aria-labelledby="site">
                 <div class="row mb-5">
-                    <div class="col-12">
+                    <div class="col-6">
                         <div class="mb-3">
                             <label for="site_name" class="form-label">Site Name*</label>
                             <input type="text" class="form-control" id="site_name" name="site_name" placeholder="Enter offer"  value="{{ $provider_settings->site_name }}">
                             @error("site_name") <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
                     </div>
-                </div>
-                <div class="row mb-5">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="mb-3">
                             <label for="site_currency" class="form-label">Site Currency*</label>
                             <select name="site_currency" class="form-control select2">
@@ -46,10 +44,13 @@
                             @error("site_currency") <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
                     </div>
+                </div>
+
+                <div class="row mb-5">
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="site_currency_icon" class="form-label">Site Currency Icon*</label>
-                            <input type="text" class="form-control" id="site_currency_icon" name="site_currency_icon" placeholder="Enter offer"  value="{{ $provider_settings->site_currency_icon }}">
+                            <input type="text" class="form-control" id="site_currency_icon" name="site_currency_icon" placeholder="Enter Icon"  value="{{ $provider_settings->site_currency_icon }}">
                             @error("site_currency_icon") <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
                     </div>
@@ -61,6 +62,13 @@
                                 <option @if($provider_settings->site_currency_position === "left") selected @endif value="left">Left</option>
                             </select>
                             @error("site_currency_position") <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="site_delivery_charge" class="form-label">Site Delivery Charge</label>
+                            <input type="text" class="form-control" id="site_delivery_charge" name="site_delivery_charge" placeholder="Enter Charge"  value="{{ $provider_settings->site_delivery_charge }}">
+                            @error("site_delivery_charge") <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
                     </div>
                 </div>

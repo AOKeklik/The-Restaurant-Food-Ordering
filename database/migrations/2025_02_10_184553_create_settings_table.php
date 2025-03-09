@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string("site_currency");
             $table->string("site_currency_icon");
             $table->enum("site_currency_position", ["right","left"]);
+            $table->double("site_delivery_charge")->default(0);
             $table->string("site_address");
             $table->string("site_email");
             $table->string("site_phone");

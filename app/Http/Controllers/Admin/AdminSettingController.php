@@ -23,6 +23,7 @@ class AdminSettingController extends Controller
             "site_currency"=>"required|string",
             "site_currency_icon"=>"required|string",
             "site_currency_position"=>"required|string",
+            "site_delivery_charge"=>"required|numeric",
             "site_address"=>"required|string",
             "site_email"=>"required|email",
             "site_phone"=>"required|string",
@@ -57,6 +58,10 @@ class AdminSettingController extends Controller
         $setting->site_currency=$request->site_currency;
         $setting->site_currency_icon=$request->site_currency_icon;
         $setting->site_currency_position=$request->site_currency_position;
+        
+        if($request->site_delivery_charge)
+            $setting->site_delivery_charge=$request->site_delivery_charge;
+
         $setting->site_address=$request->site_address;
         $setting->site_email=$request->site_email;
         $setting->site_phone=$request->site_phone;

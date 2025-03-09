@@ -1,0 +1,1 @@
+<a class="cart_icon"><i class="fas fa-shopping-basket"></i> <span class="cart_item_count">{{ cartItemCount() }}</span></a>

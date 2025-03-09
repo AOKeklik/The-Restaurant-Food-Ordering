@@ -31,7 +31,7 @@
                     @foreach($product->product_sizes as $product_size)
                         <option 
                             value="{{ $product_size->id }}" data-price="{{ $product_size->price }}" 
-                            @if(isset(Session::get("cart")[$product->id]["product_size"]) && Session::get("cart")[$product->id]["product_size"]["id"] ==  $product_size->id) 
+                            @if(isset(Session::get("cart")["cart"][$product->id]["product_size"]) && Session::get("cart")["cart"][$product->id]["product_size"]["id"] ==  $product_size->id) 
                                 selected
                             @endif
                         >
@@ -51,8 +51,8 @@
                     @foreach($options as $option)
                         <option 
                             value="{{ $option->id }}" data-price="{{ $option->price }}"
-                            @if(isset(Session::get("cart")[$product->id]["product_options"]) && 
-                            in_array($option->id, array_column(Session::get("cart")[$product->id]["product_options"], "id"))) 
+                            @if(isset(Session::get("cart")["cart"][$product->id]["product_options"]) && 
+                            in_array($option->id, array_column(Session::get("cart")["cart"][$product->id]["product_options"], "id"))) 
                                 selected
                             @endif
                         >
@@ -71,8 +71,8 @@
                 <button class="btn btn-primary cart_decrease" style="background: #f86f03"><i class="fal fa-minus"></i></button>
                 <input 
                     type="text" id="quantity" name="quantity" placeholder="1" readonly
-                    @if(isset(Session::get("cart")[$product->id]["product_info"])) 
-                        value="{{ Session::get("cart")[$product->id]["product_info"]["quantity"] }}" 
+                    @if(isset(Session::get("cart")["cart"][$product->id]["product_info"])) 
+                        value="{{ Session::get("cart")["cart"][$product->id]["product_info"]["quantity"] }}" 
                     @else
                         value="1" 
                     @endif
@@ -83,8 +83,8 @@
                 id="total_price" 
                 data-price="{{ $product->offer_price > 0 ? $product->offer_price : $product->price }}"
             >
-                @if(isset(Session::get("cart")[$product->id]["product_info"]))
-                    {{ currency(cartItemTotal($product->id)) }}
+                @if(isset(Session::get("cart")["cart"][$product->id]["product_info"]))
+                    {{ currency(cartItemSubTotal($product->id)) }}
                 @else
                     @if ($product->offer_price > 0)
                         {{ currency($product->offer_price) }}
@@ -98,10 +98,8 @@
     <ul class="details_button_area d-flex flex-wrap">
         <li>
             @if($product->max_quantity === 0)
-                <a class="common_btn bg-danger" href="javascript:void(0)">
-                    <i class="fa-duotone fa-light fa-xmark"></i> Stock out
-                </a>
-            @elseif(Session::has("cart") && array_key_exists($product->id, Session::get("cart")))
+                <a class="common_btn bg-danger" href="javascript:void(0)">Stock out</a>
+            @elseif(Session::has("cart") && array_key_exists($product->id, Session::get("cart")["cart"]))
                 <a class="common_btn" href="javascript:void(0)">
                     <i class="fa-solid fa-cart-circle-check fs-3"></i>
                 </a>
@@ -263,7 +261,7 @@
                     //console.log(res)
 
                     $(".fp__menu_cart_boody").html(res)  
-                    $(".cart_item_count").html($(".cart_item_count_get").html())
+                    $(".cart_item_count").html($(".cart_item_count_get").val())
                 }
             })
         }

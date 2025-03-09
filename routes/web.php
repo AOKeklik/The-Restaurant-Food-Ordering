@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminOptionController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminProductImageController;
@@ -92,6 +93,15 @@ Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     Route::post("option/status/update",[AdminOptionController::class,"option_status_update"])->name("admin.option.status.update");
     Route::post("option/delete",[AdminOptionController::class,"option_delete"])->name("admin.option.delete");
 
+    /* coupons */
+    Route::get("coupons",[AdminCouponController::class,"coupons"])->name("admin.coupons");
+    Route::get("coupon/add",[AdminCouponController::class,"coupon_add"])->name("admin.coupon.add");
+    Route::get("coupon/edit/{coupon_id}",[AdminCouponController::class,"coupon_edit"])->name("admin.coupon.edit");
+    Route::post("coupon/store",[AdminCouponController::class,"coupon_store"])->name("admin.coupon.store");
+    Route::post("coupon/update",[AdminCouponController::class,"coupon_update"])->name("admin.coupon.update");
+    Route::post("coupon/ajax/status/update",[AdminCouponController::class,"coupon_ajax_status_update"])->name("admin.coupon.ajax.status.update");
+    Route::post("coupon/ajax/delete",[AdminCouponController::class,"coupon_ajax_delete"])->name("admin.coupon.ajax.delete");
+
     /* products */
     Route::get("products",[AdminProductController::class,"products"])->name("admin.products");
     Route::get("product/add",[AdminProductController::class,"product_add"])->name("admin.product.add");
@@ -168,10 +178,16 @@ Route::prefix("/")->group(function(){
     Route::get("order/cart",[FrontOrderController::class,"cart"])->name("front.order.cart");
     Route::post("order/popup/ajax/submit",[FrontOrderController::class,"cart_ajax_popup"])->name("front.order.popup.ajax.submit");
     Route::post("order/cart/ajax/submit",[FrontOrderController::class,"cart_ajax_submit"])->name("front.order.cart.ajax.submit");
+    Route::get("order/cart/ajax/count",[FrontOrderController::class,"cart_ajax_count"])->name("front.order.cart.ajax.count");
     Route::get("order/cart/ajax/items",[FrontOrderController::class,"cart_ajax_items"])->name("front.order.cart.ajax.items");
+    Route::get("order/cart/ajax/page",[FrontOrderController::class,"cart_ajax_page"])->name("front.order.cart.ajax.page");
     Route::post("order/cart/ajax/item/remove",[FrontOrderController::class,"cart_ajax_item_remove"])->name("front.order.cart.ajax.item.remove");
     Route::get("order/cart/ajax/items/remove",[FrontOrderController::class,"cart_ajax_items_remove"])->name("front.order.cart.ajax.items.remove");
     Route::post("order/cart/ajax/quantity",[FrontOrderController::class,"cart_ajax_quantity"])->name("front.order.cart.ajax.quantity");
+    
+    /* order - coupon */
+    Route::post("order/coupon/ajax/submit",[FrontOrderController::class,"cart_ajax_coupon_submit"])->name("front.order.coupon.ajax.submit");
+    Route::get("order/coupon/ajax/remove",[FrontOrderController::class,"cart_ajax_coupon_remove"])->name("front.order.coupon.ajax.remove");
 });
 
 

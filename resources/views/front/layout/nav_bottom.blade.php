@@ -61,8 +61,8 @@
                         </form>
                     </div>
                 </li>
-                <li>
-                    <a class="cart_icon"><i class="fas fa-shopping-basket"></i> <span class="cart_item_count">{{ cartItemCount() }}</span></a>
+                <li data-section-cart="count">
+                    @include("front.component.cart_ajax_count")
                 </li>
                 <li>
                     @if(Auth::guard("user")->check())

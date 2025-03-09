@@ -20,7 +20,7 @@
 
 <script> 
     /* ////////////////////////////////
-                Datatable
+                DATATABLE
     // /////////////////////////////// */
     $(document).ready(function () {
         const table = $('#example').DataTable({
@@ -42,7 +42,7 @@
     })
 
     /* ////////////////////////////////
-                select2
+                SELECT2
     // /////////////////////////////// */
     $(document).ready(function(){        
         $('.select2').select2({
@@ -52,9 +52,26 @@
         })
     })
 
+    /* ////////////////////////////////
+            SWITCH CART SIDEBAR
+    // /////////////////////////////// */
+    $(document).ready(function(){
+        $(document)
+            .on("click",".cart_icon",showCartSideBar)
+            .on("click",".close_cart",hideCartSideBar)
+
+        function showCartSideBar(){
+            $(".fp__menu_cart_area").addClass("show_mini_cart")
+        }
+
+        function hideCartSideBar(){
+            $(".fp__menu_cart_area").removeClass("show_mini_cart")
+        }
+    })
+        
 
     /* ////////////////////////////////
-            cart item remove
+            CART ITEM REMOVE
     // /////////////////////////////// */
     $(document).ready(function(){
         $(document).on("click",".del_icon",async function(e){
@@ -66,43 +83,77 @@
             formData.append("_token", "{{ csrf_token() }}")
             formData.append("product_id",product_id)
 
-            $(this).closest(".fp__menu_cart_boody").html('<div class="pt-5 d-flex justify-content-center"><div class="spinner-border" role="status"></div></div>')            
-            await new Promise(resolve=>setTimeout(resolve,1000))
-
+            showLoadingSpinner("cart")           
+            await delay(1000)
             
+            removeCartItem(formData)
+        })
+
+        function removeCartItem (formData) {
             $.ajax({
                 type:"POST",
                 contentType:false,
                 processData:false,
                 data:formData,
                 url:"{{ route('front.order.cart.ajax.item.remove') }}",
-                success:function(res_1){
-                    console.log(res_1)
-
-                    $.ajax({
-                        type:"GET",
-                        contentType:false,
-                        processData:false,
-                        url:"{{ route('front.order.cart.ajax.items') }}",
-                        success:function(res_2){
-                            console.log(res_2)
-
-                            $(".fp__menu_cart_boody").html(res_2)  
-                            $(".cart_item_count").html($(".cart_item_count_get").html())
-
-                            iziToast.show({
-                                title: res_1.error?.message ?? res_1.success?.message,
-                                position: "topRight",
-                                color: res_1.error ? "red" : "green"
-                            }) 
-                        }
-                    })
+                success: res => {
+                    // console.log(res)
+                    fetchCartSidebar()
+                    fetchCartCount()
+                    fetchCartPage()
+                    showNotification(res)
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText) 
                 }
             })
-        })
+        }
+
+        function fetchCartSidebar(){
+            $.ajax({
+                type:"GET",
+                url:"{{ route('front.order.cart.ajax.items') }}",
+                success:function(cartItems){
+                    $("[data-section-cart=sidebar-items]").html(cartItems)
+                }
+            })
+        }
+
+        function fetchCartPage(){
+            $.ajax({
+                type:"GET",
+                url:"{{ route('front.order.cart.ajax.page') }}",
+                success:function(cartItemsPage){
+                    $("[data-section-cart=page]").html(cartItemsPage) 
+                }
+            })
+        }
+
+        function fetchCartCount(){
+            $.ajax({
+                type:"GET",
+                url:"{{ route('front.order.cart.ajax.count') }}",
+                success:function(count){
+                    $("[data-section-cart=count]").html(count) 
+                }
+            })
+        }
+
+        function showLoadingSpinner(section){
+            $("[data-section-spinner="+section+"]").html('<div class="pt-5 d-flex justify-content-center"><div class="spinner-border" role="status"></div></div>') 
+        }
+
+        function delay(ms){
+            return new Promise(resolve=>setTimeout(resolve,ms))
+        }
+
+        function showNotification(res){
+            iziToast.show({
+                title: res.error?.message ?? res.success?.message,
+                position: "topRight",
+                color: res.error ? "red" : "green"
+            }) 
+        }
     })
 
     /* ////////////////////////////////
@@ -120,12 +171,13 @@
             formData.append("_token", "{{ csrf_token() }}")
             formData.append("product_id",product_id)
 
+            showOverlay()
+            await delay(1000)
 
-            $('.overlay-container').removeClass('d-none');
-            $('.overlay').addClass('active');
+            submitPopupForm(formData)
+        })
 
-            await new Promise(resolve=>setTimeout(resolve,1000))
-
+        function submitPopupForm(formData) {
             $.ajax({
                 type:"POST",
                 data:formData,
@@ -135,14 +187,33 @@
                 success:function(res){
                     // console.log(res)
                     
-                    $(".load_product_modal_body").html(res)
-                    $("#cartModal").modal("show")
-
-                    $('.overlay-container').addClass('d-none');
-                    $('.overlay').removeClass('active');
+                    showProductModal(res)
+                    hideOverlay()
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText)
+                    hideOverlay()
                 }
             })
+        }
 
-        })
+        function showProductModal(res){
+            $(".load_product_modal_body").html(res)
+            $("#cartModal").modal("show")
+        }
+
+        function showOverlay(){
+            $('.overlay-container').removeClass('d-none');
+            $('.overlay').addClass('active');
+        }
+
+        function hideOverlay(){
+            $('.overlay-container').addClass('d-none');
+            $('.overlay').removeClass('active');
+        }
+
+        function delay(ms){
+            return new Promise(resolve=>setTimeout(resolve,ms))
+        }
     })
 </script>
