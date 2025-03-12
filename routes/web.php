@@ -169,8 +169,15 @@ Route::prefix("customer")->middleware("customer.authenticate")->group(function()
 
     /* profile */
     Route::post("avatar/update",[FrontCustomerProfileController::class,"avatar_update"])->name("front.customer.avatar.update");
-    Route::post("profile/update",[FrontCustomerProfileController::class,"profile_update"])->name("front.customer.profile.update");
     Route::post("password/update",[FrontCustomerProfileController::class,"password_update"])->name("front.customer.password.update");
+    Route::get("profile/edit/ajax",[FrontCustomerProfileController::class,"profile_edit_ajax"])->name("front.customer.profile.edit.ajax");
+    Route::post("profile/update/ajax",[FrontCustomerProfileController::class,"profile_update_ajax"])->name("front.customer.profile.update.ajax");
+    Route::get("profile/info/ajax",[FrontCustomerProfileController::class,"profile_info_ajax"])->name("front.customer.profile.info.ajax");
+    Route::post("address/store/ajax",[FrontCustomerProfileController::class,"address_store_ajax"])->name("front.customer.address.store.ajax");
+    Route::get("address/items/ajax",[FrontCustomerProfileController::class,"address_items_ajax"])->name("front.customer.address.items.ajax");
+    Route::post("address/edit/ajax",[FrontCustomerProfileController::class,"address_edit_ajax"])->name("front.customer.address.edit.ajax");
+    Route::post("address/update/ajax",[FrontCustomerProfileController::class,"address_update_ajax"])->name("front.customer.address.update.ajax");
+    Route::post("address/delete/ajax",[FrontCustomerProfileController::class,"address_delete_ajax"])->name("front.customer.address.delete.ajax");
 });
 
 

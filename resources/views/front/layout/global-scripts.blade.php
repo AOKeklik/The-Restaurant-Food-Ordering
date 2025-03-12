@@ -53,7 +53,7 @@
     })
 
     /* ////////////////////////////////
-            SWITCH CART SIDEBAR
+            TOGGLE CART SIDEBAR
     // /////////////////////////////// */
     $(document).ready(function(){
         $(document)

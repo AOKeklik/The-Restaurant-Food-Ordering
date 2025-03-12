@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DeliveryArea extends Model
+class Address extends Model
 {
     use HasFactory;
 
-    public function addresses()
+    public function deliveryArea()
     {
-        return $this->hasMany(Address::class);
+        return $this->belongsTo(DeliveryArea::class,"delivery_area_id");
     }
 }

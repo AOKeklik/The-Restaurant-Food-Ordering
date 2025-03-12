@@ -47,15 +47,8 @@
                 <a class="nav-link" href="{{ route("admin.setting.menu") }}"><i class="far fa-pizza-slice"></i> <span>Menu</span></a>
             </li> 
 
-            {{-- product --}}
-            <li class="menu-header">Restaurant</li>
-            <li class="dropdown @if(Route::is("admin.products") || Route::is("admin.product.add")) active @endif">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-shopping-bag"></i> <span>Products</span></a>
-                <ul class="dropdown-menu">
-                    <li class="@if(Route::is("admin.products")) active @endif"><a class="nav-link" href="{{ route("admin.products") }}">Products</a></li>
-                    <li class="@if(Route::is("admin.product.add")) active @endif"><a class="nav-link" href="{{ route("admin.product.add") }}">Add Product</a></li>
-                </ul>
-            </li>
+            {{-- customer --}}
+            <li class="menu-header">Customer</li>
             <li class="dropdown @if(Route::is("admin.delivery_areas") || Route::is("admin.delivery_area.add")) active @endif">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-map-marker-alt"></i> <span>Delivery Areas</span></a>
                 <ul class="dropdown-menu">
@@ -65,6 +58,16 @@
                     <li class="@if(Route::is("admin.delivery_area.add")) active @endif">
                         <a class="nav-link" href="{{ route("admin.delivery_area.add") }}">Add Area</a>
                     </li>
+                </ul>
+            </li>
+
+            {{-- product --}}
+            <li class="menu-header">Restaurant</li>
+            <li class="dropdown @if(Route::is("admin.products") || Route::is("admin.product.add")) active @endif">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-shopping-bag"></i> <span>Products</span></a>
+                <ul class="dropdown-menu">
+                    <li class="@if(Route::is("admin.products")) active @endif"><a class="nav-link" href="{{ route("admin.products") }}">Products</a></li>
+                    <li class="@if(Route::is("admin.product.add")) active @endif"><a class="nav-link" href="{{ route("admin.product.add") }}">Add Product</a></li>
                 </ul>
             </li>
             <li class="dropdown @if(Route::is("admin.options") || Route::is("admin.option.add")) active @endif">

@@ -32,8 +32,7 @@ $(function () {
     //=========NICE SELECT=========
     $('#select_js').niceSelect();
     $('#select_js2').niceSelect();
-    $('#select_js3').niceSelect();
-    $('#select_js4').niceSelect();
+    $('.niceselect2').niceSelect();
 
 
 
@@ -435,12 +434,6 @@ $(function () {
     new WOW().init();
 
 
-    //*==========PERSONAL INFO==========
-    $(".dash_info_btn").click(function () {
-        $(".fp_dash_personal_info").toggleClass("show");
-    });
-
-
     //*==========ORDER HISTORY==========
     $(".view_invoice").on("click", function () {
         $(".fp_dashboard_order").fadeOut();
@@ -466,14 +459,6 @@ $(function () {
 
     $(".cancel_new_address").on("click", function () {
         $(".address_body").removeClass("show_new_address");
-    });
-
-    $('.dash_edit_btn').on('click', function () {
-        $(".address_body").addClass("show_edit_address");
-    });
-
-    $(".cancel_edit_address").on("click", function () {
-        $(".address_body").removeClass("show_edit_address");
     });
 
 
