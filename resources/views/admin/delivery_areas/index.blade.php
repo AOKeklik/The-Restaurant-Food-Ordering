@@ -30,8 +30,8 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $deliveryArea->name }}</td>
-                            <td>{{ formatDeliveryTime($deliveryArea->min_time) }}</td>
-                            <td>{{ formatDeliveryTime($deliveryArea->max_time) }}</td>
+                            <td>{{ deliveryTime($deliveryArea->min_time) }}</td>
+                            <td>{{ deliveryTime($deliveryArea->max_time) }}</td>
                             <td>
                                 <div class="d-inline active">
                                     <span class="button-loader"></span>

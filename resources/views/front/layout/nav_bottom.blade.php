@@ -62,7 +62,7 @@
                     </div>
                 </li>
                 <li data-section-cart="count">
-                    @include("front.component.cart_ajax_count")
+                    @include("front.cart.ajax_count")
                 </li>
                 <li>
                     @if(Auth::guard("user")->check())
@@ -126,7 +126,7 @@
 <!--=============================
         CART SIDEBAR
 ==============================-->
-@include("front.component.cart_sidebar")
+@include("front.cart.sidebar")
 <!--=============================
         CART SIDEBAR
 ==============================-->

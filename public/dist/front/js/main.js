@@ -30,8 +30,6 @@ $(function () {
 
 
     //=========NICE SELECT=========
-    $('#select_js').niceSelect();
-    $('#select_js2').niceSelect();
     $('.niceselect2').niceSelect();
 
 

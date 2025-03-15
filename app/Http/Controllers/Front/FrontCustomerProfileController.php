@@ -18,7 +18,7 @@ class FrontCustomerProfileController extends Controller
             where("user_id",Auth::guard("user")->user()->id)->
             orderBy("id","desc")->
             get();
-        $deliveryAreas=DeliveryArea::orderBy("id","desc")->get();
+        $deliveryAreas=DeliveryArea::where("status",1)->orderBy("id","desc")->get();
         return view("front.customer-dashboard.index",compact("addresses","deliveryAreas"));
     }
 
@@ -134,7 +134,13 @@ class FrontCustomerProfileController extends Controller
             ]);
 
             if(!$validator->passes())
-                return response()->json(["error"=>["message"=>$validator->errors()->toArray()]]);
+                return response()->json(["error_form"=>["message"=>$validator->errors()->toArray()]]);
+
+
+            $addresses=Address::where('user_id', $request->user_id)->get();
+
+            if($addresses->count() >= 4)
+                return response()->json(["error"=>["message"=>"You can only have 4 addresses."]]);
 
             $address=new Address();
 
@@ -148,7 +154,7 @@ class FrontCustomerProfileController extends Controller
             $address->address=$request->address;
 
             if(!$address->save())
-                return redirect()->back()->with("error","Failed to create address.");
+                return  response()->json(["error"=>["message"=>"Failed to create address."]]);
             
             return response()->json(["success"=>["message"=>"Address created successfully."]]);
         }catch(\Exception $err){

@@ -18,7 +18,7 @@
 <section class="fp__cart_view mt_125 xs_mt_95 mb_100 xs_mb_70">
     <div class="container">
         <div data-section-cart="page" class="row wow fadeInUp" data-wow-duration="1s">
-            @include("front.component.cart_ajax_page")
+            @include("front.cart.ajax_page")
         </div>
     </div>
 </section>
@@ -29,7 +29,7 @@
 @push("scripts")
     <script>
         /* ////////////////////////////////
-                ADD TO CART
+                    CART PAGE
         ////////////////////////////////// */
         $(document).ready(function(){
             let global_quantity = 0
@@ -151,7 +151,7 @@
                 })
             }
 
-            function updateCartQuantity (parent,callback) {
+            function updateCartQuantity (parent) {
 
                 const product_id=parent.data("product-id")
                 const formData=new FormData()
@@ -163,7 +163,11 @@
                 executeAjax(
                     "{{ route('front.order.cart.ajax.quantity') }}",
                     formData,
-                    res => callback()
+                    res => {
+                        fetchCartPage()
+                        fetchCartCount()
+                        fetchCartSidebar()
+                    }
                 )
             }
 
@@ -200,7 +204,7 @@
             async function executeAjax(url,formData=null,callback=()=>{}){
                 showOverlay()
                 await delay(1000)
-
+                
                 $.ajax({
                     type: formData ? "post" : "get",
                     contentType: false,

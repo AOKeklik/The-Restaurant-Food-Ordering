@@ -68,10 +68,9 @@ if(!function_exists("cartSubTotal")){
     }
 }
 
-if(!function_exists("cartTotal")){
-    function cartTotal () {
-        $settings = Setting::first();
-        $total = cartSubTotal() + $settings->site_delivery_charge;
+if(!function_exists("cartTotalExcludingShipping")){
+    function cartTotalExcludingShipping () {
+        $total = cartSubTotal();
 
         if(isset(Session::get("cart")["coupon"]))
             $total = $total - Session::get("cart")["coupon"]["discount"];
@@ -80,8 +79,33 @@ if(!function_exists("cartTotal")){
     }
 }
 
-if(!function_exists("formatDeliveryTime")){
-    function formatDeliveryTime ($val) {
+if(!function_exists("cartTotal")){
+    function cartTotal () {        
+        $total = cartSubTotal() + deliveryFee();
+
+        if(isset(Session::get("cart")["coupon"]))
+            $total = $total - Session::get("cart")["coupon"]["discount"];
+
+        return $total;
+    }
+}
+
+
+if(!function_exists("deliveryFee")){
+    function deliveryFee(){
+        $settings = Setting::first();
+        $deliveryFee = $settings->site_delivery_charge;
+        
+        if(isset(Session::get("cart")["address"]))
+            $deliveryFee = $deliveryFee + Session::get("cart")["address"]["delivery_area_fee"];
+        
+        return $deliveryFee;
+
+    }
+}
+
+if(!function_exists("deliveryTime")){
+    function deliveryTime ($val) {
         $hours = floor($val / 60);
         $minutes= $val % 60;
         return sprintf("%02d:%02d", $hours, $minutes); // Format as HH:MM

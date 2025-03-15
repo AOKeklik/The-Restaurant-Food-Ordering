@@ -32,7 +32,7 @@
     </ul>  
     <p class="subtotal">sub total <span>{{ currency(cartSubTotal()) }}</span></p>
     <a class="cart_view" href="{{ route("front.order.cart") }}"> view cart</a>
-    <a class="checkout" href="check_out.html">checkout</a>
+    <a class="checkout" href="{{ route("front.order.checkout.view") }}">checkout</a>
 @else
     <p>No any items to show in the cart!</p>
 @endif

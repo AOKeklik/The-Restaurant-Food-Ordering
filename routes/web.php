@@ -14,9 +14,13 @@ use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminWhyChooseController;
 use App\Http\Controllers\Front\CustomerAuthController;
+use App\Http\Controllers\Front\FrontCartController;
+use App\Http\Controllers\Front\FrontCheckoutController;
+use App\Http\Controllers\Front\FrontCouponController;
 use App\Http\Controllers\Front\FrontCustomerProfileController;
 use App\Http\Controllers\Front\FrontHomeController;
 use App\Http\Controllers\Front\FrontOrderController;
+use App\Http\Controllers\Front\FrontPaymentController;
 use App\Http\Controllers\Front\FrontProductController;
 
 
@@ -193,19 +197,28 @@ Route::prefix("/")->group(function(){
     Route::get("product/{product_id}/{product_slug}",[FrontProductController::class,"product"])->name("front.product");
 
     /* order - cart */
-    Route::get("order/cart",[FrontOrderController::class,"cart"])->name("front.order.cart");
-    Route::post("order/popup/ajax/submit",[FrontOrderController::class,"cart_ajax_popup"])->name("front.order.popup.ajax.submit");
-    Route::post("order/cart/ajax/submit",[FrontOrderController::class,"cart_ajax_submit"])->name("front.order.cart.ajax.submit");
-    Route::get("order/cart/ajax/count",[FrontOrderController::class,"cart_ajax_count"])->name("front.order.cart.ajax.count");
-    Route::get("order/cart/ajax/items",[FrontOrderController::class,"cart_ajax_items"])->name("front.order.cart.ajax.items");
-    Route::get("order/cart/ajax/page",[FrontOrderController::class,"cart_ajax_page"])->name("front.order.cart.ajax.page");
-    Route::post("order/cart/ajax/item/remove",[FrontOrderController::class,"cart_ajax_item_remove"])->name("front.order.cart.ajax.item.remove");
-    Route::get("order/cart/ajax/items/remove",[FrontOrderController::class,"cart_ajax_items_remove"])->name("front.order.cart.ajax.items.remove");
-    Route::post("order/cart/ajax/quantity",[FrontOrderController::class,"cart_ajax_quantity"])->name("front.order.cart.ajax.quantity");
+    Route::get("order/cart",[FrontCartController::class,"cart"])->name("front.order.cart");
+    Route::post("order/popup/ajax/submit",[FrontCartController::class,"cart_ajax_popup"])->name("front.order.popup.ajax.submit");
+    Route::post("order/cart/ajax/submit",[FrontCartController::class,"cart_ajax_submit"])->name("front.order.cart.ajax.submit");
+    Route::get("order/cart/ajax/count",[FrontCartController::class,"cart_ajax_count"])->name("front.order.cart.ajax.count");
+    Route::get("order/cart/ajax/items",[FrontCartController::class,"cart_ajax_items"])->name("front.order.cart.ajax.items");
+    Route::get("order/cart/ajax/page",[FrontCartController::class,"cart_ajax_page"])->name("front.order.cart.ajax.page");
+    Route::post("order/cart/ajax/item/remove",[FrontCartController::class,"cart_ajax_item_remove"])->name("front.order.cart.ajax.item.remove");
+    Route::get("order/cart/ajax/items/remove",[FrontCartController::class,"cart_ajax_items_remove"])->name("front.order.cart.ajax.items.remove");
+    Route::post("order/cart/ajax/quantity",[FrontCartController::class,"cart_ajax_quantity"])->name("front.order.cart.ajax.quantity");
     
     /* order - coupon */
-    Route::post("order/coupon/ajax/submit",[FrontOrderController::class,"cart_ajax_coupon_submit"])->name("front.order.coupon.ajax.submit");
-    Route::get("order/coupon/ajax/remove",[FrontOrderController::class,"cart_ajax_coupon_remove"])->name("front.order.coupon.ajax.remove");
+    Route::post("order/coupon/ajax/submit",[FrontCouponController::class,"coupon_ajax_submit"])->name("front.order.coupon.ajax.submit");
+    Route::get("order/coupon/ajax/remove",[FrontCouponController::class,"coupon_ajax_remove"])->name("front.order.coupon.ajax.remove");
+
+    /* order - checkout */
+    Route::get("order/checkout",[FrontCheckoutController::class,"checkout_view"])->name("front.order.checkout.view")->middleware("customer.cart");
+    Route::get("order/checkout/view/ajax/page",[FrontCheckoutController::class,"checkout_view_ajax_page"])->name("front.order.checkout.view.ajax.page");
+    Route::post("order/checkout/store/ajax/addresses",[FrontCheckoutController::class,"checkout_store_ajax_addresses"])->name("front.order.checkout.store.ajax.addresses");
+    Route::post("order/checkout/store/ajax/address",[FrontCheckoutController::class,"checkout_store_ajax_address"])->name("front.order.checkout.store.ajax.address");
+
+    /* order - payment */
+    Route::get("order/payment",[FrontPaymentController::class,"payment_view"])->name("front.order.payment.view")->middleware("customer.payment.view")->middleware("customer.cart");
 });
 
 

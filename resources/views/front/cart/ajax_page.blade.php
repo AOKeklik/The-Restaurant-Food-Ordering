@@ -62,7 +62,7 @@
         <div class="fp__cart_list_footer_button">
             <h6>total cart</h6>
             <p>subtotal: <span class="cart_subtotal">{{ currency(cartSubTotal()) }}</span></p>
-            <p>delivery: <span class="cart_delivery">{{ currency($provider_settings->site_delivery_charge) }}</span></p>
+            <p>delivery: <span class="cart_delivery">{{ currency(0) }}</span></p>
             <p>discount: <span class="cart_discount">
                 @if(isset(Session::get("cart")["coupon"]["discount"]))
                     {{ currency(Session::get("cart")["coupon"]["discount"]) }}
@@ -70,7 +70,7 @@
                     {{ currency(0) }}
                 @endif
             </span></p>
-            <p class="total"><span>total:</span> <span class="cart_total">{{ currency(cartTotal()) }}</span></p>
+            <p class="total"><span>total:</span> <span class="cart_total">{{ currency(cartTotalExcludingShipping()) }}</span></p>
             <form>
                 <input type="text" placeholder="Coupon Code" name="code">
                 <button id="coupon_apply" name="coupon_apply" type="submit">apply</button>
@@ -87,7 +87,7 @@
                     </div>
                 @endif
             </div>
-            <a class="common_btn" href=" #">checkout</a>
+            <a class="common_btn" href="{{ route("front.order.checkout.view") }}">checkout</a>
         </div>
     </div>
 @else

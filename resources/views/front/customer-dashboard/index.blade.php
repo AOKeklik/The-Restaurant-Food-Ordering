@@ -842,31 +842,31 @@
 
             showOverlay()
 
-            const updateItem = await executeAjax(
+            const store = await executeAjax(
                 "{{ route('front.customer.address.store.ajax') }}",
                 formData
             )
 
-            if(updateItem.error) {
-                $("[data-alert^=address-store]").html("")
+            if(store.error_form) {
                 hideOverlay()
-                Object.keys(updateItem.error.message).forEach(key => {
-                    const message = updateItem.error.message[key][0]
+                $("[data-alert^=address-store]").html("")
+                Object.keys(store.error_form.message).forEach(key => {
+                    const message = store.error_form.message[key][0]
                     $("[data-alert=address-store-"+key+"]").html(message)
                 })
 
                 return
             }
-            
-            const fetchItems = await executeAjax(
+
+            const fetch = await executeAjax(
                 "{{ route('front.customer.address.items.ajax') }}",
                 null
             )
 
-            resetForm(form)
             hideOverlay()
-            showNotification(updateItem)
-            $("[data-section=address-items]").html(fetchItems)
+            resetForm(form)
+            showNotification(store)
+            $("[data-section=address-items]").html(fetch)
             hideAddressStoreForm()
         }
 

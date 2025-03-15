@@ -82,6 +82,8 @@
 
             formData.append("_token", "{{ csrf_token() }}")
             formData.append("product_id",product_id)
+            formData.append("current_url",window.location.href)
+            
 
             showLoadingSpinner("cart")           
             await delay(1000)
@@ -96,9 +98,12 @@
                 processData:false,
                 data:formData,
                 url:"{{ route('front.order.cart.ajax.item.remove') }}",
-                success: res => {
+                success: async res => {
                     // console.log(res)
+
+                    await redirect(res)
                     fetchCartSidebar()
+                    fetchCheckoutPage()
                     fetchCartCount()
                     fetchCartPage()
                     showNotification(res)
@@ -129,6 +134,19 @@
             })
         }
 
+        function fetchCheckoutPage(){
+            $.ajax({
+                type:"GET",
+                url:"{{ route('front.order.checkout.view.ajax.page') }}",
+                success:function(res){
+                    $("[data-section=checkout-page]").html(res)
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseJSON)
+                }
+            })
+        }
+
         function fetchCartCount(){
             $.ajax({
                 type:"GET",
@@ -154,10 +172,16 @@
                 color: res.error ? "red" : "green"
             }) 
         }
+
+        function redirect(res){
+            console.log(res)
+            if(res.redirect)
+                window.location.href=res.redirect.link
+        }
     })
 
     /* ////////////////////////////////
-                showup cart popup
+            SHOW UP CART POPUP
     // /////////////////////////////// */
     $(document).ready(function(){
         $(document).on("click",".fp__menu_item .show_up_popup", async function(e){
