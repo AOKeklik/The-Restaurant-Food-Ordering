@@ -15,9 +15,15 @@ class CustomerCart
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if ($request->ajax() || $request->wantsJson()) {
+            if(!$request->session()->has("cart")) {
+                // return response()->json(["redirect" => ["link" => route("front.order.cart")]]);
+                return response()->json(["error"=>['message' => 'Cart is empty, please add items to your cart.']]);
+            }
+        }
 
         if(!$request->session()->has("cart"))
-            return redirect()->route("front.order.cart");
+            return redirect()->route("front.order.cart")->with("error","Cart is empty, please add items to your cart.");
 
         return $next($request);
     }

@@ -39,8 +39,7 @@ class FrontCheckoutController extends Controller
         $deliveryAreas=DeliveryArea::where("status",1)->orderBy("id","DESC")->get();
         return view("front.checkout.ajax_page",compact("addresses","deliveryAreas"));
     }
-
-
+    
 
     public function checkout_store_ajax_addresses (Request $request) {
         try{

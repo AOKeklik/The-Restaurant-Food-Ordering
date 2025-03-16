@@ -150,6 +150,14 @@
 
                 
                 const store = await storeAddreses(formData)
+
+                if(store.error) {
+                    resetForm(form)
+                    hideOverlay()
+                    showNotification(store)
+                    hideModal()
+                    return
+                }
                 
                 if(store.error_form) {
                     hideOverlay()
@@ -171,22 +179,31 @@
             }
 
             async function handlerCheckoutStoreAddress(e){
-                e.preventDefault()
+                try{
+                    e.preventDefault()
 
-                const formData=new FormData()
-                const address_id = $(this).data("address-id")
+                    const formData=new FormData()
+                    const address_id = $(this).data("address-id")
 
-                formData.append("_token","{{ csrf_token() }}")
-                formData.append("address_id",address_id)
+                    formData.append("_token","{{ csrf_token() }}")
+                    formData.append("address_id",address_id)
 
-                showOverlay()
-                await delay(1000)
+                    showOverlay()
+                    await delay(1000)
 
-                const store = await storeAddress(formData)
-                const fetch = await fetchCheckoutPage()
+                    const store = await storeAddress(formData)
 
-                hideOverlay()
-                showNotification(store)
+                    if(store.error)
+                        throw new Error(store.error.message)
+
+                    const fetch = await fetchCheckoutPage()
+
+                    showNotification(store)
+                }catch(err){
+                    showNotification({ error: { message: err.message || 'An unexpected error occurred' } })
+                } finally {
+                    hideOverlay()
+                }
             }
 
             async function storeAddreses(formData){
@@ -199,11 +216,14 @@
                     processData: false,
                     contentType: false,
                     data: formData,
-                    success:function(res){
+                    headers:{
+                        "X-Page-URL": window.location.href
+                    },
+                    success: res=>{
                         // console.log(res)
                         result = res
                     },
-                    error: function(xhr) {
+                    error: xhr=>{
                         console.log(xhr.responseJSON)
                     }
                 })
@@ -262,7 +282,7 @@
 
             function resetForm(formSelector) {
                 $(formSelector)[0].reset()
-                $(formSelector).find("[data-app-alert]").text("")
+                $(formSelector).find("[data-alert]").text("")
             }
 
             function showNotification(res){
@@ -271,6 +291,17 @@
                     position: "topRight",
                     color: res.error ? "red" : "green"
                 })
+            }
+
+            function redirect(res,callback=()=>{}){
+                console.log(res)
+                
+                if(res.redirect) {
+                    window.location.href=res.redirect.link
+                    return
+                }
+                
+                callback()
             }
 
         })

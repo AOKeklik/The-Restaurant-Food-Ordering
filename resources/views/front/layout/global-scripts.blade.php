@@ -81,9 +81,7 @@
             const formData=new FormData()
 
             formData.append("_token", "{{ csrf_token() }}")
-            formData.append("product_id",product_id)
-            formData.append("current_url",window.location.href)
-            
+            formData.append("product_id",product_id)            
 
             showLoadingSpinner("cart")           
             await delay(1000)
@@ -98,10 +96,9 @@
                 processData:false,
                 data:formData,
                 url:"{{ route('front.order.cart.ajax.item.remove') }}",
-                success: async res => {
+                success: res => {
                     // console.log(res)
 
-                    await redirect(res)
                     fetchCartSidebar()
                     fetchCheckoutPage()
                     fetchCartCount()
@@ -128,8 +125,8 @@
             $.ajax({
                 type:"GET",
                 url:"{{ route('front.order.cart.ajax.page') }}",
-                success:function(cartItemsPage){
-                    $("[data-section-cart=page]").html(cartItemsPage) 
+                success:function(res){
+                    $("[data-section-cart=page]").html(res) 
                 }
             })
         }
@@ -138,8 +135,8 @@
             $.ajax({
                 type:"GET",
                 url:"{{ route('front.order.checkout.view.ajax.page') }}",
-                success:function(res){
-                    $("[data-section=checkout-page]").html(res)
+                success: function(res){
+                    $("[data-section-checkout=page]").html(res) 
                 },
                 error: function(xhr) {
                     console.log(xhr.responseJSON)
@@ -173,10 +170,15 @@
             }) 
         }
 
-        function redirect(res){
-            console.log(res)
-            if(res.redirect)
+        function redirect(res,callback){
+            // console.log(res)
+            
+            if(res.redirect) {
                 window.location.href=res.redirect.link
+                return
+            }
+            
+            callback()
         }
     })
 

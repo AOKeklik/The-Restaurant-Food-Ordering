@@ -155,7 +155,6 @@ class FrontCartController extends Controller
         try {
             $validator = \Validator::make($request->all(), [
                 "product_id" => "required|numeric|exists:products,id",
-                "current_url" => "required|url",
             ]);
     
             if (!$validator->passes()) {
@@ -172,9 +171,6 @@ class FrontCartController extends Controller
                 Session::put("cart", $cart);
             else {
                 Session::forget("cart");
-
-                if(isset($request->current_url) && $request->current_url === route("front.order.checkout.view"))
-                    return response()->json(["redirect" => ["link" => route("front.order.cart")]]);
             }
                 
     

@@ -137,6 +137,6 @@
             @endif
         </span></p>
         <p class="total"><span>total:</span> <span class="cart_total">{{ currency(cartTotal()) }}</span></p>
-        <a class="common_btn" href="{{ route("front.order.paymetn.view") }}">proceed to payment</a>
+        <a class="common_btn" href="{{ route("front.order.payment.view") }}">proceed to payment</a>
     </div>
 </div>

@@ -26,7 +26,9 @@
                     {{ currency(cartItemSubTotal($val["product_info"]["id"])) }}
                 </p>
             </div>
-            <span data-product-id="{{  $val["product_info"]["id"] }}" class="del_icon"><i class="fal fa-times"></i></span>
+            @if(!Request::is("order/checkout"))
+                <span data-product-id="{{  $val["product_info"]["id"] }}" class="del_icon"><i class="fal fa-times"></i></span>
+            @endif
         </li>
     @endforeach
     </ul>  
