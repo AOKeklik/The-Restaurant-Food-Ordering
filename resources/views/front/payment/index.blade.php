@@ -20,9 +20,9 @@
             <div class="col-lg-8">
                 <div class="fp__payment_area">
                     <div class="row">
-                        <div class="col-lg-3 col-6 col-sm-4 col-md-3 wow fadeInUp" data-wow-duration="1s">
-                            <a class="fp__single_payment" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">
-                                <img src="images/pay_1.jpg" alt="payment method" class="img-fluid w-100">
+                        <div class="col-md-6 wow fadeInUp" data-wow-duration="1s">
+                            <a data-btn="payment-store" data-method="paypal" class="fp__single_payment" {{-- data-bs-toggle="modal" data-bs-target="#exampleModal" --}} href="#">
+                                <img src="{{ asset("uploads/setting/paypal.png") }}" alt="payment method" class="img-fluid w-100">
                             </a>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                         <form>
                             <input type="text" placeholder="Enteer Something">
                             <textarea rows="4" placeholder="Enter Something"></textarea>
-                            <select id="select_js3">
+                            <select id="select_js3" class="niceselect2">
                                 <option value="">select country</option>
                                 <option value="">bangladesh</option>
                                 <option value="">nepal</option>
@@ -75,3 +75,95 @@
     PAYMENT PAGE END
 ==============================-->
 @endsection
+@push("scripts")
+    <script>
+        /* /////////////////////////////
+            CHOOSE A PAYMENT METHOD
+        // //////////////////////////// */
+        $(document).ready(function(){
+            $(document)
+                .on("click","[data-btn=payment-store]",handlerStorePayment)
+
+            async function handlerStorePayment(e){
+                try{
+                    e.preventDefault()
+
+                    const formData=new FormData()
+                    const payment_method = $(this).data("method")
+
+                    const csrf_token=await uptdateCSRFToken()
+
+                    formData.append("_token",csrf_token)
+                    formData.append("payment_method",payment_method)
+
+                    const store = await storePayment(formData)
+
+                    if(store.error)
+                        throw store
+
+                    showNotification(store)
+                }catch(err){
+                    // console.log(err)
+                    showNotification(err)
+                } finally {
+                    hideOverlay()
+                }
+            }
+
+            async function storePayment(formData){
+                let result
+                showOverlay()
+                await delay(1000)
+                await $.ajax({
+                    type:"POST",
+                    url:"{{ route('front.order.payment.store.ajax') }}",
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: res=>{
+                        // console.log(res)
+                        result = res
+                    },
+                    error: xhr=>{
+                        hideOverlay()
+                        console.log(xhr.responseJSON)
+                    }
+                })
+                return result
+            }
+
+            async function uptdateCSRFToken() {
+                try {
+                    const response = await $.get("{{ route('csrf.token.refresh') }}")
+                    return response.token
+                } catch (error) {
+                    console.error("Failed to refresh CSRF token", error)
+                    return null
+                }
+            }
+
+            function showOverlay(){
+                $('.overlay-container').removeClass('d-none')
+                $('.overlay').addClass('active')
+            }
+
+            function hideOverlay(){
+                $('.overlay-container').addClass('d-none')
+                $('.overlay').removeClass('active')
+            }
+
+            function delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms))
+            }
+
+            function showNotification(res){
+                // console.log(res)
+                iziToast.show({
+                    title: res.error?.message ?? res.success?.message ?? res.message,
+                    position: "topRight",
+                    color: res.error ?? res.message ? "red" : "green"
+                })
+            }
+        })
+    </script>
+@endpush

@@ -68,20 +68,18 @@ class FrontCartController extends Controller
                 return response()->json(["error" => ["message" => "Requested quantity exceeds the available stock limit of " . $product->max_quantity . "."]]);
 
             $cart["cart"][$product->id] = [
-                "product_info"=>[
-                    "id" => $product->id,
-                    "slug" => $product->slug,
-                    "name" => $product->name,
-                    "image" => $product->image,
-                    "price" => $product->offer_price > 0 ? $product->offer_price : $product->price,
-                    "quantity" => $request->quantity,
-                ]
+                "id" => $product->id,
+                "slug" => $product->slug,
+                "name" => $product->name,
+                "image" => $product->image,
+                "price" => $product->offer_price > 0 ? $product->offer_price : $product->price,
+                "quantity" => $request->quantity,
             ];
         
             if (filter_var($request->product_size, FILTER_VALIDATE_INT)) {
                 $product_size = ProductSizes::find($request->product_size);
     
-                $cart["cart"][$product->id]["product_size"] = [
+                $cart["cart"][$product->id]["size"] = [
                     "id"=>$product_size->id,
                     "name"=>$product_size->name,
                     "price"=>$product_size->price,
@@ -92,7 +90,7 @@ class FrontCartController extends Controller
                 $options = Option::whereIn("id",$request->options)->get();
     
                 foreach($options as $option)
-                    $cart["cart"][$product->id]["product_options"][] = [
+                    $cart["cart"][$product->id]["options"][] = [
                         "id"=>$option->id,
                         "name"=>$option->name,
                         "price"=>$option->price,
@@ -127,7 +125,7 @@ class FrontCartController extends Controller
             if (!isset($cart) || !array_key_exists($request->product_id, $cart["cart"]))
                 return response()->json(["error" => ["message" => "Product not found in cart."]]);
     
-            $cart["cart"][ $request->product_id]["product_info"]["quantity"] = $request->quantity;
+            $cart["cart"][ $request->product_id]["quantity"] = $request->quantity;
             Session::put("cart", $cart);
 
             return response()->json(["success" => ["message" => "Cart updated successfully"]]);

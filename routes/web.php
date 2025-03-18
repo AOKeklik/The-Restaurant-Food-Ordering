@@ -211,15 +211,19 @@ Route::prefix("/")->group(function(){
     Route::post("order/coupon/ajax/submit",[FrontCouponController::class,"coupon_ajax_submit"])->name("front.order.coupon.ajax.submit");
     Route::get("order/coupon/ajax/remove",[FrontCouponController::class,"coupon_ajax_remove"])->name("front.order.coupon.ajax.remove");
 
-    Route::middleware(/* "customer.authenticate", */"customer.cart")->group(function () {
+    Route::middleware("customer.checkout")->group(function () {
         /* order - checkout */
         Route::get("order/checkout",[FrontCheckoutController::class,"checkout_view"])->name("front.order.checkout.view");
         Route::get("order/checkout/view/ajax/page",[FrontCheckoutController::class,"checkout_view_ajax_page"])->name("front.order.checkout.view.ajax.page");
         // Route::get("order/checkout/redirect/ajax/payment",[FrontCheckoutController::class,"checkout_redirect_ajax_payment"])->name("front.order.checkout.redirect.ajax.payment");
         Route::post("order/checkout/store/ajax/address",[FrontCheckoutController::class,"checkout_store_ajax_address"])->name("front.order.checkout.store.ajax.address");
         Route::post("order/checkout/store/ajax/addresses",[FrontCheckoutController::class,"checkout_store_ajax_addresses"])->name("front.order.checkout.store.ajax.addresses");
+    });
 
-       
+    Route::middleware("customer.payment")->group(function () {
+        /* order - payment */
+        Route::get("order/payment",[FrontPaymentController::class,"payment_view"])->name("front.order.payment.view");
+        Route::post("order/payment/store/ajax",[FrontPaymentController::class,"payment_store_ajax"])->name("front.order.payment.store.ajax");
     });
 });
 

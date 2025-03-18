@@ -13,41 +13,41 @@
                             <th class="fp__pro_icon"><a class="clear_all" role="button">clear all</a></th>                                
                         </tr>
                         @foreach(Session::get("cart")["cart"] as $product)
-                            <tr data-product-id="{{ $product["product_info"]["id"] }}">
-                                <td class="fp__pro_img"><img src="{{ asset("uploads/product") }}/{{ $product["product_info"]["image"] }}" alt="{{ $product["product_info"]["name"] }}" class="img-fluid w-100"></td>
+                            <tr data-product-id="{{ $product["id"] }}">
+                                <td class="fp__pro_img"><img src="{{ asset("uploads/product") }}/{{ $product["image"] }}" alt="{{ $product["name"] }}" class="img-fluid w-100"></td>
         
                                 <td class="fp__pro_name">
-                                    <a href="{{ route("front.product",[$product["product_info"]["id"], $product["product_info"]["slug"]]) }}">{!! $product["product_info"]["name"] !!}</a>
-                                    @if(isset(Session::get("cart")["cart"]["product_size"]))
-                                        <span>{{ $product["product_size"]["name"] }}</span>
+                                    <a href="{{ route("front.product",[$product["id"], $product["slug"]]) }}">{!! $product["name"] !!}</a>
+                                    @if(isset(Session::get("cart")["cart"]["size"]))
+                                        <span>{{ $product["size"]["name"] }}</span>
                                     @endif
-                                    @if(isset(Session::get("cart")["cart"]["product_options"]))
-                                        @foreach($product["product_options"] as $option)
+                                    @if(isset(Session::get("cart")["cart"]["options"]))
+                                        @foreach($product["options"] as $option)
                                             <p>{!! $option["name"] !!}</p>
                                         @endforeach
                                     @endif
                                 </td>
         
                                 <td class="fp__pro_status">
-                                    <h6>{!! currency($product["product_info"]["price"]) !!}</h6>
+                                    <h6>{!! currency($product["price"]) !!}</h6>
                                 </td>
         
                                 <td class="fp__pro_select">
                                     <div class="quentity_btn">
                                         <button class="btn btn-primary cart_decrease" style="background: #f86f03"><i class="fal fa-minus"></i></button>
-                                        <input type="text" id="quantity" name="quantity" placeholder="1" readonly value="{{ $product["product_info"]["quantity"] }}">
+                                        <input type="text" id="quantity" name="quantity" placeholder="1" readonly value="{{ $product["quantity"] }}">
                                         <button class="btn btn-primary cart_increase" style="background: #f86f03"><i class="fal fa-plus"></i></button>
                                     </div>
                                 </td>
         
                                 <td class="fp__pro_tk">
-                                    <h6 id="total_price" data-price="{{ $product["product_info"]["price"] }}">
-                                        {{ currency(cartItemSubTotal($product["product_info"]["id"])) }}
+                                    <h6 id="total_price" data-price="{{ $product["price"] }}">
+                                        {{ currency(cartItemSubTotal($product["id"])) }}
                                     </h6>
                                 </td>
         
                                 <td class="fp__pro_icon">
-                                    <span data-product-id="{{ $product['product_info']['id'] }}" class="delete_cart_item text-center" role="button">
+                                    <span data-product-id="{{ $product['id'] }}" class="delete_cart_item text-center" role="button">
                                         <i class="far fa-times"></i>
                                     </span>
                                 </td>

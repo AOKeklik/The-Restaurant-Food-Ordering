@@ -236,12 +236,12 @@
             }
 
             function hideOverlay(){
-                $('.overlay-container').addClass('d-none');
+                $('.overlay-container').addClass('d-none')
                 $('.overlay').removeClass('active')
             }
 
             function delay(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
+                return new Promise(resolve => setTimeout(resolve, ms))
             }
 
             function createCouponHtml(code){

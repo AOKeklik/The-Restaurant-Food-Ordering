@@ -24,7 +24,7 @@
 <!--============================
     CHECK OUT PAGE END
 ==============================-->
-@php echo "<pre>";print_r(Session::get("cart"));echo "</pre>"; @endphp
+@php echo "<pre>";print_r(Session::get("cart"));echo "</pre>" @endphp
 <!--============================
     ADD ADDRESS FORM
 ==============================-->
@@ -171,7 +171,7 @@
                     hideModal()
                     resetForm($("[data-form=checkout-address-store]"))
                 }catch(err){
-                    // console.error(err);
+                    // console.error(err)
                     showNotification(err)
                     hideModal()
                     resetForm($("[data-form=checkout-address-store]"))
@@ -213,11 +213,11 @@
 
             async function uptdateCSRFToken() {
                 try {
-                    const response = await $.get("{{ route('csrf.token.refresh') }}");
-                    return response.token;
+                    const response = await $.get("{{ route('csrf.token.refresh') }}")
+                    return response.token
                 } catch (error) {
-                    console.error("Failed to refresh CSRF token", error);
-                    return null;
+                    console.error("Failed to refresh CSRF token", error)
+                    return null
                 }
             }
 
@@ -279,7 +279,7 @@
             }
 
             function hideModal(){
-                $('#address_modal').modal('hide');
+                $('#address_modal').modal('hide')
             }
 
             function showOverlay(){
@@ -288,12 +288,12 @@
             }
 
             function hideOverlay(){
-                $('.overlay-container').addClass('d-none');
+                $('.overlay-container').addClass('d-none')
                 $('.overlay').removeClass('active')
             }
 
             function delay(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
+                return new Promise(resolve => setTimeout(resolve, ms))
             }
 
             function resetForm(formSelector) {
@@ -314,7 +314,7 @@
 
                 if (res.success?.redirect || res.error?.redirect) {
                     await delay(1000)
-                    window.location.href = res.success?.redirect ?? res.error?.redirect;
+                    window.location.href = res.success?.redirect ?? res.error?.redirect
                 }
             }
 

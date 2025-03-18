@@ -100,6 +100,7 @@ class FrontCheckoutController extends Controller
             $cart["address"] = [
                 "id"=>$address->id,
                 "fee"=>$address->deliveryArea->fee,
+                "address"=>$address->address,
             ];
 
             Session::put("cart", $cart);

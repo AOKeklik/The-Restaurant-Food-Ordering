@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'admin.redirectIfAuthenticated' => \App\Http\Middleware\AdminRedirectIfAuthenticated::class,
         'customer.authenticate' => \App\Http\Middleware\CustomerAuthenticate::class,
         'customer.redirectIfAuthenticated' => \App\Http\Middleware\CustomerRedirectIfAuthenticated::class,
-        'customer.cart' => \App\Http\Middleware\CustomerCart::class,
+        'customer.checkout' => \App\Http\Middleware\CustomerCheckout::class,
+        'customer.payment' => \App\Http\Middleware\CustomerPayment::class,
     ];
 }

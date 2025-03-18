@@ -114,11 +114,11 @@
 
         async function uptdateCSRFToken() {
             try {
-                const response = await $.get("{{ route('csrf.token.refresh') }}");
-                return response.token;
+                const response = await $.get("{{ route('csrf.token.refresh') }}")
+                return response.token
             } catch (error) {
-                console.error("Failed to refresh CSRF token", error);
-                return null;
+                console.error("Failed to refresh CSRF token", error)
+                return null
             }
         }
 
@@ -214,11 +214,11 @@
 
         async function uptdateCSRFToken() {
             try {
-                const response = await $.get("{{ route('csrf.token.refresh') }}");
-                return response.token;
+                const response = await $.get("{{ route('csrf.token.refresh') }}")
+                return response.token
             } catch (error) {
-                console.error("Failed to refresh CSRF token", error);
-                return null;
+                console.error("Failed to refresh CSRF token", error)
+                return null
             }
         }
         
@@ -248,13 +248,13 @@
         }
 
         function showOverlay(){
-            $('.overlay-container').removeClass('d-none');
-            $('.overlay').addClass('active');
+            $('.overlay-container').removeClass('d-none')
+            $('.overlay').addClass('active')
         }
 
         function hideOverlay(){
-            $('.overlay-container').addClass('d-none');
-            $('.overlay').removeClass('active');
+            $('.overlay-container').addClass('d-none')
+            $('.overlay').removeClass('active')
         }
 
         function delay(ms){

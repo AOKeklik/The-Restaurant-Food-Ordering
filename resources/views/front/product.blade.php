@@ -67,7 +67,7 @@
                                     @foreach($product->product_sizes as $product_size)
                                         <option 
                                             value="{{ $product_size->id }}" data-price="{{ $product_size->price }}" 
-                                            @if(isset(Session::get("cart")["cart"][$product->id]["product_size"]) && Session::get("cart")["cart"][$product->id]["product_size"]["id"] ==  $product_size->id) 
+                                            @if(isset(Session::get("cart")["cart"][$product->id]["size"]) && Session::get("cart")["cart"][$product->id]["size"]["id"] ==  $product_size->id) 
                                                 selected
                                             @endif
                                         >
@@ -87,8 +87,8 @@
                                     @foreach($options as $option)
                                         <option 
                                             value="{{ $option->id }}" data-price="{{ $option->price }}"
-                                            @if(isset(Session::get("cart")["cart"][$product->id]["product_options"]) && 
-                                            in_array($option->id, array_column(Session::get("cart")["cart"][$product->id]["product_options"], "id"))) 
+                                            @if(isset(Session::get("cart")["cart"][$product->id]["options"]) && 
+                                            in_array($option->id, array_column(Session::get("cart")["cart"][$product->id]["options"], "id"))) 
                                                 selected
                                             @endif
                                         >
@@ -107,8 +107,8 @@
                                 <button class="btn btn-primary cart_decrease" style="background: #f86f03"><i class="fal fa-minus"></i></button>
                                 <input 
                                     type="text" id="quantity" name="quantity" placeholder="1" readonly
-                                    @if(isset(Session::get("cart")["cart"][$product->id]["product_info"])) 
-                                        value="{{ Session::get("cart")["cart"][$product->id]["product_info"]["quantity"] }}" 
+                                    @if(isset(Session::get("cart")["cart"][$product->id])) 
+                                        value="{{ Session::get("cart")["cart"][$product->id]["quantity"] }}" 
                                     @else
                                         value="1" 
                                     @endif
@@ -119,7 +119,7 @@
                                 id="total_price" 
                                 data-price="{{ $product->offer_price > 0 ? $product->offer_price : $product->price }}"
                             >
-                                @if(isset(Session::get("cart")["cart"][$product->id]["product_info"]))
+                                @if(isset(Session::get("cart")["cart"][$product->id]))
                                     {{ currency(cartItemSubTotal($product->id)) }}
                                 @else
                                     @if ($product->offer_price > 0)
@@ -422,69 +422,119 @@
 
         /* cart submit */
         async function cartSubmit(el,parent){
+            try{
+                const quantity=parent.find("input[name=quantity]")
+                const product_id=el.data("product-id")
+                const product_size=parent.find("select#product_size").val()
+                const options=parent.find("select#options").val()
+                const formData=new FormData()
 
-            const quantity=parent.find("input[name=quantity]")
-            const product_id=el.data("product-id")
-            const product_size=parent.find("select#product_size").val()
-            const options=parent.find("select#options").val()
-            const formData=new FormData()
+                const csrf_token=await uptdateCSRFToken()
 
-            formData.append("_token", "{{ csrf_token() }}")
-            formData.append("product_id",product_id)
-            
-            if(options && options.length > 0)
-                options.forEach(option=>{
-                    formData.append("options[]",option)
-                })
+                formData.append("_token",csrf_token)
+                formData.append("product_id",product_id)
+                
+                if(options && options.length > 0)
+                    options.forEach(option=>{
+                        formData.append("options[]",option)
+                    })
 
-            if(Number(product_size)) formData.append("product_size",product_size)
-            formData.append("quantity",quantity.val())
+                if(Number(product_size)) formData.append("product_size",product_size)
+                formData.append("quantity",quantity.val())
+    
+                const store = await storeCartItem (formData)
+                await fetchCartSidebar()
+                await fetchCartCount()
+                
+                showNotification(store)
+                hideLoading(store)
+            }catch(err){
+                showNotification(err)
+                hideLoading(err)
+            }
+        }
 
-            el.html('<div class="spinner-border" role="status"></div>')            
-            await new Promise(resolve=>setTimeout(resolve,1000))
-
-            $.ajax({
+        async function storeCartItem(formData){
+            let result
+            showLoading()
+            await delay(1000)
+            await $.ajax({
                 type:"POST",
                 data:formData,
                 contentType:false,
                 processData:false,
                 url:"{{ route('front.order.cart.ajax.submit') }}",
                 success:function(res){
-                    console.log(res)
-
-                    if(res.success){
-                        el.html('<i class="fa-solid fa-cart-circle-check fs-3"></i>')
-                        el.css("pointer-events","none")
-                        updateCartSidebar ()
-                    }
-
-                    if(res.error)
-                        el.html('<span class="text-white">add to cart</span>')
-
-
-                    iziToast.show({
-                        title: res.error?.message ?? res.success?.message,
-                        position: "topRight",
-                        color: res.error ? "red" : "green"
-                    })                   
+                    result=res
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseJSON)
                 }
             })
-
+            return result
         }
 
-        /* refresh cart sidebar */
-        function updateCartSidebar () {
+        function fetchCartSidebar(){
             $.ajax({
                 type:"GET",
-                contentType:false,
-                processData:false,
                 url:"{{ route('front.order.cart.ajax.items') }}",
                 success:function(res){
-                    console.log(res)
-
-                    $(".fp__menu_cart_boody").html(res)  
-                    $(".cart_item_count").html($(".cart_item_count_get").val())
+                    $("[data-section-cart=sidebar-items]").html(res)
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseJSON)
                 }
+            })
+        }
+
+        function fetchCartCount(){
+            $.ajax({
+                type:"GET",
+                url:"{{ route('front.order.cart.ajax.count') }}",
+                success:function(count){
+                    $("[data-section-cart=count]").html(count) 
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseJSON)
+                }
+            })
+        }
+
+        async function uptdateCSRFToken() {
+            try {
+                const response = await $.get("{{ route('csrf.token.refresh') }}");
+                return response.token;
+            } catch (error) {
+                console.error("Failed to refresh CSRF token", error);
+                return null;
+            }
+        }
+
+        function showLoading(){
+            $(".fp__menu_details .add_to_cart").html('<div class="spinner-border" role="status"></div>') 
+        }
+
+        function hideLoading(res){
+            const addToCartBtn = $(".fp__menu_details .add_to_cart")
+
+            if(res.success){
+                addToCartBtn.html('<i class="fa-solid fa-cart-circle-check fs-3"></i>')
+                addToCartBtn.css("pointer-events","none")
+            }
+
+            if(res.error)
+                addToCartBtn.html('<span class="text-white">add to cart</span>')
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function showNotification(res){
+            iziToast.show({
+                title: res.error?.message ?? res.success?.message ?? res.message,
+                position: "topRight",
+                color: res.error ?? res.message ? "red" : "green"
             })
         }
     })

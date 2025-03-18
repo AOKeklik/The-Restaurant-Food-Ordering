@@ -21,7 +21,7 @@ if(!function_exists("cartItemCount")) {
 
         if(Session::has("cart")) {
             foreach(Session::get("cart")["cart"] as $item){
-                $count+=$item["product_info"]["quantity"];
+                $count+=$item["quantity"];
             }
         }
 
@@ -34,15 +34,15 @@ if(!function_exists("cartItemSubTotal")){
         $total = 0;
         $cartItem=Session::get("cart")["cart"][$product_id];
        
-        $price=$cartItem["product_info"]["price"];
-        $size_price=isset($cartItem["product_size"]) ? $cartItem["product_size"]["price"] : 0;
+        $price=$cartItem["price"];
+        $size_price=isset($cartItem["size"]) ? $cartItem["size"]["price"] : 0;
         $options_price=0;
 
-        if(isset($cartItem["product_options"]))
-            foreach($cartItem["product_options"] as $option)
+        if(isset($cartItem["options"]))
+            foreach($cartItem["options"] as $option)
                 $options_price += $option["price"];
 
-        $total += ($price + $size_price + $options_price) * $cartItem["product_info"]["quantity"];   
+        $total += ($price + $size_price + $options_price) * $cartItem["quantity"];   
         
         return $total;
     }
@@ -53,15 +53,15 @@ if(!function_exists("cartSubTotal")){
         $total = 0;
         if(Session::has("cart"))
             foreach(Session::get("cart")["cart"] as $key=>$val) {
-                $price=$val["product_info"]["price"];
-                $size_price=isset($val["product_size"]) ? $val["product_size"]["price"] : 0;
+                $price=$val["price"];
+                $size_price=isset($val["size"]) ? $val["size"]["price"] : 0;
                 $options_price=0;
 
-                if(isset($val["product_options"]))
-                    foreach($val["product_options"] as $option)
+                if(isset($val["options"]))
+                    foreach($val["options"] as $option)
                         $options_price += $option["price"];
 
-                $total += ($price + $size_price + $options_price) * $val["product_info"]["quantity"];   
+                $total += ($price + $size_price + $options_price) * $val["quantity"];   
             }
 
         return $total;
@@ -111,5 +111,15 @@ if(!function_exists("deliveryTime")){
         $hours = floor($val / 60);
         $minutes= $val % 60;
         return sprintf("%02d:%02d", $hours, $minutes); // Format as HH:MM
+    }
+}
+
+if(!function_exists("paymentInvoiceId")){
+    function paymentInvoiceId () {
+        $now=now();
+        $date=$now->format("Ymd");
+        $time=$now->format("His");
+
+        return uniqid().$date.$time;
     }
 }

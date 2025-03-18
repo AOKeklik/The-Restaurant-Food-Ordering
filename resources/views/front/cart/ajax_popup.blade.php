@@ -116,7 +116,7 @@
 
 <script>
     /* ////////////////////////////////
-            product select
+            PRODUCT SELECT & STORE
     ////////////////////////////////// */
     $(document).ready(function(){
         /* size & options */

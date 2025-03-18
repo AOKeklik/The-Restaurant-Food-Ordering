@@ -4,7 +4,7 @@
      <!--=============================
         BREADCRUMB START
     ==============================-->
-    <section class="fp__breadcrumb" style="background: url();">
+    <section class="fp__breadcrumb" style="background: url()">
         <div class="fp__breadcrumb_overlay">
             <div class="container">
                 <div class="fp__breadcrumb_text">
@@ -814,7 +814,7 @@
             hideOverlay()
             $("[data-section=address-edit-form]").html(res)
             if(res.error) showNotification(res)
-            $('.niceselect2').niceSelect('destroy').niceSelect();
+            $('.niceselect2').niceSelect('destroy').niceSelect()
             showAddressUpdateForm()
         }
 
@@ -1038,12 +1038,12 @@
         }
 
         function hideOverlay(){
-            $('.overlay-container').addClass('d-none');
+            $('.overlay-container').addClass('d-none')
             $('.overlay').removeClass('active')
         }
 
         function delay(ms=null) {
-            return new Promise(resolve => setTimeout(resolve, ms ?? delayTime));
+            return new Promise(resolve => setTimeout(resolve, ms ?? delayTime))
         }
 
         function resetForm(formSelector) {
