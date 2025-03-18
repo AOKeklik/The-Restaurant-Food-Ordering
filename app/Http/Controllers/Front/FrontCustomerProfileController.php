@@ -162,7 +162,7 @@ class FrontCustomerProfileController extends Controller
         }
     }
     public function address_items_ajax () {
-        $addresses=Address::orderBy("id","DESC")->get();
+        $addresses=Address::where("user_id",Auth::guard("user")->user()->id)->orderBy("id","DESC")->get();
         return view("front.customer-dashboard.address_items_ajax",compact("addresses"));
     }
     public function address_edit_ajax (Request $request) {

@@ -122,11 +122,11 @@
         /* size & options */
         $(".fp__cart_popup_text select#product_size").change(function(){
             const parent = $(this).closest(".fp__cart_popup_text")
-            updateTotalPrice(parent)
+            handlerUpdateTotalPrice(parent)
         })
         $(".fp__cart_popup_text select#options").change(function(){
             const parent = $(this).closest(".fp__cart_popup_text")
-            updateTotalPrice(parent)
+            handlerUpdateTotalPrice(parent)
         })
 
         /* decrease button */
@@ -140,7 +140,7 @@
             if(currentQuantity <= 1) return
 
             quantity.val(currentQuantity - 1)
-            updateTotalPrice (parent)
+            handlerUpdateTotalPrice (parent)
             
         })
 
@@ -155,25 +155,13 @@
             if(currentQuantity > 100) return
             
             quantity.val(currentQuantity + 1)            
-            updateTotalPrice (parent)
+            handlerUpdateTotalPrice (parent)
         })
-
-        
-        /* add to cart */
-        $(".fp__cart_popup_text .add_to_cart").click(function(e){
-            e.preventDefault()
-            
-            const el = $(this)
-            const parent = $(this).closest(".fp__cart_popup_text")
-            cartSubmit (el,parent)
-        })
-        
-        
-        /* ==== functions ==== */
+        $(".fp__cart_popup_text .add_to_cart").click(handlerCartSubmit)
 
 
         /* update total price */
-        function updateTotalPrice(parent) {
+        function handlerUpdateTotalPrice(parent) {
             const quantity=parent.find("input[name=quantity]")
 
             const h3= parent.find("#total_price")
@@ -196,16 +184,16 @@
             h3.html(formatedTotal)
         }
 
-        /* cart submit */
-        async function cartSubmit(el,parent){
-
+        async function handlerCartSubmit(e){
+            e.preventDefault()
+            
+            const el = $(this)
+            const parent = $(this).closest(".fp__cart_popup_text")
             const quantity=parent.find("input[name=quantity]")
             const product_id=el.data("product-id")
             const product_size=parent.find("select#product_size").val()
             const options=parent.find("select#options").val()
             const formData=new FormData()
-
-            console.log(product_id)
 
             formData.append("_token", "{{ csrf_token() }}")
             formData.append("product_id",product_id)
@@ -218,52 +206,78 @@
             if(Number(product_size)) formData.append("product_size",product_size)
             formData.append("quantity",quantity.val())
 
-            el.html('<div class="spinner-border" role="status"></div>')            
-            await new Promise(resolve=>setTimeout(resolve,1000))
+            el.html('<div class="spinner-border" role="status"></div>')
 
-            $.ajax({
+            const store = await storeCartItem(formData)
+
+            if(store.success){
+                el.html('<i class="fa-solid fa-cart-circle-check fs-3"></i>')
+                el.css("pointer-events","none")
+                fetchCartSidebar()
+                fetchCartCount()
+            }
+
+            if(store.error)
+                el.html('<span class="text-white">add to cart</span>')
+
+            showNotification(store)
+        }
+
+        async function storeCartItem(formData){
+            let result
+            await delay(1000)
+            await $.ajax({
                 type:"POST",
                 data:formData,
                 contentType:false,
                 processData:false,
                 url:"{{ route('front.order.cart.ajax.submit') }}",
                 success:function(res){
-                    console.log(res)
-
-                    if(res.success){
-                        el.html('<i class="fa-solid fa-cart-circle-check fs-3"></i>')
-                        el.css("pointer-events","none")
-                        updateCartSidebar ()
-                    }
-
-                    if(res.error)
-                        el.html('<span class="text-white">add to cart</span>')
-
-
-                    iziToast.show({
-                        title: res.error?.message ?? res.success?.message,
-                        position: "topRight",
-                        color: res.error ? "red" : "green"
-                    })                    
+                    result=res
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseJSON)
                 }
             })
-
+            return result
         }
 
-        /* refresh cart sidebar */
-        function updateCartSidebar () {
+        function fetchCartSidebar(){
             $.ajax({
                 type:"GET",
-                contentType:false,
-                processData:false,
                 url:"{{ route('front.order.cart.ajax.items') }}",
                 success:function(res){
-                    //console.log(res)
-
-                    $(".fp__menu_cart_boody").html(res)  
-                    $(".cart_item_count").html($(".cart_item_count_get").val())
+                    $("[data-section-cart=sidebar-items]").html(res)
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseJSON)
                 }
             })
+        }
+
+        function fetchCartCount(){
+            $.ajax({
+                type:"GET",
+                url:"{{ route('front.order.cart.ajax.count') }}",
+                success:function(count){
+                    $("[data-section-cart=count]").html(count) 
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseJSON)
+                }
+            })
+        }
+
+        function showNotification(res){
+            iziToast.show({
+                title: res.error?.message ?? res.success?.message,
+                position: "topRight",
+                color: res.error ? "red" : "green"
+            })
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
     })
 </script>

@@ -80,7 +80,9 @@
             const product_id=$(this).data("product-id")
             const formData=new FormData()
 
-            formData.append("_token", "{{ csrf_token() }}")
+            const csrf_token=await uptdateCSRFToken()
+
+            formData.append("_token", csrf_token)
             formData.append("product_id",product_id)            
 
             showLoadingSpinner("cart")           
@@ -102,7 +104,6 @@
                     fetchCartSidebar()
                     fetchCheckoutPage()
                     fetchCartCount()
-                    fetchCartPage()
                     showNotification(res)
                 },
                 error: function(xhr, status, error) {
@@ -111,22 +112,25 @@
             })
         }
 
+        async function uptdateCSRFToken() {
+            try {
+                const response = await $.get("{{ route('csrf.token.refresh') }}");
+                return response.token;
+            } catch (error) {
+                console.error("Failed to refresh CSRF token", error);
+                return null;
+            }
+        }
+
         function fetchCartSidebar(){
             $.ajax({
                 type:"GET",
                 url:"{{ route('front.order.cart.ajax.items') }}",
                 success:function(cartItems){
                     $("[data-section-cart=sidebar-items]").html(cartItems)
-                }
-            })
-        }
-
-        function fetchCartPage(){
-            $.ajax({
-                type:"GET",
-                url:"{{ route('front.order.cart.ajax.page') }}",
-                success:function(res){
-                    $("[data-section-cart=page]").html(res) 
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseJSON)
                 }
             })
         }
@@ -150,6 +154,9 @@
                 url:"{{ route('front.order.cart.ajax.count') }}",
                 success:function(count){
                     $("[data-section-cart=count]").html(count) 
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseJSON)
                 }
             })
         }
@@ -194,16 +201,28 @@
             const product_id=el.data("product-id")
             const formData=new FormData()
 
-            formData.append("_token", "{{ csrf_token() }}")
+            const csrf_token=await uptdateCSRFToken()
+
+            formData.append("_token", csrf_token)
             formData.append("product_id",product_id)
 
             showOverlay()
             await delay(1000)
 
-            submitPopupForm(formData)
+            storeCartItem(formData)
         })
 
-        function submitPopupForm(formData) {
+        async function uptdateCSRFToken() {
+            try {
+                const response = await $.get("{{ route('csrf.token.refresh') }}");
+                return response.token;
+            } catch (error) {
+                console.error("Failed to refresh CSRF token", error);
+                return null;
+            }
+        }
+        
+        function storeCartItem(formData) {
             $.ajax({
                 type:"POST",
                 data:formData,

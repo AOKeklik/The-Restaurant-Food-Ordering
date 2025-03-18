@@ -101,8 +101,8 @@
                             </div>
                 
                             <div class="col-12 d-flex gap-5">
-                                <button data-btn="checkout-address-cancel" type="button" class="common_btn">cancel</button>
-                                <button data-btn="checkout-store-address" type="button" class="common_btn">save address</button>
+                                <button data-btn="checkout-cancel-addresses" type="button" class="common_btn">cancel</button>
+                                <button data-btn="checkout-store-addresses" type="button" class="common_btn">save address</button>
                             </div>
                         </div>
                     </form>
@@ -123,9 +123,9 @@
         // /////////////////////////////// */
         $(document).ready(function() {          
             $(document)
-                .on("click","[data-btn=checkout-address-cancel]",handlerCheckoutAddressCancel)
-                .on("click","[data-btn=checkout-store-address]",handlerCheckoutStoreAddresses)
-                .on("change","[data-address-id]",handlerCheckoutStoreAddress)
+                .on("click","[data-btn=checkout-cancel-address]",handlerCheckoutAddressCancel)
+                .on("click","[data-btn=checkout-store-addresses]",handlerCheckoutStoreAddresses)
+                .on("click","[data-btn=proceed-payment]",handlerCheckoutStoreAddress)
 
             function handlerCheckoutAddressCancel (e){
                 e.preventDefault()
@@ -133,49 +133,52 @@
             }
 
             async function handlerCheckoutStoreAddresses(e){
-                e.preventDefault()
+                try{
+                    e.preventDefault()
 
-                const formData=new FormData()
-                const form = $("[data-form=checkout-address-store]")
+                    const formData=new FormData()
+                    const form = $("[data-form=checkout-address-store]")
 
-                formData.append("_token","{{ csrf_token() }}")
-                formData.append("user_id",form.find("#user_id").val())
-                formData.append("first_name",form.find("#first_name").val())
-                formData.append("last_name",form.find("#last_name").val())
-                formData.append("phone",form.find("#phone").val())
-                formData.append("email",form.find("#email").val())
-                formData.append("delivery_area_id",form.find("#delivery_area_id").val())
-                formData.append("address",form.find("#address").val())
-                formData.append("type",form.find("input.type:checked").val())
+                    const csrf_token=await uptdateCSRFToken()
 
-                
-                const store = await storeAddreses(formData)
+                    formData.append("_token",csrf_token)
+                    formData.append("user_id",form.find("#user_id").val())
+                    formData.append("first_name",form.find("#first_name").val())
+                    formData.append("last_name",form.find("#last_name").val())
+                    formData.append("phone",form.find("#phone").val())
+                    formData.append("email",form.find("#email").val())
+                    formData.append("delivery_area_id",form.find("#delivery_area_id").val())
+                    formData.append("address",form.find("#address").val())
+                    formData.append("type",form.find("input.type:checked").val())
 
-                if(store.error) {
-                    resetForm(form)
-                    hideOverlay()
+
+                    const store = await storeAddreses(formData)
+
+                    if(store.error) 
+                        throw store
+
+                    if(store.error_form) {
+                        $("[data-alert^=checkout-address-store]").html("")
+                        Object.entries(store.error_form.message).forEach(([key, message]) => {
+                            console.log(key, message[0])
+                            $("[data-alert=checkout-address-store-"+key+"]").html(message[0])
+                        })
+                        return
+                    }
+
+                    await fetchCheckoutPage()
                     showNotification(store)
                     hideModal()
-                    return
-                }
-                
-                if(store.error_form) {
+                    resetForm($("[data-form=checkout-address-store]"))
+                }catch(err){
+                    // console.error(err);
+                    showNotification(err)
+                    hideModal()
+                    resetForm($("[data-form=checkout-address-store]"))
+                    redirect(err)
+                }finally{
                     hideOverlay()
-                    $("[data-alert^=checkout-address-store]").html("")
-                    Object.keys(store.error_form.message).forEach(key => {
-                        const message = store.error_form.message[key][0]
-                        $("[data-alert=checkout-address-store-"+key+"]").html(message)
-                    })
-
-                    return
                 }
-
-                const fetch = await fetchCheckoutPage()
-
-                resetForm(form)
-                hideOverlay()
-                showNotification(store)
-                hideModal()
             }
 
             async function handlerCheckoutStoreAddress(e){
@@ -183,26 +186,38 @@
                     e.preventDefault()
 
                     const formData=new FormData()
-                    const address_id = $(this).data("address-id")
+                    const address_id = $("[data-address-id]:checked").data("address-id")
 
-                    formData.append("_token","{{ csrf_token() }}")
+                    const csrf_token=await uptdateCSRFToken()
+
+                    formData.append("_token",csrf_token)
                     formData.append("address_id",address_id)
-
-                    showOverlay()
-                    await delay(1000)
 
                     const store = await storeAddress(formData)
 
                     if(store.error)
-                        throw new Error(store.error.message)
+                        throw store
 
                     const fetch = await fetchCheckoutPage()
 
                     showNotification(store)
+                    redirect(store)
                 }catch(err){
-                    showNotification({ error: { message: err.message || 'An unexpected error occurred' } })
+                    // console.log(err)
+                    showNotification(err)
+                    redirect(err)
                 } finally {
                     hideOverlay()
+                }
+            }
+
+            async function uptdateCSRFToken() {
+                try {
+                    const response = await $.get("{{ route('csrf.token.refresh') }}");
+                    return response.token;
+                } catch (error) {
+                    console.error("Failed to refresh CSRF token", error);
+                    return null;
                 }
             }
 
@@ -216,14 +231,13 @@
                     processData: false,
                     contentType: false,
                     data: formData,
-                    headers:{
-                        "X-Page-URL": window.location.href
-                    },
                     success: res=>{
                         // console.log(res)
                         result = res
                     },
                     error: xhr=>{
+                        hideOverlay()
+                        hideModal()
                         console.log(xhr.responseJSON)
                     }
                 })
@@ -232,6 +246,8 @@
 
             async function storeAddress(formData){
                 let result
+                showOverlay()
+                await delay(1000)
                 await $.ajax({
                     type:"POST",
                     url:"{{ route('front.order.checkout.store.ajax.address') }}",
@@ -293,15 +309,13 @@
                 })
             }
 
-            function redirect(res,callback=()=>{}){
-                console.log(res)
-                
-                if(res.redirect) {
-                    window.location.href=res.redirect.link
-                    return
+            async function redirect(res) {
+                // console.log(res)
+
+                if (res.success?.redirect || res.error?.redirect) {
+                    await delay(1000)
+                    window.location.href = res.success?.redirect ?? res.error?.redirect;
                 }
-                
-                callback()
             }
 
         })

@@ -71,9 +71,10 @@ if(!function_exists("cartSubTotal")){
 if(!function_exists("cartTotalExcludingShipping")){
     function cartTotalExcludingShipping () {
         $total = cartSubTotal();
+        $discount=Session::get("cart")["coupon"]["discount"] ?? 0;
 
         if(isset(Session::get("cart")["coupon"]))
-            $total = $total - Session::get("cart")["coupon"]["discount"];
+            $total = $total - $discount;
 
         return $total;
     }
@@ -82,9 +83,10 @@ if(!function_exists("cartTotalExcludingShipping")){
 if(!function_exists("cartTotal")){
     function cartTotal () {        
         $total = cartSubTotal() + deliveryFee();
+        $discount=Session::get("cart")["coupon"]["discount"] ?? 0;
 
         if(isset(Session::get("cart")["coupon"]))
-            $total = $total - Session::get("cart")["coupon"]["discount"];
+            $total = $total -  $discount;
 
         return $total;
     }
@@ -94,10 +96,10 @@ if(!function_exists("cartTotal")){
 if(!function_exists("deliveryFee")){
     function deliveryFee(){
         $settings = Setting::first();
-        $deliveryFee = $settings->site_delivery_charge;
+        $deliveryFee = $settings->site_delivery_charge ?? 0;
         
         if(isset(Session::get("cart")["address"]))
-            $deliveryFee = $deliveryFee + Session::get("cart")["address"]["delivery_area_fee"];
+            $deliveryFee = $deliveryFee + Session::get("cart")["address"]["fee"];
         
         return $deliveryFee;
 

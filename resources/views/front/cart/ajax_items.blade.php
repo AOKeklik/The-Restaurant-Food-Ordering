@@ -1,7 +1,3 @@
-<input type="hidden" name="cart_item_count_get" class="cart_item_count_get" value="{{ cartItemCount() }}">
-<input type="hidden" name="cart_subtotal_get" class="cart_subtotal_get" value="{{ currency(cartSubTotal()) }}">
-<input type="hidden" name="cart_total_get" class="cart_total_get" value="{{ currency(cartTotal()) }}">
-
 <div class="fp__menu_cart_header">
     <h5>total item (<span>{{ cartItemCount() }}</span>)</h5>
     <span class="close_cart"><i class="fal fa-times"></i></span>
@@ -26,7 +22,7 @@
                     {{ currency(cartItemSubTotal($val["product_info"]["id"])) }}
                 </p>
             </div>
-            @if(!Request::is("order/checkout"))
+            @if(!Request::is("order/checkout") && !Request::is("order/payment"))
                 <span data-product-id="{{  $val["product_info"]["id"] }}" class="del_icon"><i class="fal fa-times"></i></span>
             @endif
         </li>

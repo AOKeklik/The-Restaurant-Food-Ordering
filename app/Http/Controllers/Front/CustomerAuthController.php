@@ -171,10 +171,12 @@ class CustomerAuthController extends Controller
             return redirect()->back()->with("error",$err->getMessage());
         }
     }
-    public function signout_submit(){
+    public function signout_submit(Request $request){
         Auth::logout();
-        session()->flush();
-        return redirect()->route("front.customer.signin")->with("success","Successfully logged out.");
 
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return redirect()->route("front.customer.signin")->with("success","Successfully logged out.");
     }
 }

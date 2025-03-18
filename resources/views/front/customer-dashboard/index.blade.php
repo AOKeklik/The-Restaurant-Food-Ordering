@@ -840,12 +840,7 @@
             formData.append("address",form.find("#address").val())
             formData.append("type",form.find("input.type:checked").val())
 
-            showOverlay()
-
-            const store = await executeAjax(
-                "{{ route('front.customer.address.store.ajax') }}",
-                formData
-            )
+            const store = await storeAddressItem(formData)
 
             if(store.error_form) {
                 hideOverlay()
@@ -925,19 +920,9 @@
             formData.append("_token","{{ csrf_token() }}")
             formData.append("address_id",$(this).data("address-id"))
 
-            showOverlay()
-
-            const deleteItem = await executeAjax(
-                "{{ route('front.customer.address.delete.ajax') }}",
-                formData
-            )
-
-            const fetchItems = await executeAjax(
-                "{{ route('front.customer.address.items.ajax') }}",
-                null
-            )
-
-            $("[data-section=address-items]").html(fetchItems)
+            const deleteItem = await deleteAddressItem(formData)
+            const fetchItems = await fetchAddressItems()
+            
             hideOverlay()
             showNotification(deleteItem)
         }
@@ -957,6 +942,63 @@
 
         function hideProfileUpdateForm() {
             $(".fp_dash_personal_info").removeClass("show")
+        }
+
+        async function storeAddressItem(formData){
+            let result
+            showOverlay()
+            await delay(1000)
+            await $.ajax({
+                type:"POST",
+                url:"{{ route('front.customer.address.store.ajax') }}",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success:function(res){
+                    // console.log(res)
+                    result = res
+                },
+                error: function(xhr) {
+                    hideOverlay()
+                    console.log(xhr.responseJSON)
+                }
+            })
+            return result
+        }
+
+        async function deleteAddressItem(formData){
+            let result
+            showOverlay()
+            await delay(1000)
+            await $.ajax({
+                type:"POST",
+                url:"{{ route('front.customer.address.delete.ajax') }}",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success:function(res){
+                    // console.log(res)
+                    result = res
+                },
+                error: function(xhr) {
+                    hideOverlay()
+                    console.log(xhr.responseJSON)
+                }
+            })
+            return result
+        }
+
+        function fetchAddressItems(){
+            $.ajax({
+                type:"GET",
+                url:"{{ route('front.customer.address.items.ajax') }}",
+                success:function(res){
+                    $("[data-section=address-items]").html(res)
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseJSON)
+                }
+            })
         }
 
         /* BASICS */
