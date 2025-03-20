@@ -37,8 +37,8 @@
                         <div class="mb-3">
                             <label for="site_currency" class="form-label">Site Currency*</label>
                             <select name="site_currency" class="form-control select2">
-                                @foreach(config("currency.currency_list") as $key=>$val)
-                                    <option @if($val ===  $provider_settings->site_currency) selected @endif value="{{ $val }}">{{ $val }}</option>
+                                @foreach(config("list_currency") as $key=>$val)
+                                    <option @if($key ===  $provider_settings->site_currency) selected @endif value="{{ $key }}">{{ $key }}</option>
                                 @endforeach
                             </select>
                             @error("site_currency") <small class="text-danger">{{ $message }}</small> @enderror

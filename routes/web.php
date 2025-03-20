@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\AdminDeliveryAreasController;
 use App\Http\Controllers\Admin\AdminOptionController;
+use App\Http\Controllers\Admin\AdminPaymentController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminProductImageController;
 use App\Http\Controllers\Admin\AdminProductSizeController;
@@ -89,24 +90,6 @@ Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     Route::post("category/home/update",[AdminCategoryController::class,"category_home_update"])->name("admin.category.home.update");
     Route::post("category/delete",[AdminCategoryController::class,"category_delete"])->name("admin.category.delete");
 
-    /* options */
-    Route::get("options",[AdminOptionController::class,"options"])->name("admin.options");
-    Route::get("option/add",[AdminOptionController::class,"option_add"])->name("admin.option.add");
-    Route::get("option/edit/{option_id}",[AdminOptionController::class,"option_edit"])->name("admin.option.edit");
-    Route::post("option/store",[AdminOptionController::class,"option_store"])->name("admin.option.store");
-    Route::post("option/update",[AdminOptionController::class,"option_update"])->name("admin.option.update");
-    Route::post("option/status/update",[AdminOptionController::class,"option_status_update"])->name("admin.option.status.update");
-    Route::post("option/delete",[AdminOptionController::class,"option_delete"])->name("admin.option.delete");
-
-    /* coupons */
-    Route::get("coupons",[AdminCouponController::class,"coupons"])->name("admin.coupons");
-    Route::get("coupon/add",[AdminCouponController::class,"coupon_add"])->name("admin.coupon.add");
-    Route::get("coupon/edit/{coupon_id}",[AdminCouponController::class,"coupon_edit"])->name("admin.coupon.edit");
-    Route::post("coupon/store",[AdminCouponController::class,"coupon_store"])->name("admin.coupon.store");
-    Route::post("coupon/update",[AdminCouponController::class,"coupon_update"])->name("admin.coupon.update");
-    Route::post("coupon/ajax/status/update",[AdminCouponController::class,"coupon_ajax_status_update"])->name("admin.coupon.ajax.status.update");
-    Route::post("coupon/ajax/delete",[AdminCouponController::class,"coupon_ajax_delete"])->name("admin.coupon.ajax.delete");
-
     /* delivery areas */
     Route::get("delivery-areas",[AdminDeliveryAreasController::class,"delivery_areas"])->name("admin.delivery_areas");
     Route::get("delivery-area/add",[AdminDeliveryAreasController::class,"delivery_area_add"])->name("admin.delivery_area.add");
@@ -141,6 +124,32 @@ Route::prefix("admin")->middleware("admin.authenticate")->group(function () {
     Route::post("product/size/update",[AdminProductSizeController::class,"size_update"])->name("admin.product.size.update");
     Route::post("product/size/status/update",[AdminProductSizeController::class,"size_status_update"])->name("admin.product.size.status.update");
     Route::post("product/size/delete",[AdminProductSizeController::class,"size_delete"])->name("admin.product.size.delete");
+
+    /* options */
+    Route::get("options",[AdminOptionController::class,"options"])->name("admin.options");
+    Route::get("option/add",[AdminOptionController::class,"option_add"])->name("admin.option.add");
+    Route::get("option/edit/{option_id}",[AdminOptionController::class,"option_edit"])->name("admin.option.edit");
+    Route::post("option/store",[AdminOptionController::class,"option_store"])->name("admin.option.store");
+    Route::post("option/update",[AdminOptionController::class,"option_update"])->name("admin.option.update");
+    Route::post("option/status/update",[AdminOptionController::class,"option_status_update"])->name("admin.option.status.update");
+    Route::post("option/delete",[AdminOptionController::class,"option_delete"])->name("admin.option.delete");
+
+    /* coupons */
+    Route::get("coupons",[AdminCouponController::class,"coupons"])->name("admin.coupons");
+    Route::get("coupon/add",[AdminCouponController::class,"coupon_add"])->name("admin.coupon.add");
+    Route::get("coupon/edit/{coupon_id}",[AdminCouponController::class,"coupon_edit"])->name("admin.coupon.edit");
+    Route::post("coupon/store",[AdminCouponController::class,"coupon_store"])->name("admin.coupon.store");
+    Route::post("coupon/update",[AdminCouponController::class,"coupon_update"])->name("admin.coupon.update");
+    Route::post("coupon/ajax/status/update",[AdminCouponController::class,"coupon_ajax_status_update"])->name("admin.coupon.ajax.status.update");
+    Route::post("coupon/ajax/delete",[AdminCouponController::class,"coupon_ajax_delete"])->name("admin.coupon.ajax.delete");
+
+    /* payments */
+    Route::get("payment/paypal/edit",[AdminPaymentController::class,"payment_paypal_edit"])->name("admin.payment.paypal.edit");
+    Route::get("payment/stripe/edit",[AdminPaymentController::class,"payment_stripe_edit"])->name("admin.payment.stripe.edit");
+    Route::get("payment/razorpay/edit",[AdminPaymentController::class,"payment_razorpay_edit"])->name("admin.payment.razorpay.edit");
+    Route::post("payment/paypal/update",[AdminPaymentController::class,"payment_paypal_update"])->name("admin.payment.paypal.update");
+    Route::post("payment/stripe/update",[AdminPaymentController::class,"payment_stripe_update"])->name("admin.payment.stripe.update");
+    Route::post("payment/razorpay/update",[AdminPaymentController::class,"payment_razorpay_update"])->name("admin.payment.razorpay.update");
 });
 
 
@@ -215,12 +224,11 @@ Route::prefix("/")->group(function(){
         /* order - checkout */
         Route::get("order/checkout",[FrontCheckoutController::class,"checkout_view"])->name("front.order.checkout.view");
         Route::get("order/checkout/view/ajax/page",[FrontCheckoutController::class,"checkout_view_ajax_page"])->name("front.order.checkout.view.ajax.page");
-        // Route::get("order/checkout/redirect/ajax/payment",[FrontCheckoutController::class,"checkout_redirect_ajax_payment"])->name("front.order.checkout.redirect.ajax.payment");
         Route::post("order/checkout/store/ajax/address",[FrontCheckoutController::class,"checkout_store_ajax_address"])->name("front.order.checkout.store.ajax.address");
         Route::post("order/checkout/store/ajax/addresses",[FrontCheckoutController::class,"checkout_store_ajax_addresses"])->name("front.order.checkout.store.ajax.addresses");
     });
 
-    Route::middleware("customer.payment")->group(function () {
+    Route::middleware("customer.checkout","customer.payment")->group(function () {
         /* order - payment */
         Route::get("order/payment",[FrontPaymentController::class,"payment_view"])->name("front.order.payment.view");
         Route::post("order/payment/store/ajax",[FrontPaymentController::class,"payment_store_ajax"])->name("front.order.payment.store.ajax");
@@ -231,10 +239,3 @@ Route::prefix("/")->group(function(){
 Route::get('/csrf-token-refresh', function () {
     return response()->json(['token' => csrf_token()]);
 })->name('csrf.token.refresh');
-
-
-// Route::get('/', function () {
-//     $cart = Session::get('cart', 'Cart is empty'); 
-//     Log::info('Cart session data: ', ['cart' => $cart]);
-//     return 'Cart session logged in the terminal';
-// });

@@ -105,6 +105,7 @@
                 }catch(err){
                     // console.log(err)
                     showNotification(err)
+                    redirect(err)
                 } finally {
                     hideOverlay()
                 }
@@ -163,6 +164,15 @@
                     position: "topRight",
                     color: res.error ?? res.message ? "red" : "green"
                 })
+            }
+
+            async function redirect(res) {
+                // console.log(res);
+
+                if (res.success?.redirect || res.error?.redirect) {
+                    await delay(1000)
+                    window.location.href = res.success?.redirect ?? res.error?.redirect;
+                }
             }
         })
     </script>

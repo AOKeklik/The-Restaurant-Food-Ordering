@@ -61,7 +61,7 @@
                 </ul>
             </li>
 
-            {{-- product --}}
+            {{-- restaurant --}}
             <li class="menu-header">Restaurant</li>
             <li class="dropdown @if(Route::is("admin.products") || Route::is("admin.product.add")) active @endif">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-shopping-bag"></i> <span>Products</span></a>
@@ -88,6 +88,15 @@
                     <li class="@if(Route::is("admin.coupon.add")) active @endif"><a class="nav-link" href="{{ route("admin.coupon.add") }}">Add Coupon</a></li>
                 </ul>
             </li>
+            <li class="dropdown @if(Request::is("admin/payment/*")) active @endif">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa-solid fa-credit-card"></i> <span>Payments</span></a>
+                <ul class="dropdown-menu">
+                    <li class="@if(Route::is("admin.payment.paypal.edit")) active @endif"><a class="nav-link" href="{{ route("admin.payment.paypal.edit") }}">Paypal</a></li>
+                    <li class="@if(Route::is("admin.payment.stripe.edit")) active @endif"><a class="nav-link" href="{{ route("admin.payment.stripe.edit") }}">Stripe</a></li>
+                    <li class="@if(Route::is("admin.payment.razorpay.edit")) active @endif"><a class="nav-link" href="{{ route("admin.payment.razorpay.edit") }}">Razorpay</a></li>
+                </ul>
+            </li>
+            
 
 
             {{-- <li class="menu-header">Starter</li>
