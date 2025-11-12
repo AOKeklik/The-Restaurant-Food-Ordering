@@ -23,6 +23,7 @@ class AdminPaymentController extends Controller
     public function payment_razorpay_edit ():View 
     {
         $paymentSettings=PaymentSetting::pluck("value","key");
+        
         return view("admin.payment.razorpay",compact("paymentSettings"));
     }
 

@@ -24,10 +24,11 @@ class OrderService{
             $order->address_id=$cartAddress["id"];
             $order->invoice_id=paymentInvoiceId();
             $order->transaction_id=NULL;
-            // $order->payment_method=$order["method"];
+            $order->payment_method=NULL;
             // $order->payment_status="pending";
             // $order->order_status="pending";
             $order->payment_approve_date=NULL;
+            $order->currency_name=NULL;  
             $order->discount=empty($cartCoupon) ? 0 : $cartCoupon["discount"];
             $order->delivery_charge=$cartAddress["fee"];
             $order->cart_subtotal=cartSubTotal();
@@ -35,7 +36,6 @@ class OrderService{
             $order->product_quantity=cartItemCount();
             $order->coupon_info=empty($cartCoupon) ? NULL : json_encode($cartCoupon);
             $order->address=$cartAddress["address"];
-            $order->currency_name=NULL;
 
             if(!$order->save()) throw new \Exception("Failed to save order.");
 
@@ -54,7 +54,6 @@ class OrderService{
                 if(!$orderItem->save())
                     throw new \Exception("Failed to save order item.");
             }
-
 
             return $order;
        }catch(\Exception $err){

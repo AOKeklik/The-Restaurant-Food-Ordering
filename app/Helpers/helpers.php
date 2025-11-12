@@ -11,7 +11,6 @@ if(!function_exists("currency")){
             return $price." ".$settings->site_currency_icon;
         else
             return $settings->site_currency_icon." ".$price;
-
     }
 }
 

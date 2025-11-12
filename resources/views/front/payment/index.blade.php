@@ -22,7 +22,7 @@
                     <div class="row">
                         <div class="col-md-6 wow fadeInUp" data-wow-duration="1s">
                             <a data-btn="payment-store" data-method="paypal" class="fp__single_payment" {{-- data-bs-toggle="modal" data-bs-target="#exampleModal" --}} href="#">
-                                <img src="{{ asset("uploads/setting/paypal.png") }}" alt="payment method" class="img-fluid w-100">
+                                <img src="{{ asset("uploads/payment") }}/{{ config("paymentSettings.paypal_logo") }}" alt="payment method" class="img-fluid w-100">
                             </a>
                         </div>
                     </div>
@@ -102,6 +102,7 @@
                         throw store
 
                     showNotification(store)
+                    redirect(store)
                 }catch(err){
                     // console.log(err)
                     showNotification(err)

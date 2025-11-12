@@ -19,7 +19,7 @@ return new class extends Migration
    
             $table->string("invoice_id");
             $table->string("transaction_id")->nullable();
-            $table->enum("payment_method",["paypal","stripe"])->default("paypal");
+            $table->string("payment_method")->nullable();
             $table->enum("payment_status",["pending","success", "cancelled"])->default("pending");
             $table->enum("order_status",["pending","success", "cancelled"])->default("pending");
             $table->timestamp("payment_approve_date")->nullable();

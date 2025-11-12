@@ -35,7 +35,7 @@
                 <div class="mb-4">
                     <label for="paypal_country" class="form-label">Paypal Country*</label>
                     <select name="paypal_country" class="form-control select2">
-                        @foreach(config("list_currency") as $key=>$val)
+                        @foreach(config("list_country") as $key=>$val)
                             <option @if($val ===  $paymentSettings["paypal_country"]) selected @endif value="{{ $val }}">{{ $val }}</option>
                         @endforeach
                     </select>
@@ -47,7 +47,7 @@
                     <label for="paypal_currency" class="form-label">Paypal Currency*</label>
                     <select name="paypal_currency" class="form-control select2">
                         @foreach(config("list_currency") as $key=>$val)
-                            <option @if($key ===  $paymentSettings["paypal_currency"]) selected @endif value="{{ $key }}">{{ $key }}</option>
+                            <option @if($val ===  $paymentSettings["paypal_currency"]) selected @endif value="{{ $val }}">{{ $val }}</option>
                         @endforeach
                     </select>
                     @error("paypal_currency") <small class="text-danger">{{ $message }}</small> @enderror
@@ -63,7 +63,7 @@
             </div>
             <div class="col-md-6">
                 <div class="mb-4">
-                    <label for="paypal_api_key" class="form-label">Paypal Api Key*</label>
+                    <label for="paypal_api_key" class="form-label">Paypal Client Id*</label>
                     <input type="text" class="form-control" id="paypal_api_key" name="paypal_api_key" placeholder="Enter Charge"  value="{{ $paymentSettings["paypal_api_key"] }}">
                     @error("paypal_api_key") <small class="text-danger">{{ $message }}</small> @enderror
                 </div>

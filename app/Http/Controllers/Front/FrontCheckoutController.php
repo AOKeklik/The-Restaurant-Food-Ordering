@@ -19,10 +19,8 @@ class FrontCheckoutController extends Controller
                 where("user_id",Auth::guard("user")->user()->id)->
                 orderBy("id","DESC")->get();
 
-        if(!Auth::guard("user")->check() && isset(Session::get("cart")["addresses"]))
-            $addresses=Session::get("cart")["addresses"];
-
         $deliveryAreas=DeliveryArea::where("status",1)->orderBy("id","DESC")->get();
+
         return view("front.checkout.index",compact("addresses","deliveryAreas"));
     }
     public function checkout_view_ajax_page(){
@@ -41,7 +39,8 @@ class FrontCheckoutController extends Controller
     }
     
 
-    public function checkout_store_ajax_addresses (Request $request) {
+    public function checkout_store_ajax_addresses (Request $request) 
+    {
         try{
             $rules=[
                 "first_name"=>"required|string",
@@ -82,7 +81,8 @@ class FrontCheckoutController extends Controller
             return response()->json(["error"=>["message"=>$err->getMessage()]]);
         }
     }
-    public function checkout_store_ajax_address (Request $request) {
+    public function checkout_store_ajax_address (Request $request) 
+    {
         try {
             $validator = \Validator::make($request->all(), [
                 "address_id" => "required",

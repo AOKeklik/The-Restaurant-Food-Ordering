@@ -232,6 +232,14 @@ Route::prefix("/")->group(function(){
         /* order - payment */
         Route::get("order/payment",[FrontPaymentController::class,"payment_view"])->name("front.order.payment.view");
         Route::post("order/payment/store/ajax",[FrontPaymentController::class,"payment_store_ajax"])->name("front.order.payment.store.ajax");
+
+        /* order - methods */
+        Route::get("order/method/paypal/payment",[FrontPaymentController::class,"paypal_payment"])->name("front.order.method.paypal.payment");
+        Route::get("order/method/paypal/success",[FrontPaymentController::class,"paypal_success"])->name("front.order.method.paypal.success");
+        Route::get("order/method/paypal/cancel",[FrontPaymentController::class,"paypal_cancel"])->name("front.order.method.paypal.cancel");
+        Route::get("order/method/stripe/payment",[FrontPaymentController::class,"stripe_payment"])->name("front.order.method.stripe.payment");
+        Route::get("order/method/stripe/success",[FrontPaymentController::class,"stripe_success"])->name("front.order.method.stripe.success");
+        Route::get("order/method/stripe/cancel",[FrontPaymentController::class,"stripe_cancel"])->name("front.order.method.stripe.cancel");
     });
 });
 
